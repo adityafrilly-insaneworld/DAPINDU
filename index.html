@@ -1,0 +1,2513 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAPINDU · Data Pintar Posyandu</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--t9:#0a3d47;--t8:#0e5060;--t7:#116b7f;--t6:#1487a0;--t5:#17a4c4;--t4:#3bbedd;--t3:#72d3ea;--t1:#e0f7fc;--t0:#f0fbfd;--mint:#00c9a7;--ml:#e6faf7;--coral:#ff6b6b;--amber:#ffb830;--purple:#7c5cbf;--bg:#f4fafd;--wh:#ffffff;--tx:#0f2d36;--mu:#5a7a85;--bd:#d0eaf0;--sw:252px;--r:16px;--sh:0 4px 24px rgba(14,80,96,0.08)}
+body.dark{--bg:#0f1923;--wh:#1a2535;--tx:#dde6f0;--mu:#8aabcc;--bd:#2a3e55;--t0:#1e2f42;--t1:#1a3a4a;--ml:#132e2a;--sh:0 4px 24px rgba(0,0,0,0.35);--amber:#fbbf24;--coral:#f87171}
+body.dark ::-webkit-scrollbar-thumb{background:#2d4a62}
+/* layout */
+body.dark .topbar{background:#131f2d;border-bottom-color:#2a3e55}
+body.dark .card{background:#1a2535;border-color:#2a3e55}
+body.dark .stat-card{background:#1a2535;border-color:#2a3e55}
+body.dark .main{background:#0f1923}
+/* typography */
+body.dark{color:#dde6f0}
+body.dark p,body.dark span:not(.badge):not(.lopt),body.dark div:not([class]){color:inherit}
+body.dark .page-title{color:#a5c8f0}
+body.dark .page-meta{color:#8aabcc}
+body.dark .card-title{color:#a5c8f0}
+body.dark .card-title i{color:#3bbedd}
+body.dark .card-sub{color:#8aabcc}
+body.dark .stat-val{color:#dde6f0}
+body.dark .stat-label{color:#8aabcc}
+body.dark .stat-unit{color:#8aabcc}
+body.dark .td-name{color:#a5c8f0}
+body.dark td{color:#dde6f0;border-bottom-color:#2a3e55}
+body.dark th{color:#7dd3fc;background:#1e2f42}
+body.dark table thead tr{background:#1e2f42}
+body.dark tbody tr:hover td{background:#1e2f42}
+/* forms */
+body.dark input,body.dark select,body.dark textarea{background:#131f2d;border-color:#2a3e55;color:#dde6f0}
+body.dark input::placeholder,body.dark textarea::placeholder{color:#4a6a88}
+body.dark input:focus,body.dark select:focus,body.dark textarea:focus{border-color:#3bbedd;box-shadow:0 0 0 3px rgba(59,190,221,.15)}
+body.dark label{color:#7dd3fc}
+body.dark .lopt{color:#8aabcc}
+body.dark .sec-div{color:#3bbedd;border-bottom-color:#2a3e55}
+/* badges */
+body.dark .badge-ok{background:#14532d;color:#86efac}
+body.dark .badge-warn{background:#713f12;color:#fde68a}
+body.dark .badge-danger{background:#7f1d1d;color:#fca5a5}
+body.dark .badge-severe{background:#450a0a;color:#fca5a5}
+body.dark .badge-info{background:#164e63;color:#67e8f9}
+body.dark .badge-neutral{background:#1e293b;color:#a0aec0}
+/* alerts */
+body.dark .alert-box.info{background:#0c3347;color:#bae6fd;border-left-color:#0ea5e9}
+body.dark .alert-box.warn{background:#3d1b00;color:#fde68a;border-left-color:#f59e0b}
+body.dark .alert-box.danger{background:#3d0000;color:#fca5a5;border-left-color:#ef4444}
+body.dark .alert-box i{opacity:.9}
+/* modals */
+body.dark .modal{background:#1a2535}
+body.dark .modal-hdr{background:#1a2535;border-bottom-color:#2a3e55}
+body.dark .modal-ftr{border-top-color:#2a3e55}
+body.dark .modal-title{color:#a5c8f0}
+body.dark .modal-close{color:#8aabcc}
+body.dark .modal-close:hover{color:#dde6f0}
+/* buttons - preserve header btn colors, improve outline/ghost btns */
+body.dark .tbtn:not(.add-balita):not(.add-lansia):not([id="darkToggle"]){background:#1a2535;border-color:#2a3e55;color:#dde6f0}
+body.dark .tbtn:not(.add-balita):not(.add-lansia):hover{border-color:#3bbedd;color:#67e8f9}
+body.dark #darkToggle{background:#1a2535;border-color:#2a3e55;color:#dde6f0}
+body.dark .btn-outline{border-color:#2a3e55;color:#a0aec0}
+body.dark .btn-outline:hover{border-color:#3bbedd;color:#67e8f9}
+body.dark .btn-primary{background:var(--t6);border-color:var(--t6)}
+body.dark .btn-mint{background:#007a67;border-color:#007a67}
+/* sidebar elements */
+body.dark .sidebar-footer .ver{color:rgba(255,255,255,.3)}
+/* imun cards */
+body.dark .imun-card{background:#1e2f42;border-color:#2a3e55}
+body.dark .imun-card .imun-name{color:#c7e0f7}
+body.dark .imun-card .imun-date{color:#8aabcc}
+body.dark .imun-card.done{background:linear-gradient(135deg,#0f2e28,#0f3320);border-color:#00c9a7}
+body.dark .imun-card.done .imun-name{color:#86efac}
+body.dark .imun-card.pending{background:#1e1010;border-color:#5a1e1e}
+body.dark .imun-card.pending .imun-name{color:#fca5a5}
+body.dark .imun-stage-title{background:#1e2f42;color:#7dd3fc}
+body.dark .imun-bar{background:#2a3e55}
+body.dark .imun-bar-fill{opacity:.9}
+/* gauges */
+body.dark .gauge-card{background:#1e2f42;border-color:#2a3e55}
+body.dark .gauge-title{color:#8aabcc}
+body.dark .gauge-unit{color:#8aabcc}
+body.dark .gauge-value{color:#dde6f0}
+body.dark .gauge-bar{background:#2a3e55}
+/* kunjungan */
+body.dark .kunj-item{background:#1e2f42;border-color:#2a3e55}
+body.dark .kunj-avatar.balita{background:#0c3347;color:#67e8f9}
+body.dark .kunj-avatar.lansia{background:#0f3320;color:#86efac}
+body.dark .kunj-name{color:#a5c8f0}
+body.dark .kunj-meta{color:#8aabcc}
+/* privasi / pencatatan block */
+body.dark .privasi-content{background:#131f2d;border-color:#2a3e55}
+body.dark .privasi-content.show{background:#131f2d}
+body.dark .privasi-toggle{background:#1e2f42;border-color:#2a3e55;color:#7dd3fc}
+body.dark .privasi-toggle:hover{background:#253548;border-color:#3bbedd;color:#a5c8f0}
+/* laporan */
+body.dark .lap-card{background:#1a2535;border-color:#2a3e55}
+body.dark .lap-card-title{color:#a5c8f0}
+/* combobox */
+body.dark .combobox-dropdown{background:#1a2535;border-color:#3bbedd}
+body.dark .combobox-opt{color:#dde6f0}
+body.dark .combobox-opt:hover{background:#1e2f42}
+/* checkbox */
+body.dark .chk-item{background:#1e2f42;border-color:#2a3e55;color:#dde6f0}
+body.dark .chk-item:has(input:checked){background:#0c3347;border-color:#3bbedd;color:#67e8f9}
+/* toast */
+body.dark .toast{background:#1a2535;color:#dde6f0;border-left-color:#3bbedd}
+body.dark .toast.success{border-left-color:#00c9a7}
+body.dark .toast.error{border-left-color:#f87171}
+/* action buttons in table */
+body.dark [style*="#eff6ff"]{background:#0c2040!important;border-color:#1d4ed8!important;color:#fff!important}
+body.dark [style*="#f0fdf4"]{background:#0a2a1a!important;border-color:#15803d!important;color:#fff!important}
+body.dark [style*="#fefce8"]{background:#2a1c00!important;border-color:#92400e!important;color:#fff!important}
+body.dark [style*="#fff1f2"]{background:#2a0010!important;border-color:#be123c!important;color:#fff!important}
+/* empty state */
+body.dark .empty-state{color:#8aabcc}
+/* tbl-info */
+body.dark .tbl-info{color:#8aabcc}
+/* stat cards accent */
+body.dark .stat-card::after{opacity:.05}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.5}
+::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:var(--t3);border-radius:99px}
+.app{display:flex;min-height:100vh}
+/* SIDEBAR */
+.sidebar{width:var(--sw);background:linear-gradient(160deg,var(--t9) 0%,var(--t8) 100%);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:200;transition:transform .3s cubic-bezier(.4,0,.2,1);overflow:hidden}
+.sidebar-brand{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.brand-logo{width:42px;height:42px;background:linear-gradient(135deg,var(--mint),var(--t4));border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:21px;margin-bottom:9px;box-shadow:0 4px 12px rgba(0,201,167,0.4)}
+.brand-name{font-size:17px;font-weight:800;color:#fff;letter-spacing:-.3px}
+.brand-sub{font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px;letter-spacing:.5px;text-transform:uppercase}
+.sidebar-nav{padding:14px 12px;flex:1;overflow-y:auto}
+.nav-sec{font-size:10px;font-weight:700;color:rgba(255,255,255,0.35);letter-spacing:1.2px;text-transform:uppercase;padding:8px 12px 5px;margin-top:6px}
+.nav-sec.balita-sec{color:#7dd3fc;letter-spacing:1.2px}
+.nav-sec.lansia-sec{color:#fcd34d;letter-spacing:1.2px}
+.nav-item.balita-item:hover{background:rgba(125,211,252,0.12);color:#fff}
+.nav-item.balita-item.active{background:linear-gradient(90deg,rgba(125,211,252,0.2),rgba(125,211,252,0.08));color:#fff}
+.nav-item.balita-item.active::before{background:#7dd3fc}
+.nav-item.lansia-item:hover{background:rgba(252,211,77,0.12);color:#fff}
+.nav-item.lansia-item.active{background:linear-gradient(90deg,rgba(252,211,77,0.2),rgba(252,211,77,0.08));color:#fff}
+.nav-item.lansia-item.active::before{background:#fcd34d}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:12px;cursor:pointer;color:rgba(255,255,255,0.65);transition:all .18s;margin-bottom:3px;position:relative;font-size:14px;font-weight:500}
+.nav-item:hover{background:rgba(255,255,255,0.08);color:#fff}
+.nav-item.active{background:linear-gradient(90deg,rgba(0,201,167,0.2),rgba(0,201,167,0.08));color:#fff}
+.nav-item.active::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:3px;background:var(--mint);border-radius:0 99px 99px 0}
+.nav-item i{font-size:19px;width:22px;text-align:center;flex-shrink:0}
+.sidebar-footer{padding:14px 20px;border-top:1px solid rgba(255,255,255,0.06)}
+.sidebar-footer .ver{font-size:10px;color:rgba(255,255,255,0.25)}
+/* MAIN */
+.main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-width:0}
+.topbar{background:var(--wh);border-bottom:1px solid var(--bd);padding:13px 28px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.menu-toggle{display:none;background:none;border:none;cursor:pointer;color:var(--tx);font-size:22px;padding:4px}
+.page-title{font-size:19px;font-weight:800;color:var(--t8)}
+.page-meta{font-size:12px;color:var(--mu);margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.tbtn{display:inline-flex;align-items:center;gap:6px;padding:8px 15px;border-radius:99px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--bd);background:var(--wh);color:var(--tx);transition:all .15s;font-family:inherit}
+.tbtn:hover{border-color:var(--t4);color:var(--t7)}
+.tbtn.primary{background:var(--t7);color:#fff;border-color:var(--t7)}
+.tbtn.primary:hover{background:var(--t8)}
+.tbtn.add-balita{background:#0891b2;color:#fff;border-color:#0891b2;gap:4px}
+.tbtn.add-balita:hover{background:#0e7490}
+.tbtn.add-lansia{background:#d97706;color:#fff;border-color:#d97706;gap:4px}
+.tbtn.add-lansia:hover{background:#b45309}
+.tbtn i.main-icon{font-size:18px}.tbtn i.plus-icon{font-size:12px;opacity:.85}
+.content{padding:24px 28px;flex:1}
+.page{display:none;animation:fadeUp .25s ease}.page.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* CARDS */
+.card{background:var(--wh);border-radius:var(--r);border:1px solid var(--bd);box-shadow:var(--sh);padding:22px;margin-bottom:20px}
+.card-title{font-size:16px;font-weight:700;color:var(--t8);display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.card-title i{font-size:20px;color:var(--t5)}
+.card-sub{font-size:13px;color:var(--mu);margin-bottom:16px}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+.stat-card{background:var(--wh);border-radius:var(--r);border:1px solid var(--bd);padding:18px 20px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.stat-card::after{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;opacity:.08}
+.stat-card.teal::after{background:var(--t5)}.stat-card.mint::after{background:var(--mint)}.stat-card.amber::after{background:var(--amber)}.stat-card.purple::after{background:var(--purple)}
+.stat-icon{font-size:28px;margin-bottom:8px}
+.stat-label{font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px}
+.stat-val{font-size:30px;font-weight:800;color:var(--t8);line-height:1}
+.stat-unit{font-size:13px;font-weight:500;color:var(--mu)}
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group.full{grid-column:1/-1}
+label{font-size:11px;font-weight:700;color:var(--t7);text-transform:uppercase;letter-spacing:.5px}
+.lopt{font-size:10px;font-weight:500;color:var(--mu);text-transform:none;letter-spacing:0;margin-left:4px}
+input,select,textarea{font-family:inherit;font-size:14px;padding:10px 13px;border:1.5px solid var(--bd);border-radius:10px;background:var(--wh);color:var(--tx);transition:all .15s;width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--t5);box-shadow:0 0 0 3px rgba(23,164,196,.12)}
+.sec-div{font-size:11px;font-weight:700;color:var(--t5);text-transform:uppercase;letter-spacing:.8px;margin:14px 0 8px;padding-bottom:5px;border-bottom:1px dashed var(--bd);grid-column:1/-1}
+.chk-group{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.chk-item{display:flex;align-items:center;gap:7px;padding:7px 12px;background:var(--t0);border:1.5px solid var(--bd);border-radius:10px;cursor:pointer;transition:all .15s;font-size:13px;font-weight:500}
+.chk-item input[type=checkbox]{width:15px;height:15px;accent-color:var(--t6);flex-shrink:0;padding:0}
+.chk-item:has(input:checked){background:var(--t1);border-color:var(--t4);color:var(--t8)}
+/* BUTTONS */
+.btn-row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border-radius:99px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid transparent;transition:all .15s}
+.btn-primary{background:var(--t7);color:#fff;border-color:var(--t7)}
+.btn-primary:hover{background:var(--t8);transform:translateY(-1px);box-shadow:0 4px 12px rgba(14,80,96,.25)}
+.btn-mint{background:var(--mint);color:#fff;border-color:var(--mint)}
+.btn-mint:hover{background:#00b094;transform:translateY(-1px)}
+.btn-outline{background:transparent;border-color:var(--bd);color:var(--mu)}
+.btn-outline:hover{border-color:var(--t4);color:var(--t7)}
+.btn-danger{background:#fee2e2;color:#b91c1c;border-color:#fecaca}
+.btn-danger:hover{background:#fecaca}
+.btn-sm{padding:5px 12px;font-size:12px}
+.btn-icon{padding:7px;width:32px;height:32px;justify-content:center;border-radius:9px}
+/* TABLE */
+.tbl-ctrl{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.tbl-ctrl select{width:auto;padding:6px 10px;font-size:12px}
+.tbl-ctrl .tbl-info{font-size:12px;color:var(--mu)}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--t0)}
+th{padding:11px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--t7);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;cursor:pointer;user-select:none}
+th:hover{color:var(--t5)}
+th.sort-asc::after{content:' ↑'}th.sort-desc::after{content:' ↓'}
+td{padding:11px 12px;border-bottom:1px solid #f0f4f6;font-size:13.5px;vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#f8fbfc}
+.td-name{font-weight:600;color:var(--t8)}
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;white-space:nowrap}
+.badge-ok{background:#dcfce7;color:#15803d}
+.badge-warn{background:#fef9c3;color:#854d0e}
+.badge-danger{background:#fee2e2;color:#b91c1c}
+.badge-info{background:var(--t1);color:var(--t7)}
+.badge-neutral{background:#f1f5f9;color:#64748b}
+.badge-severe{background:#7f1d1d;color:#fff}
+/* IMUN */
+.imun-stage{margin-bottom:14px}
+.imun-stage-title{font-size:11px;font-weight:700;color:var(--t7);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;padding:4px 8px;background:var(--t0);border-radius:6px;display:inline-block}
+.imun-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.imun-card{background:var(--t0);border:2px solid var(--bd);border-radius:12px;padding:10px;text-align:center;transition:all .2s}
+.imun-card.done{background:linear-gradient(135deg,#e6faf7,#dcfce7);border-color:var(--mint)}
+.imun-card.pending{background:#fff8f8;border-color:#fecaca}
+.imun-icon{font-size:20px;margin-bottom:3px}
+.imun-name{font-size:10px;font-weight:700;color:var(--t8);line-height:1.3}
+.imun-date{font-size:9px;color:var(--mu);margin-top:2px}
+.imun-bar{background:var(--bd);border-radius:99px;height:8px;overflow:hidden;margin-top:6px}
+.imun-bar-fill{background:linear-gradient(90deg,var(--mint),var(--t4));height:100%;border-radius:99px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+/* CHART */
+.chart-wrap{position:relative;height:240px;margin-top:14px}
+/* TOAST */
+.toast-c{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{display:flex;align-items:center;gap:10px;padding:12px 18px;background:#fff;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.12);font-size:14px;font-weight:500;border-left:4px solid var(--t5);animation:slideIn .3s ease;min-width:240px}
+.toast.success{border-color:var(--mint)}.toast.error{border-color:var(--coral)}
+@keyframes slideIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,40,50,.4);backdrop-filter:blur(4px);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:all .2s}
+.modal-overlay.open{opacity:1;visibility:visible}
+.modal{background:var(--wh);border-radius:20px;width:100%;max-width:680px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.15);transform:scale(.96);transition:transform .2s}
+.modal-overlay.open .modal{transform:scale(1)}
+.modal-hdr{padding:20px 24px 14px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1}
+.modal-title{font-size:17px;font-weight:800;color:var(--t8)}
+.modal-body{padding:20px 24px}
+.modal-ftr{padding:14px 24px;border-top:1px solid var(--bd);display:flex;justify-content:flex-end;gap:10px}
+.modal-close{background:none;border:none;cursor:pointer;color:var(--mu);font-size:22px;display:flex}
+/* ALERT BOX */
+.alert-box{border-radius:12px;padding:11px 15px;font-size:13px;font-weight:500;display:flex;align-items:flex-start;gap:10px;margin-top:12px}
+.alert-box.info{background:var(--t1);color:var(--t8)}
+.alert-box.warn{background:#fef9c3;color:#713f12}
+.alert-box.danger{background:#fee2e2;color:#991b1b}
+.alert-box i{font-size:17px;flex-shrink:0;margin-top:1px}
+/* HEALTH GAUGES */
+.health-gauges{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:12px;margin-top:12px}
+.gauge-card{background:var(--wh);border:1px solid var(--bd);border-radius:14px;padding:14px;text-align:center}
+.gauge-title{font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.gauge-value{font-size:26px;font-weight:800;margin-bottom:3px}
+.gauge-unit{font-size:10px;color:var(--mu)}
+.gauge-bar{background:var(--bd);border-radius:99px;height:5px;margin-top:8px;overflow:hidden}
+.gauge-fill{height:100%;border-radius:99px;transition:width .8s ease}
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:36px 20px;color:var(--mu)}
+.empty-state i{font-size:44px;opacity:.3;margin-bottom:10px;display:block}
+/* KUNJUNGAN TERAKHIR */
+.kunjungan-list{display:flex;flex-direction:column;gap:6px}
+.kunj-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--t0);border-radius:10px;font-size:13px;border:1px solid var(--bd)}
+.kunj-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.kunj-avatar.balita{background:#e0f7fc;color:var(--t7)}
+.kunj-avatar.lansia{background:#e6faf7;color:#15803d}
+.kunj-name{font-weight:600;color:var(--t8);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kunj-meta{font-size:11px;color:var(--mu)}
+.kunj-badge{flex-shrink:0}
+/* LAPORAN INFOGRAFIS */
+.lap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.lap-card{background:var(--wh);border:1px solid var(--bd);border-radius:var(--r);padding:16px;box-shadow:var(--sh)}
+.lap-card-title{font-size:13px;font-weight:700;color:var(--t8);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+/* DETAIL PRIVASI */
+.privasi-block{margin-top:10px}
+.privasi-toggle{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:99px;font-size:12px;font-weight:600;cursor:pointer;background:var(--t0);border:1.5px solid var(--bd);color:var(--t7);transition:all .15s}
+.privasi-toggle:hover{border-color:var(--t5);background:var(--t1)}
+.privasi-content{display:none;background:#f8f9fb;border:1px solid var(--bd);border-radius:10px;padding:12px;margin-top:8px}
+.privasi-content.show{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+/* DATALIST STYLE */
+.combobox-wrap{position:relative}
+.combobox-wrap input{width:100%}
+.combobox-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1.5px solid var(--t4);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:999;max-height:200px;overflow-y:auto;display:none}
+.combobox-dropdown.open{display:block}
+.combobox-opt{padding:9px 14px;cursor:pointer;font-size:14px;transition:background .12s}
+.combobox-opt:hover{background:var(--t0)}
+/* FILTER BAR */
+.filter-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.filter-bar select{padding:7px 10px;font-size:12px;border-radius:8px;width:auto}
+/* RESPONSIVE */
+@media(max-width:1100px){.stats-grid{grid-template-columns:repeat(2,1fr)}.lap-grid{grid-template-columns:1fr 1fr}}
+input[type=number]{appearance:textfield;-moz-appearance:textfield}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
+@media(max-width:640px){.two-col,.two-col-sm{grid-template-columns:1fr!important}}
+/* ── SYNC STATUS ── */
+.sync-indicator{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:99px;transition:all .3s}
+.sync-indicator.synced{background:#dcfce7;color:#15803d}
+.sync-indicator.syncing{background:#fef9c3;color:#854d0e}
+.sync-indicator.offline{background:#fee2e2;color:#b91c1c}
+.sync-indicator.init{background:#f1f5f9;color:#64748b}
+body.dark .sync-indicator.synced{background:#14532d;color:#86efac}
+body.dark .sync-indicator.syncing{background:#713f12;color:#fde68a}
+body.dark .sync-indicator.offline{background:#7f1d1d;color:#fca5a5}
+body.dark .sync-indicator.init{background:#1e293b;color:#94a3b8}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0}
+.sync-dot.pulse{animation:syncPulse 1.2s ease-in-out infinite}
+@keyframes syncPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;background:var(--t9);border-top:1px solid rgba(255,255,255,.12);padding:4px 0 env(safe-area-inset-bottom,0px);flex-direction:row;justify-content:space-around;align-items:stretch}
+body.dark .bottom-nav{background:#111c2a;border-top-color:rgba(255,255,255,.08)}
+.bnav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;flex:1;cursor:pointer;padding:6px 2px 4px;color:rgba(255,255,255,.45);font-size:9px;font-weight:600;letter-spacing:.2px;text-transform:uppercase;transition:all .18s;border:none;background:none;font-family:inherit;line-height:1.2}
+.bnav-item i{font-size:21px;margin-bottom:1px}
+.bnav-item.active{color:var(--mint)}
+.bnav-item.balita-nav.active{color:#7dd3fc}
+.bnav-item.lansia-nav.active{color:#fcd34d}
+.bnav-item:active{opacity:.7}
+/* ── FULLSCREEN ── */
+.fs-btn{position:fixed;bottom:76px;right:14px;z-index:400;width:40px;height:40px;background:var(--t7);color:#fff;border:none;border-radius:50%;font-size:19px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.3);display:none;align-items:center;justify-content:center;transition:all .2s}
+.fs-btn:hover{background:var(--t8);transform:scale(1.08)}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-110%)!important;display:none}
+  .main{margin-left:0!important;padding-bottom:68px}
+  .bottom-nav{display:flex}
+  .fs-btn{display:flex}
+  .menu-toggle{display:none!important}
+  .topbar{padding:10px 12px}
+  .form-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .health-gauges{grid-template-columns:1fr 1fr}
+  .lap-grid{grid-template-columns:1fr}
+  .content{padding:14px 12px}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .health-gauges{grid-template-columns:1fr}
+  .imun-grid{grid-template-columns:repeat(2,1fr)}
+  .page-title{font-size:15px}
+  .lap-grid{grid-template-columns:1fr}
+  .content{padding:10px 8px}
+  .topbar-right .tbtn:not(.add-balita):not(.add-lansia){display:none}
+}
+@media(max-width:360px){.stats-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="toast-c" id="toastC"></div>
+<div class="sov" id="sov" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:199" onclick="toggleSidebar()"></div>
+<div class="app">
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-logo">🏥</div>
+    <div class="brand-name">DAPINDU</div>
+    <div class="brand-sub" id="sbSub">Posyandu Ceria · Desa Lestari</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-sec">Utama</div>
+    <div class="nav-item active" data-page="dashboard"><i class="ri-dashboard-3-line"></i>Dashboard</div>
+    <div class="nav-sec balita-sec">🍼 Posyandu Balita</div>
+    <div class="nav-item balita-item" data-page="balita"><i class="ri-user-heart-line"></i>Data Balita</div>
+    <div class="nav-item balita-item" data-page="imunisasi"><i class="ri-syringe-line"></i>Imunisasi</div>
+    <div class="nav-sec lansia-sec">🌿 Posyandu Lansia</div>
+    <div class="nav-item lansia-item" data-page="lansia"><i class="ri-parent-line"></i>Data Lansia</div>
+    <div class="nav-sec">Lainnya</div>
+    <div class="nav-item" data-page="laporan"><i class="ri-file-chart-line"></i>Laporan &amp; Ekspor</div>
+    <div class="nav-item" data-page="konfig"><i class="ri-settings-3-line"></i>Konfigurasi</div>
+  </nav>
+  <div class="sidebar-footer"><div class="ver">DAPINDU v1.0 · 2025</div></div>
+</aside>
+<!-- MAIN -->
+<main class="main" id="mainContent">
+  <div class="topbar">
+    <div class="topbar-left">
+      <button class="menu-toggle" onclick="toggleSidebar()"><i class="ri-menu-line"></i></button>
+      <div><div class="page-title" id="tbTitle">Dashboard</div><div class="page-meta" id="tbMeta">Ringkasan Data Posyandu</div></div>
+    </div>
+    <div class="topbar-right">
+      <span class="sync-indicator init" id="syncStatus"><span class="sync-dot"></span><span id="syncLabel">Menghubungkan…</span></span>
+      <button class="tbtn" id="darkToggle" onclick="toggleDark()" title="Ganti Mode Tampilan" style="padding:8px 11px"><i class="ri-moon-line" id="darkIcon"></i></button>
+      <button class="tbtn add-balita" onclick="openBalitaModal()"><i class="ri-user-heart-line main-icon"></i><i class="ri-add-line plus-icon"></i> Tambah Data Balita</button>
+      <button class="tbtn add-lansia" onclick="openLansiaModal()"><i class="ri-parent-line main-icon"></i><i class="ri-add-line plus-icon"></i> Tambah Data Lansia</button>
+    </div>
+  </div>
+  <div class="content">
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+    <div class="stats-grid" id="statsGrid"></div>
+    <!-- CATAT KUNJUNGAN -->
+    <div class="card" style="margin-bottom:20px;border-left:4px solid var(--t5)">
+      <div class="card-title" style="margin-bottom:2px"><i class="ri-calendar-check-line"></i>Catat Kunjungan Bulan Ini</div>
+      <div class="card-sub">Input cepat pemeriksaan rutin — peserta sudah terdaftar</div>
+      <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+        <div class="form-group" style="flex:0 0 145px;min-width:120px"><label>Jenis</label><select id="qJenis" onchange="updateQPeserta()"><option value="balita">Balita</option><option value="lansia">Lansia</option></select></div>
+        <div class="form-group" style="flex:1;min-width:180px"><label>Nama Peserta</label>
+          <div class="combobox-wrap"><input type="text" id="qPesertaInput" placeholder="Ketik nama..." autocomplete="off" oninput="filterQPeserta()" onfocus="openQDropdown()" onblur="setTimeout(closeQDropdown,200)">
+          <div class="combobox-dropdown" id="qDropdown"></div></div>
+          <input type="hidden" id="qPesertaId">
+        </div>
+        <div class="form-group" style="flex:0 0 145px;min-width:120px"><label>Bulan &amp; Tahun</label><input type="month" id="qBulan" lang="id"></div>
+        <div class="form-group" style="flex:0 0 95px;min-width:82px" id="qBBGrp"><label>BB (kg)</label><input type="number" step="0.1" id="qBB" placeholder="0,0"></div>
+        <div class="form-group" style="flex:0 0 95px;min-width:82px" id="qTBGrp"><label>TB (cm)</label><input type="number" step="0.5" id="qTB" placeholder="0,0"></div>
+        <div class="form-group" style="flex:0 0 90px;min-width:80px" id="qLKGrp"><label>LK (cm)</label><input type="number" step="0.1" id="qLK" placeholder="—"></div>
+        <div class="form-group" style="flex:0 0 90px;min-width:80px" id="qLLAGrp"><label>LLA (cm)</label><input type="number" step="0.1" id="qLLA" placeholder="—"></div>
+        <div class="form-group" style="flex:0 0 110px;min-width:90px;display:none" id="qTDGrp"><label>TD (mmHg)</label><input type="text" id="qTD" placeholder="120/80"></div>
+        <div class="form-group" style="flex:0 0 100px;min-width:85px;display:none" id="qGulaGrp"><label>Gula (mg/dL)</label><input type="number" id="qGula" placeholder="—"></div>
+        <div class="form-group" style="flex:0 0 100px;min-width:85px;display:none" id="qAUGrp"><label>Asam Urat</label><input type="number" step="0.1" id="qAU" placeholder="—"></div>
+        <div class="form-group" style="flex:0 0 100px;min-width:85px;display:none" id="qKolGrp"><label>Kolesterol</label><input type="number" id="qKol" placeholder="—"></div>
+        <div style="align-self:flex-end"><button class="btn btn-primary" onclick="simpanKunjungan()"><i class="ri-save-line"></i>Simpan</button></div>
+      </div>
+    </div>
+    <!-- PENCATATAN TERAKHIR -->
+    <div class="card" style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:4px">
+        <div class="card-title" style="margin-bottom:0"><i class="ri-history-line"></i>8 Pencatatan Terakhir</div>
+        <div style="display:flex;gap:6px">
+          <button id="filterKunj_all" class="btn btn-sm btn-primary" onclick="setFilterKunj('all')" style="padding:5px 12px;font-size:12px">Semua</button>
+          <button id="filterKunj_balita" class="btn btn-sm btn-outline" onclick="setFilterKunj('balita')" style="padding:5px 12px;font-size:12px;color:#0891b2;border-color:#0891b2">👶 Balita</button>
+          <button id="filterKunj_lansia" class="btn btn-sm btn-outline" onclick="setFilterKunj('lansia')" style="padding:5px 12px;font-size:12px;color:#d97706;border-color:#d97706">👴 Lansia</button>
+        </div>
+      </div>
+      <div class="card-sub">Data terakhir dicatat untuk semua peserta</div>
+      <div id="kunjunganTerakhir"></div>
+    </div>
+    <!-- GRAFIK KEHADIRAN -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px" class="two-col">
+      <div class="card"><div class="card-title"><i class="ri-user-heart-line"></i>Peserta Posyandu Balita</div><div class="card-sub">Jumlah balita hadir per bulan</div><div class="chart-wrap"><canvas id="dashBalitaChart"></canvas></div></div>
+      <div class="card"><div class="card-title"><i class="ri-parent-line"></i>Peserta Posyandu Lansia</div><div class="card-sub">Jumlah lansia hadir per bulan</div><div class="chart-wrap"><canvas id="dashLansiaChart"></canvas></div></div>
+    </div>
+    <!-- STUNTING + LANSIA -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px" class="two-col">
+      <div class="card"><div class="card-title"><i class="ri-mental-health-line"></i>Deteksi Potensi Stunting</div><div class="card-sub">TB/U &lt; -2SD standar Permenkes No.2/2020</div><div id="stuntingInfografis"></div></div>
+      <div class="card"><div class="card-title"><i class="ri-heart-pulse-line"></i>Deteksi Kesehatan Lansia</div><div class="card-sub">Status pemeriksaan kesehatan lansia</div><div id="lansiaHealthInfografis"></div></div>
+    </div>
+  </div>
+
+  <!-- DATA BALITA -->
+  <div class="page" id="page-balita">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <div style="font-size:17px;font-weight:800;color:var(--t8)">Data Balita</div>
+      <button class="btn btn-primary" onclick="openBalitaModal()"><i class="ri-add-line" style="font-size:18px"></i><span style="font-size:12px">+</span> Tambah Balita</button>
+    </div>
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+        <div><div class="card-title" style="margin-bottom:0"><i class="ri-list-check"></i>Data Balita Terdaftar</div><div class="card-sub" style="margin:4px 0 0;font-size:12px">Klik nama untuk melihat detail</div></div>
+        <div class="filter-bar">
+          <input type="text" placeholder="🔍 Cari nama..." id="searchBalita" style="padding:7px 11px;font-size:13px;width:180px" oninput="renderBalita()">
+          <select id="filterPosyandu" onchange="renderBalita()" style="font-size:12px;padding:7px 10px;border-radius:8px">
+            <option value="">Semua Posyandu</option>
+            <option value="Posyandu Panda">Posyandu Panda</option>
+            <option value="Posyandu Kanguru">Posyandu Kanguru</option>
+          </select>
+          <select id="sortBalita" onchange="renderBalita()" style="font-size:12px">
+            <option value="">Urutan Default</option>
+            <option value="usia_asc">Usia: Termuda → Tertua</option>
+            <option value="usia_desc">Usia: Tertua → Termuda</option>
+            <option value="jk_l">Jenis Kelamin: Laki-laki</option>
+            <option value="jk_p">Jenis Kelamin: Perempuan</option>
+          </select>
+        </div>
+      </div>
+      <div class="tbl-ctrl">
+        <label style="text-transform:none;font-size:13px;color:var(--mu);letter-spacing:0">Tampilkan</label>
+        <select id="limitBalita" onchange="renderBalita()" style="width:auto;padding:5px 10px;font-size:13px"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option><option value="all">Semua</option></select>
+        <span class="tbl-info" id="infoBalita"></span>
+      </div>
+      <div class="tbl-wrap"><table><thead><tr><th>#</th><th onclick="setSortBalita('nama')">Nama Balita</th><th>Ibu/Ortu</th><th>JK</th><th onclick="setSortBalita('usia')">Usia</th><th>Posyandu</th><th>Aksi</th></tr></thead><tbody id="balitaTbody"></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- IMUNISASI -->
+  <div class="page" id="page-imunisasi">
+    <div style="font-size:17px;font-weight:800;color:var(--t8);margin-bottom:16px">Pencatatan Imunisasi</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px" class="two-col">
+      <div class="card">
+        <div class="card-title"><i class="ri-syringe-line"></i>Catat Imunisasi</div>
+        <div class="form-grid" style="grid-template-columns:1fr">
+          <div class="form-group"><label>Pilih Balita</label>
+            <div class="combobox-wrap">
+              <input type="text" id="imunBalitaInput" placeholder="Ketik nama balita..." autocomplete="off" oninput="filterImunBalita()" onfocus="openImunDropdown()" onblur="setTimeout(closeImunDropdown,200)">
+              <div class="combobox-dropdown" id="imunDropdown"></div>
+            </div>
+            <input type="hidden" id="imunBalitaSel" onchange="renderRiwayatImun()">
+          </div>
+          <div class="form-group"><label>Tanggal Pemberian</label><input type="text" id="imunTgl" placeholder="dd/mm/yyyy"></div>
+          <div class="form-group"><label>Jenis Imunisasi (centang yang diberikan)</label><div class="chk-group" id="imunChecklist"></div></div>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" onclick="simpanImunisasi()"><i class="ri-save-line"></i>Simpan</button></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ri-history-line"></i>Status Imunisasi</div>
+        <div class="card-sub">Pilih balita untuk melihat progres</div>
+        <div id="riwayatImunContainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATA LANSIA -->
+  <div class="page" id="page-lansia">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <div style="font-size:17px;font-weight:800;color:var(--t8)">Data Lansia</div>
+      <button class="btn btn-primary" onclick="openLansiaModal()"><i class="ri-add-line" style="font-size:18px"></i><span style="font-size:12px">+</span> Tambah Lansia</button>
+    </div>
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+        <div><div class="card-title" style="margin-bottom:0"><i class="ri-parent-line"></i>Data Lansia Terdaftar</div><div class="card-sub" style="margin:4px 0 0;font-size:12px">Klik nama untuk detail</div></div>
+        <input type="text" placeholder="🔍 Cari nama..." id="searchLansia" style="padding:7px 11px;font-size:13px;width:200px;max-width:100%" oninput="renderLansia()">
+      </div>
+      <div class="tbl-ctrl">
+        <label style="text-transform:none;font-size:13px;color:var(--mu);letter-spacing:0">Tampilkan</label>
+        <select id="limitLansia" onchange="renderLansia()" style="width:auto;padding:5px 10px;font-size:13px"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option><option value="all">Semua</option></select>
+        <span class="tbl-info" id="infoLansia"></span>
+      </div>
+      <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Nama</th><th>Usia</th><th>TD</th><th>Gula Darah</th><th>Kolesterol</th><th>Asam Urat</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="lansiaTbody"></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- LAPORAN -->
+  <div class="page" id="page-laporan">
+    <div style="font-size:17px;font-weight:800;color:var(--t8);margin-bottom:16px">Laporan &amp; Ekspor</div>
+    <div class="lap-grid">
+      <div class="lap-card"><div class="lap-card-title"><i class="ri-mental-health-line" style="color:var(--coral)"></i>Potensi Stunting</div><div id="lapStunting"></div></div>
+      <div class="lap-card"><div class="lap-card-title"><i class="ri-heart-pulse-line" style="color:var(--amber)"></i>Kesehatan Lansia</div><div id="lapLansia"></div></div>
+      <div class="lap-card"><div class="lap-card-title"><i class="ri-syringe-line" style="color:var(--t5)"></i>Status Imunisasi</div><div id="lapImun"></div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px" class="two-col">
+      <div class="card"><div class="card-title"><i class="ri-bar-chart-box-line"></i>Statistik Umum</div><div id="laporanStats"></div></div>
+      <div class="card"><div class="card-title"><i class="ri-pie-chart-line"></i>Distribusi Imunisasi</div><div class="chart-wrap" style="height:200px"><canvas id="imunPieChart"></canvas></div></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ri-printer-line"></i>Ekspor Laporan PDF</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:12px">
+        <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:14px;padding:16px">
+          <div style="font-size:13px;font-weight:700;color:#14532d;margin-bottom:4px"><i class="ri-file-pdf-line"></i> Laporan Bulanan</div>
+          <div style="font-size:11px;color:#166534;margin-bottom:10px">Data peserta hadir di bulan tertentu</div>
+          <input type="month" id="pdfBulan" style="padding:5px 8px;font-size:12px;width:100%;margin-bottom:8px">
+          <button class="btn btn-sm" style="background:#15803d;color:#fff;border-color:#15803d" onclick="document.getElementById('pdfJenis').value='bulanan';eksporPDF()"><i class="ri-printer-line"></i>Cetak PDF Bulanan</button>
+        </div>
+        <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:14px;padding:16px">
+          <div style="font-size:13px;font-weight:700;color:#14532d;margin-bottom:4px"><i class="ri-file-pdf-line"></i> Laporan Tahunan</div>
+          <div style="font-size:11px;color:#166534;margin-bottom:10px">Rekap data sepanjang tahun</div>
+          <input type="number" id="pdfTahun" placeholder="Tahun" style="padding:5px 8px;font-size:12px;width:100%;margin-bottom:8px" value="2025">
+          <button class="btn btn-sm" style="background:#15803d;color:#fff;border-color:#15803d" onclick="document.getElementById('pdfJenis').value='tahunan';eksporPDF()"><i class="ri-printer-line"></i>Cetak PDF Tahunan</button>
+        </div>
+        <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:14px;padding:16px">
+          <div style="font-size:13px;font-weight:700;color:#14532d;margin-bottom:4px"><i class="ri-file-pdf-line"></i> Laporan Lengkap</div>
+          <div style="font-size:11px;color:#166534;margin-bottom:10px">Seluruh data balita dan lansia</div>
+          <button class="btn btn-sm" style="background:#15803d;color:#fff;border-color:#15803d" onclick="document.getElementById('pdfJenis').value='lengkap';eksporPDF()"><i class="ri-printer-line"></i>Cetak PDF Lengkap</button>
+        </div>
+      </div>
+      <input type="hidden" id="pdfJenis" value="bulanan">
+    </div>
+  </div>
+
+  <!-- KONFIGURASI -->
+  <div class="page" id="page-konfig">
+    <div style="font-size:17px;font-weight:800;color:var(--t8);margin-bottom:16px">Konfigurasi Sistem</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px" class="two-col">
+      <div class="card">
+        <div class="card-title"><i class="ri-hospital-line"></i>Identitas Posyandu</div>
+        <div class="form-grid" style="grid-template-columns:1fr;margin-top:12px">
+          <div class="form-group"><label>Nama Posyandu</label><input type="text" id="kNama"></div>
+          <div class="form-group"><label>Desa / Kelurahan</label><input type="text" id="kDesa"></div>
+          <div class="form-group"><label>Kecamatan</label><input type="text" id="kKec"></div>
+          <div class="form-group"><label>Kabupaten / Kota</label><input type="text" id="kKab"></div>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" onclick="simpanKonfig()"><i class="ri-save-line"></i>Simpan</button></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ri-database-2-line"></i>Manajemen Data</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+          <div style="background:var(--t0);border:1px solid var(--bd);border-radius:12px;padding:13px">
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px">Backup JSON</div>
+            <div style="font-size:12px;color:var(--mu);margin-bottom:8px">Ekspor semua data ke file JSON</div>
+            <button class="btn btn-outline btn-sm" onclick="backupData()"><i class="ri-download-cloud-line"></i>Backup</button>
+          </div>
+          <div style="background:var(--t0);border:1px solid var(--bd);border-radius:12px;padding:13px">
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px">Impor JSON</div>
+            <div style="font-size:12px;color:var(--mu);margin-bottom:8px">Pulihkan data dari file JSON backup</div>
+            <label class="btn btn-outline btn-sm" style="cursor:pointer"><i class="ri-upload-cloud-line"></i>Pilih File JSON<input type="file" accept=".json" style="display:none" onchange="imporJSON(event)"></label>
+          </div>
+          <div id="fbStatusCard" style="background:var(--t0);border:1px solid var(--bd);border-radius:12px;padding:13px">
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px"><i class="ri-cloud-line"></i> Status Sinkronisasi</div>
+            <div style="font-size:12px;color:var(--mu);margin-bottom:8px">Firebase Realtime Sync</div>
+            <div id="fbStatusDetail" style="font-size:12px;color:var(--mu)">Menginisialisasi…</div>
+            <button class="btn btn-outline btn-sm" style="margin-top:10px;border-color:#0891b2;color:#0891b2" onclick="pushDummyData()">
+              <i class="ri-test-tube-line"></i> Push Dummy Data ke Firebase
+            </button>
+          </div>
+          <div style="background:#fff8f8;border:1px solid #fecaca;border-radius:12px;padding:13px">
+            <div style="font-weight:700;font-size:14px;color:#7f1d1d;margin-bottom:4px">Reset Semua Data</div>
+            <div style="font-size:12px;color:#b91c1c;margin-bottom:8px">Tidak dapat dibatalkan!</div>
+            <button class="btn btn-danger btn-sm" onclick="resetData()"><i class="ri-delete-bin-line"></i>Reset</button>
+          </div>
+          <div style="background:var(--t0);border:1px solid var(--bd);border-radius:12px;padding:13px"><div style="font-weight:700;font-size:14px;margin-bottom:6px">Statistik DB</div><div id="dbStats" style="font-size:13px;color:var(--mu)"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div><!-- /content -->
+</main>
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="bnav-item active" data-page="dashboard" onclick="showPage('dashboard')"><i class="ri-dashboard-3-line"></i>Dashboard</button>
+  <button class="bnav-item balita-nav" data-page="balita" onclick="showPage('balita')"><i class="ri-user-heart-line"></i>Balita</button>
+  <button class="bnav-item balita-nav" data-page="imunisasi" onclick="showPage('imunisasi')"><i class="ri-syringe-line"></i>Imunisasi</button>
+  <button class="bnav-item lansia-nav" data-page="lansia" onclick="showPage('lansia')"><i class="ri-parent-line"></i>Lansia</button>
+  <button class="bnav-item" data-page="laporan" onclick="showPage('laporan')"><i class="ri-file-chart-line"></i>Laporan</button>
+  <button class="bnav-item" data-page="konfig" onclick="showPage('konfig')"><i class="ri-settings-3-line"></i>Konfig</button>
+</nav>
+
+<!-- FULLSCREEN BUTTON -->
+<button class="fs-btn" id="fsBtn" onclick="toggleFullscreen()" title="Layar Penuh"><i class="ri-fullscreen-line" id="fsIcon"></i></button>
+
+<!-- MODAL BALITA -->
+<div class="modal-overlay" id="modalBalita">
+  <div class="modal" style="max-width:720px">
+    <div class="modal-hdr"><div class="modal-title" id="mBalitaTitle"><i class="ri-user-heart-line"></i> Tambah Balita</div><button class="modal-close" onclick="closeModal('modalBalita')"><i class="ri-close-line"></i></button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label>Nama Balita *</label><input type="text" id="bNama" placeholder="Nama lengkap"></div>
+        <div class="form-group"><label>Nama Ibu / Orang Tua *</label><input type="text" id="bNamaIbu" placeholder="Nama ibu/wali"></div>
+        <div class="form-group"><label>Tanggal Lahir *</label><input type="text" id="bTglLahir" placeholder="dd/mm/yyyy"></div>
+        <div class="form-group"><label>Jenis Kelamin *</label><select id="bJK"><option value="L">Laki-laki</option><option value="P">Perempuan</option></select></div>
+        <div class="form-group"><label>Nama Posyandu *</label><select id="bPosyandu"><option value="Posyandu Panda">Posyandu Panda</option><option value="Posyandu Kanguru">Posyandu Kanguru</option></select></div>
+        <div class="form-group"><label>Anak ke-<span class="lopt">opsional</span></label><input type="number" id="bAnakKe" placeholder="contoh: 2" min="1"></div>
+        <div class="form-group full"><label>Alamat *</label><input type="text" id="bAlamat" placeholder="Alamat lengkap"></div>
+        <div class="sec-div">Data Opsional — Identitas Kependudukan</div>
+        <div class="form-group"><label>NIK Balita<span class="lopt">opsional</span></label><input type="tel" inputmode="numeric" pattern="[0-9]*" id="bNIK" placeholder="16 digit NIK" maxlength="16"></div>
+        <div class="form-group"><label>No. KK<span class="lopt">opsional</span></label><input type="tel" inputmode="numeric" pattern="[0-9]*" id="bKK" placeholder="16 digit KK" maxlength="16"></div>
+        <div class="form-group"><label>NIK Ibu<span class="lopt">opsional</span></label><input type="tel" inputmode="numeric" pattern="[0-9]*" id="bNIKIbu" placeholder="NIK ibu" maxlength="16"></div>
+        <div class="form-group"><label>NIK Ayah<span class="lopt">opsional</span></label><input type="tel" inputmode="numeric" pattern="[0-9]*" id="bNIKAyah" placeholder="NIK ayah" maxlength="16"></div>
+        <div class="form-group"><label>Nama Ayah<span class="lopt">opsional</span></label><input type="text" id="bNamaAyah" placeholder="Nama ayah"></div>
+      </div>
+    </div>
+    <div class="modal-ftr"><button class="btn btn-outline" onclick="closeModal('modalBalita')">Batal</button><button class="btn btn-primary" onclick="simpanBalita()"><i class="ri-save-line"></i>Simpan</button></div>
+  </div>
+</div>
+
+<!-- MODAL LANSIA -->
+<div class="modal-overlay" id="modalLansia">
+  <div class="modal" style="max-width:760px">
+    <div class="modal-hdr"><div class="modal-title" id="mLansiaTitle"><i class="ri-parent-line"></i> Tambah Lansia</div><button class="modal-close" onclick="closeModal('modalLansia')"><i class="ri-close-line"></i></button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label>Nama Lansia *</label><input type="text" id="lNama" placeholder="Nama lengkap"></div>
+        <div class="form-group"><label>Tanggal Lahir *</label><input type="text" id="lTglLahir" placeholder="dd/mm/yyyy"></div>
+        <div class="form-group full"><label>Alamat *</label><input type="text" id="lAlamat" placeholder="Alamat lengkap"></div>
+        <div class="sec-div">Hasil Pemeriksaan (tidak harus semua terisi)</div>
+        <div class="form-group"><label>Tekanan Darah<span class="lopt">opsional</span></label><input type="text" id="lTD" placeholder="120/80"></div>
+        <div class="form-group"><label>Gula Darah Acak (mg/dL)<span class="lopt">opsional</span></label><input type="number" id="lGula" placeholder="—"></div>
+        <div class="form-group"><label>Asam Urat (mg/dL)<span class="lopt">opsional</span></label><input type="number" step="0.1" id="lAsamUrat" placeholder="—"></div>
+        <div class="form-group"><label>Kolesterol (mg/dL)<span class="lopt">opsional</span></label><input type="number" id="lKolesterol" placeholder="—"></div>
+        <div class="sec-div">Identitas &amp; Riwayat Penyakit</div>
+        <div class="form-group full"><label>Riwayat Penyakit<span class="lopt">opsional</span></label><textarea id="lRiwayat" rows="2" placeholder="Hipertensi, Diabetes tipe 2..."></textarea></div>
+        <div class="form-group"><label>NIK<span class="lopt">opsional</span></label><input type="tel" inputmode="numeric" pattern="[0-9]*" id="lNIK" placeholder="16 digit NIK" maxlength="16"></div>
+        <div class="form-group"><label>No. KK<span class="lopt">opsional</span></label><input type="tel" inputmode="numeric" pattern="[0-9]*" id="lKK" placeholder="16 digit KK" maxlength="16"></div>
+      </div>
+    </div>
+    <div class="modal-ftr"><button class="btn btn-outline" onclick="closeModal('modalLansia')">Batal</button><button class="btn btn-primary" onclick="simpanLansia()"><i class="ri-save-line"></i>Simpan</button></div>
+  </div>
+</div>
+
+<!-- MODAL CATAT PENGUKURAN BALITA -->
+<div class="modal-overlay" id="modalCatatBalita" style="z-index:600">
+  <div class="modal" style="max-width:500px">
+    <div class="modal-hdr"><div class="modal-title"><i class="ri-scales-line"></i> Catat Pengukuran</div><button class="modal-close" onclick="closeModal('modalCatatBalita')"><i class="ri-close-line"></i></button></div>
+    <div class="modal-body">
+      <div style="background:var(--t0);border-radius:10px;padding:9px 14px;font-size:13px;font-weight:600;color:var(--t7);margin-bottom:12px" id="cBalitaInfo"></div>
+      <div class="form-grid">
+        <div class="form-group full"><label>Bulan Pemeriksaan *</label><input type="month" id="cBulan"></div>
+        <div class="form-group"><label>BB (kg) *</label><input type="number" step="0.1" id="cBB" placeholder="7,5"></div>
+        <div class="form-group"><label>TB/PB (cm) *</label><input type="number" step="0.5" id="cTB" placeholder="68,0"></div>
+        <div class="form-group"><label>Lingkar Kepala (cm)<span class="lopt">opsional</span></label><input type="number" step="0.1" id="cLK" placeholder="—"></div>
+        <div class="form-group"><label>LLA (cm)<span class="lopt">opsional</span></label><input type="number" step="0.1" id="cLLA" placeholder="—"></div>
+      </div>
+    </div>
+    <div class="modal-ftr"><button class="btn btn-outline" onclick="closeModal('modalCatatBalita')">Batal</button><button class="btn btn-primary" onclick="simpanCatatBalita()"><i class="ri-save-line"></i>Simpan</button></div>
+  </div>
+</div>
+
+<!-- MODAL CATAT PEMERIKSAAN LANSIA -->
+<div class="modal-overlay" id="modalCatatLansia" style="z-index:600">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-hdr"><div class="modal-title"><i class="ri-heart-pulse-line"></i> Catat Pemeriksaan</div><button class="modal-close" onclick="closeModal('modalCatatLansia')"><i class="ri-close-line"></i></button></div>
+    <div class="modal-body">
+      <div style="background:var(--t0);border-radius:10px;padding:9px 14px;font-size:13px;font-weight:600;color:var(--t7);margin-bottom:12px" id="cLansiaInfo"></div>
+      <div id="cLansiaDupWarn" style="display:none;background:#fef9c3;border:1.5px solid #fbbf24;border-radius:10px;padding:9px 14px;font-size:12px;color:#78350f;margin-bottom:10px"></div>
+      <div class="form-grid">
+        <div class="form-group full"><label>Bulan Pemeriksaan *</label><input type="month" id="clBulan" onchange="cekDupLansia()"></div>
+        <div class="form-group"><label>TD (mmHg)<span class="lopt">opsional</span></label><input type="text" id="clTD" placeholder="120/80"></div>
+        <div class="form-group"><label>Gula Darah Acak (mg/dL)<span class="lopt">opsional</span></label><input type="number" id="clGula" placeholder="—"></div>
+        <div class="form-group"><label>Asam Urat (mg/dL)<span class="lopt">opsional</span></label><input type="number" step="0.1" id="clAU" placeholder="—"></div>
+        <div class="form-group"><label>Kolesterol (mg/dL)<span class="lopt">opsional</span></label><input type="number" id="clKol" placeholder="—"></div>
+      </div>
+    </div>
+    <div class="modal-ftr"><button class="btn btn-outline" onclick="closeModal('modalCatatLansia')">Batal</button><button class="btn btn-primary" onclick="simpanCatatLansia()"><i class="ri-save-line"></i>Simpan</button></div>
+  </div>
+</div>
+
+<!-- MODAL EDIT RIWAYAT BALITA -->
+<div class="modal-overlay" id="modalEditRiwayatBalita" style="z-index:650">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-hdr"><div class="modal-title"><i class="ri-scales-line"></i> Edit Pencatatan</div><button class="modal-close" onclick="closeModal('modalEditRiwayatBalita')"><i class="ri-close-line"></i></button></div>
+    <div class="modal-body">
+      <div style="background:var(--t0);border-radius:10px;padding:8px 13px;font-size:13px;font-weight:600;color:var(--t7);margin-bottom:12px" id="erBalitaInfo"></div>
+      <div class="form-grid">
+        <div class="form-group full"><label>Bulan Pencatatan *</label><input type="month" id="erBulan"></div>
+        <div class="form-group"><label>BB (kg) *</label><input type="number" step="0.1" id="erBB" placeholder="7,5"></div>
+        <div class="form-group"><label>TB/PB (cm) *</label><input type="number" step="0.5" id="erTB" placeholder="68,0"></div>
+        <div class="form-group"><label>Lingkar Kepala (cm)<span class="lopt">opsional</span></label><input type="number" step="0.1" id="erLK" placeholder="—"></div>
+        <div class="form-group"><label>Lingkar Lengan Atas (cm)<span class="lopt">opsional</span></label><input type="number" step="0.1" id="erLLA" placeholder="—"></div>
+      </div>
+      <input type="hidden" id="erBalitaId"><input type="hidden" id="erBulanLama">
+    </div>
+    <div class="modal-ftr">
+      <button class="btn btn-danger btn-sm" onclick="hapusRiwayatBalita()"><i class="ri-delete-bin-line"></i>Hapus Baris</button>
+      <div style="flex:1"></div>
+      <button class="btn btn-outline" onclick="closeModal('modalEditRiwayatBalita')">Batal</button>
+      <button class="btn btn-primary" onclick="simpanEditRiwayatBalita()"><i class="ri-save-line"></i>Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDIT IMUNISASI -->
+<div class="modal-overlay" id="modalEditImun">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-hdr"><div class="modal-title"><i class="ri-syringe-line"></i> Edit Imunisasi</div><button class="modal-close" onclick="closeModal('modalEditImun')"><i class="ri-close-line"></i></button></div>
+    <div class="modal-body">
+      <div class="form-grid" style="grid-template-columns:1fr">
+        <div class="form-group"><label>Jenis Imunisasi</label><select id="editImunJenis"></select></div>
+        <div class="form-group"><label>Tanggal Pemberian</label><input type="text" id="editImunTgl" placeholder="dd/mm/yyyy"></div>
+      </div>
+      <input type="hidden" id="editImunId">
+    </div>
+    <div class="modal-ftr"><button class="btn btn-outline" onclick="closeModal('modalEditImun')">Batal</button><button class="btn btn-primary" onclick="simpanEditImun()"><i class="ri-save-line"></i>Simpan</button></div>
+  </div>
+</div>
+
+<!-- MODAL EDIT RIWAYAT LANSIA -->
+<div class="modal-overlay" id="modalEditRiwayatLansia" style="z-index:650">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-hdr"><div class="modal-title"><i class="ri-heart-pulse-line"></i> Edit Pencatatan Lansia</div><button class="modal-close" onclick="closeModal('modalEditRiwayatLansia')"><i class="ri-close-line"></i></button></div>
+    <div class="modal-body">
+      <div style="background:var(--t0);border-radius:10px;padding:8px 13px;font-size:13px;font-weight:600;color:var(--t7);margin-bottom:12px" id="erLansiaInfo"></div>
+      <div class="form-grid">
+        <div class="form-group full"><label>Bulan Pencatatan *</label><input type="month" id="erLBulan"></div>
+        <div class="form-group"><label>TD (mmHg)<span class="lopt">opsional</span></label><input type="text" id="erLTD" placeholder="120/80"></div>
+        <div class="form-group"><label>Gula Darah Acak (mg/dL)<span class="lopt">opsional</span></label><input type="number" id="erLGula" placeholder="—"></div>
+        <div class="form-group"><label>Asam Urat (mg/dL)<span class="lopt">opsional</span></label><input type="number" step="0.1" id="erLAU" placeholder="—"></div>
+        <div class="form-group"><label>Kolesterol (mg/dL)<span class="lopt">opsional</span></label><input type="number" id="erLKol" placeholder="—"></div>
+      </div>
+      <input type="hidden" id="erLansiaId"><input type="hidden" id="erLBulanLama">
+    </div>
+    <div class="modal-ftr">
+      <button class="btn btn-danger btn-sm" onclick="hapusRiwayatLansia()"><i class="ri-delete-bin-line"></i>Hapus Baris</button>
+      <div style="flex:1"></div>
+      <button class="btn btn-outline" onclick="closeModal('modalEditRiwayatLansia')">Batal</button>
+      <button class="btn btn-primary" onclick="simpanEditRiwayatLansia()"><i class="ri-save-line"></i>Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL BALITA -->
+<div class="modal-overlay" id="modalDetailBalita">
+  <div class="modal" style="max-width:800px">
+    <div class="modal-hdr"><div class="modal-title" id="detailBalitaTitle">Detail Balita</div><button class="modal-close" onclick="closeModal('modalDetailBalita')"><i class="ri-close-line"></i></button></div>
+    <div class="modal-body" id="detailBalitaBody"></div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL LANSIA -->
+<div class="modal-overlay" id="modalDetailLansia">
+  <div class="modal" style="max-width:760px">
+    <div class="modal-hdr"><div class="modal-title" id="detailLansiaTitle">Detail Lansia</div><button class="modal-close" onclick="closeModal('modalDetailLansia')"><i class="ri-close-line"></i></button></div>
+    <div class="modal-body" id="detailLansiaBody"></div>
+  </div>
+</div>
+
+<script>
+// ═══ STANDAR PERMENKES 2/2020 ═══
+const TBU_L_M2SD=[46.1,50.8,54.4,57.3,59.7,61.7,63.3,64.8,66.2,67.5,68.7,69.9,71.0,72.1,73.1,74.1,75.0,76.0,76.9,77.7,78.6,79.4,80.2,81.0,81.7,82.5,83.3,84.1,84.8,85.5,86.1,86.7,87.3,87.9,88.5,89.1,89.7,90.3,90.9,91.4,92.0,92.5,93.0,93.5,94.0,94.5,95.1,95.6,96.1,96.6,97.1,97.6,98.1,98.6,99.1,99.6,100.2,100.7,101.2,101.7,102.3];
+const TBU_L_M3SD=[44.2,48.9,52.4,55.3,57.6,59.6,61.2,62.7,64.0,65.2,66.4,67.6,68.6,69.6,70.6,71.6,72.5,73.3,74.2,75.0,75.8,76.5,77.2,78.0,78.7,79.3,79.9,80.5,81.1,81.7,82.3,82.8,83.4,83.9,84.4,84.9,85.5,86.0,86.5,87.0,87.5,88.0,88.4,88.9,89.4,89.8,90.3,90.7,91.2,91.6,92.1,92.5,93.0,93.4,93.9,94.3,94.7,95.2,95.6,96.1,96.6];
+const TBU_P_M2SD=[45.4,49.8,53.0,55.6,57.8,59.6,61.2,62.7,64.0,65.3,66.5,67.7,68.9,70.0,71.0,72.0,73.0,74.0,74.9,75.8,76.7,77.5,78.4,79.2,80.0,80.8,81.5,82.2,82.9,83.6,84.3,84.9,85.6,86.2,86.8,87.4,88.0,88.6,89.2,89.8,90.4,91.0,91.6,92.2,92.8,93.4,94.0,94.6,95.2,95.8,96.4,97.0,97.6,98.2,98.8,99.4,100.0,100.7,101.3,101.9,102.6];
+const TBU_P_M3SD=[43.6,47.8,51.0,53.5,55.6,57.4,58.9,60.3,61.7,62.9,64.1,65.2,66.3,67.3,68.3,69.3,70.2,71.1,72.0,72.8,73.7,74.5,75.2,76.0,76.7,77.5,78.1,78.8,79.5,80.1,80.7,81.3,81.9,82.5,83.1,83.6,84.2,84.7,85.3,85.8,86.3,86.8,87.4,87.9,88.4,88.9,89.3,89.8,90.3,90.7,91.2,91.7,92.1,92.6,93.0,93.4,93.9,94.3,94.7,95.2,95.6];
+const BBU_L_M2SD=[2.5,3.4,4.3,5.0,5.6,6.0,6.4,6.7,6.9,7.1,7.4,7.6,7.7,7.9,8.1,8.3,8.4,8.6,8.8,8.9,9.1,9.2,9.4,9.5,9.7,9.8,10.0,10.1,10.2,10.4,10.5,10.7,10.8,10.9,11.0,11.2,11.3,11.4,11.5,11.6,11.8,11.9,12.0,12.1,12.2,12.4,12.5,12.6,12.7,12.8,12.9,13.1,13.2,13.3,13.4,13.5,13.6,13.7,13.8,14.0,14.1];
+const BBU_L_M3SD=[2.1,2.9,3.8,4.4,4.9,5.3,5.7,5.9,6.2,6.4,6.6,6.8,6.9,7.1,7.2,7.4,7.5,7.7,7.8,8.0,8.1,8.2,8.4,8.5,8.6,8.8,8.9,9.0,9.1,9.2,9.4,9.5,9.6,9.7,9.8,9.9,10.0,10.1,10.2,10.3,10.4,10.5,10.6,10.7,10.8,10.9,11.0,11.1,11.2,11.3,11.4,11.5,11.6,11.7,11.8,11.9,12.0,12.1,12.2,12.3,12.4];
+const BBU_P_M2SD=[2.4,3.2,3.9,4.5,5.0,5.4,5.7,6.0,6.3,6.5,6.7,6.9,7.0,7.2,7.4,7.6,7.7,7.9,8.1,8.2,8.4,8.6,8.7,8.9,9.0,9.2,9.4,9.5,9.7,9.8,10.0,10.1,10.3,10.4,10.5,10.7,10.8,10.9,11.1,11.2,11.3,11.5,11.6,11.7,11.8,12.0,12.1,12.2,12.3,12.4,12.6,12.7,12.8,12.9,13.0,13.2,13.3,13.4,13.5,13.6,13.7];
+const BBU_P_M3SD=[2.0,2.7,3.4,4.0,4.4,4.8,5.1,5.3,5.6,5.8,5.9,6.1,6.3,6.4,6.6,6.7,6.9,7.0,7.2,7.3,7.5,7.6,7.8,7.9,8.1,8.2,8.4,8.5,8.6,8.8,8.9,9.0,9.1,9.3,9.4,9.5,9.6,9.7,9.8,9.9,10.1,10.2,10.3,10.4,10.5,10.6,10.7,10.8,10.9,11.0,11.1,11.2,11.3,11.4,11.5,11.6,11.7,11.8,11.9,12.0,12.1];
+
+function getTBU(u,jk){const idx=Math.min(60,u);return{m2:(jk==='P'?TBU_P_M2SD:TBU_L_M2SD)[idx],m3:(jk==='P'?TBU_P_M3SD:TBU_L_M3SD)[idx]};}
+function getBBU(u,jk){const idx=Math.min(60,u);return{m2:(jk==='P'?BBU_P_M2SD:BBU_L_M2SD)[idx],m3:(jk==='P'?BBU_P_M3SD:BBU_L_M3SD)[idx]};}
+function statusTBU(tb,u,jk){const r=getTBU(u,jk);if(!r.m2||!tb)return{l:'—',cls:'badge-neutral',skor:0};if(tb<r.m3)return{l:'Sangat Pendek',cls:'badge-severe',skor:-3};if(tb<r.m2)return{l:'Pendek (Stunted)',cls:'badge-danger',skor:-2};return{l:'Normal',cls:'badge-ok',skor:0};}
+function statusBBU(bb,u,jk){const r=getBBU(u,jk);if(!r.m2||!bb)return{l:'—',cls:'badge-neutral'};if(bb<r.m3)return{l:'BB Sangat Kurang',cls:'badge-severe'};if(bb<r.m2)return{l:'BB Kurang',cls:'badge-danger'};return{l:'BB Normal',cls:'badge-ok'};}
+function cekStunting(b){const u=Math.min(60,hitungUsia(b.tglLahir)),r=getTBU(u,b.jk||'L');return r.m2&&b.tb&&b.tb<r.m2;}
+function cekSangatPendek(b){const u=Math.min(60,hitungUsia(b.tglLahir)),r=getTBU(u,b.jk||'L');return r.m3&&b.tb&&b.tb<r.m3;}
+
+// ═══ JADWAL IMUNISASI (BERURUTAN SESUAI USIA) ═══
+const IMUN_STAGES=[
+  {stage:'Usia 0–24 Jam',items:[{jenis:'HB-0',label:'Hepatitis B (HB-0)'}]},
+  {stage:'Usia 1 Bulan',items:[{jenis:'BCG',label:'BCG'},{jenis:'OPV-1',label:'OPV 1 (Polio Tetes)'}]},
+  {stage:'Usia 2 Bulan',items:[{jenis:'DPT-HB-Hib 1',label:'DPT-HB-Hib 1'},{jenis:'OPV-2',label:'OPV 2'},{jenis:'PCV-1',label:'PCV 1'},{jenis:'RV-1',label:'Rotavirus 1 (RV1)'}]},
+  {stage:'Usia 3 Bulan',items:[{jenis:'DPT-HB-Hib 2',label:'DPT-HB-Hib 2'},{jenis:'OPV-3',label:'OPV 3'},{jenis:'PCV-2',label:'PCV 2'},{jenis:'RV-2',label:'Rotavirus 2 (RV2)'}]},
+  {stage:'Usia 4 Bulan',items:[{jenis:'DPT-HB-Hib 3',label:'DPT-HB-Hib 3'},{jenis:'OPV-4',label:'OPV 4'},{jenis:'IPV-1',label:'IPV 1'},{jenis:'RV-3',label:'Rotavirus 3 (RV3)'}]},
+  {stage:'Usia 9 Bulan',items:[{jenis:'MR-1',label:'Campak-Rubella 1 (MR-1)'},{jenis:'IPV-2',label:'IPV 2'}]},
+  {stage:'Usia 12 Bulan',items:[{jenis:'PCV-3',label:'PCV 3'}]},
+  {stage:'Usia 18 Bulan',items:[{jenis:'DPT-HB-Hib 4',label:'DPT-HB-Hib 4 (Booster)'},{jenis:'MR-2',label:'Campak-Rubella 2 / MR Booster'}]},
+];
+const ALL_IMUN=IMUN_STAGES.flatMap(s=>s.items);
+
+// ═══ DATA STORE ═══
+const SK='dapindu_v1';
+let db={konfig:{namaPosyandu:'Posyandu Ceria',desa:'Desa Lestari',kec:'Kec. Bahagia',kab:'Kab. Sehat'},balita:[],lansia:[],imunisasi:[]};
+let _applyingRemote=false; // Flag untuk prevent infinite loop saat Firebase update
+
+// Firebase bridge — set by firebase-module.js after init
+window._fbReady=false;
+window._fbSave=null; // async (data) => {}
+window._fbListen=null; // (onData) => unsubscribe
+
+function setSyncStatus(state,label){
+  const el=document.getElementById('syncStatus');
+  const dot=el?.querySelector('.sync-dot');
+  const lbl=document.getElementById('syncLabel');
+  if(!el)return;
+  el.className='sync-indicator '+state;
+  if(dot)dot.className='sync-dot'+(state==='syncing'?' pulse':'');
+  if(lbl)lbl.textContent=label;
+  const det=document.getElementById('fbStatusDetail');
+  if(det)det.textContent=label;
+}
+
+function saveDB(){
+  if(_applyingRemote) return; // Jangan save ke Firebase saat apply remote data
+  // Selalu simpan ke localStorage sebagai cache lokal
+  localStorage.setItem(SK,JSON.stringify(db));
+  // Push ke Firebase jika tersedia
+  if(window._fbSave){
+    // Buat deep copy agar tidak ada referensi yang berubah saat async
+    const snapshot=JSON.parse(JSON.stringify(db));
+    window._fbSave(snapshot).catch(e=>{
+      console.warn('[DAPINDU] saveDB firebase error:',e);
+      setSyncStatus('offline','Offline — data lokal');
+    });
+  }
+}
+
+function loadDB(){
+  console.log('[DEBUG] loadDB called');
+  try{const r=localStorage.getItem(SK);if(r)db={...db,...JSON.parse(r)};}catch(e){}
+  ['imunisasi','balita','lansia'].forEach(k=>{if(!db[k])db[k]=[];});
+  if(!db.konfig)db.konfig={namaPosyandu:'Posyandu Ceria',desa:'Desa Lestari',kec:'Kec. Bahagia',kab:'Kab. Sehat'};
+  if(db.balita.length===0){
+    db.balita=[
+      {id:'b1',nama:'Aisyah Nur Fadila',namaIbu:'Siti Rohani',namaAyah:'Budi Santoso',tglLahir:'2023-06-15',jk:'P',posyandu:'Posyandu Panda',bb:7.2,tb:67,lk:44,lla:13,alamat:'Jl. Melati No.12',nik:'',kk:'',nikIbu:'',nikAyah:'',anakKe:1,riwayatBB:[{bulan:'2024-06',bb:7.2,tb:67,lk:44,lla:13}]},
+      {id:'b2',nama:'Bima Sakti Wijaya',namaIbu:'Dewi Rahayu',namaAyah:'Hendra W',tglLahir:'2022-11-20',jk:'L',posyandu:'Posyandu Kanguru',bb:11.5,tb:82,lk:47,lla:15,alamat:'Jl. Anggrek No.5',nik:'',kk:'',nikIbu:'',nikAyah:'',anakKe:2,riwayatBB:[{bulan:'2024-01',bb:10.8,tb:79,lk:46,lla:14},{bulan:'2024-06',bb:11.5,tb:82,lk:47,lla:15}]},
+      {id:'b3',nama:'Cahaya Putri Lestari',namaIbu:'Nur Aini',namaAyah:'Sugeng P',tglLahir:'2023-12-01',jk:'P',posyandu:'Posyandu Panda',bb:5.8,tb:60,lk:38,lla:11,alamat:'Jl. Kenanga No.8',nik:'',kk:'',nikIbu:'',nikAyah:'',anakKe:1,riwayatBB:[{bulan:'2024-06',bb:5.8,tb:60,lk:38,lla:11}]},
+    ];
+    db.imunisasi=[
+      {id:'i1',balitaId:'b1',jenis:'HB-0',tanggal:'2023-06-15'},{id:'i2',balitaId:'b1',jenis:'BCG',tanggal:'2023-07-15'},
+      {id:'i3',balitaId:'b1',jenis:'DPT-HB-Hib 1',tanggal:'2023-08-15'},{id:'i4',balitaId:'b1',jenis:'DPT-HB-Hib 2',tanggal:'2023-09-15'},
+      {id:'i5',balitaId:'b2',jenis:'HB-0',tanggal:'2022-11-20'},{id:'i6',balitaId:'b2',jenis:'BCG',tanggal:'2022-12-20'},
+      {id:'i7',balitaId:'b2',jenis:'DPT-HB-Hib 1',tanggal:'2023-01-20'},{id:'i8',balitaId:'b2',jenis:'DPT-HB-Hib 2',tanggal:'2023-02-20'},
+      {id:'i9',balitaId:'b2',jenis:'DPT-HB-Hib 3',tanggal:'2023-03-20'},{id:'i10',balitaId:'b2',jenis:'MR-1',tanggal:'2023-08-20'},
+    ];
+    db.lansia=[
+      {id:'l1',nama:'Sutini Wahyuni',tglLahir:'1958-03-10',alamat:'Jl. Cempaka No.3',nik:'',kk:'',td:'130/85',gula:118,asamUrat:5.2,kolesterol:190,riwayat:'Hipertensi ringan',riwayatPemeriksaan:[{bulan:'2024-01',td:'128/82',gula:115,asamUrat:5.0,kolesterol:185},{bulan:'2024-06',td:'130/85',gula:118,asamUrat:5.2,kolesterol:190}]},
+      {id:'l2',nama:'Raharjo Santoso',tglLahir:'1952-07-25',alamat:'Jl. Mangga No.11',nik:'',kk:'',td:'148/92',gula:165,asamUrat:7.8,kolesterol:240,riwayat:'Diabetes tipe 2, Hiperurisemia',riwayatPemeriksaan:[{bulan:'2024-01',td:'145/90',gula:158,asamUrat:7.2,kolesterol:235},{bulan:'2024-06',td:'148/92',gula:165,asamUrat:7.8,kolesterol:240}]},
+    ];
+    saveDB();
+  }
+}
+loadDB();
+
+// ═══ HELPERS ═══
+function hitungUsia(tgl){const l=new Date(tgl),n=new Date();return Math.max(0,(n.getFullYear()-l.getFullYear())*12+(n.getMonth()-l.getMonth()));}
+function hitungUsiaDetail(tgl){
+  const lahir=new Date(tgl);
+  const sekarang=new Date();
+  let bulan=sekarang.getMonth()-lahir.getMonth();
+  let hari=sekarang.getDate()-lahir.getDate();
+  let tahun=sekarang.getFullYear()-lahir.getFullYear();
+  if(hari<0){bulan--;hari+=new Date(sekarang.getFullYear(),sekarang.getMonth(),0).getDate();}
+  if(bulan<0){tahun--;bulan+=12;}
+  if(tahun>0)return `${tahun} tahun ${bulan} bulan ${hari} hari`;
+  if(bulan>0)return `${bulan} bulan ${hari} hari`;
+  return `${hari} hari`;
+}
+function hitungUsiaThn(tgl){const l=new Date(tgl),n=new Date();let y=n.getFullYear()-l.getFullYear();if(n.getMonth()<l.getMonth()||(n.getMonth()===l.getMonth()&&n.getDate()<l.getDate()))y--;return Math.max(0,y);}
+function hitungUsiaAtDate(tglLahir,tglTarget){const l=new Date(tglLahir),t=new Date(tglTarget+'-01');return Math.max(0,(t.getFullYear()-l.getFullYear())*12+(t.getMonth()-l.getMonth()));}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+function fmt(d){return d?new Date(d).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'}):'-';}
+function fmtBulan(ym){if(!ym)return'—';const[y,m]=ym.split('-');const nm=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];return (nm[parseInt(m)-1]||m)+' '+y;}
+// Format desimal koma (Indonesian locale)
+function fmtDes(n,d=1){if(n==null||isNaN(n))return'—';return Number(n).toLocaleString('id-ID',{minimumFractionDigits:0,maximumFractionDigits:d});}
+// Format tanggal: yyyy-mm-dd -> dd/mm/yyyy
+function fmtTglDisplay(yyyymmdd){
+  if(!yyyymmdd)return'';
+  const[yyyy,mm,dd]=yyyymmdd.split('-');
+  return`${dd}/${mm}/${yyyy}`;
+}
+// Parse tanggal: dd/mm/yyyy -> yyyy-mm-dd
+function parseTglInput(ddmmyyyy){
+  if(!ddmmyyyy)return'';
+  const parts=ddmmyyyy.trim().split('/');
+  if(parts.length!==3)return'';
+  const[dd,mm,yyyy]=parts;
+  if(!dd||!mm||!yyyy)return'';
+  return`${yyyy}-${String(mm).padStart(2,'0')}-${String(dd).padStart(2,'0')}`;
+}
+// Parse input value that may use comma as decimal separator
+function parseNum(v){if(v===''||v==null)return null;return parseFloat(String(v).replace(',','.'));}
+
+function toast(msg,type='success'){
+  const c=document.getElementById('toastC'),t=document.createElement('div');
+  t.className=`toast ${type}`;
+  t.innerHTML=`<i class="ri-${type==='success'?'checkbox-circle':'error-warning'}-line" style="color:${type==='success'?'var(--mint)':'var(--coral)'}"></i>${msg}`;
+  c.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(30px)';t.style.transition='.3s';setTimeout(()=>t.remove(),300);},3000);
+}
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function toggleSidebar(){const sb=document.getElementById('sidebar'),ov=document.getElementById('sov');sb.classList.toggle('open');ov.style.display=sb.classList.contains('open')?'block':'none';}
+
+// STATUS HELPERS
+function statusTD(td){
+  if(!td)return{l:'—',cls:'badge-neutral',color:'#94a3b8'};
+  const[s,d]=td.split('/').map(Number);
+  if(isNaN(s)||isNaN(d))return{l:td,cls:'badge-neutral',color:'#94a3b8'};
+  if(s>=180||d>=120)return{l:'Krisis Hipertensi',cls:'badge-severe',color:'#7f1d1d'};
+  if(s>=160||d>=100)return{l:'Hipertensi Derajat 2',cls:'badge-danger',color:'#ef4444'};
+  if(s>=140||d>=90)return{l:'Hipertensi Derajat 1',cls:'badge-warn',color:'#f59e0b'};
+  if(s>=130||d>=80)return{l:'Pra-Hipertensi',cls:'badge-warn',color:'#eab308'};
+  if(s<90)return{l:'Hipotensi',cls:'badge-warn',color:'#60a5fa'};
+  return{l:'Normal',cls:'badge-ok',color:'#22c55e'};
+}
+// BB/U lengkap: tambah +1SD (risiko lebih) dan +2SD (lebih), +3SD (obesitas)
+const BBU_L_P1SD=[3.9,5.1,6.3,7.2,7.8,8.4,8.8,9.2,9.6,9.9,10.2,10.5,10.8,11.0,11.3,11.5,11.7,12.0,12.2,12.5,12.7,12.9,13.2,13.4,13.6,13.9,14.1,14.3,14.5,14.8,15.0,15.2,15.4,15.6,15.8,16.0,16.4,16.4,16.6,16.8,17.0,17.2,17.4,17.6,17.8,18.0,18.2,18.4,18.6,18.8,19.0,19.2,19.4,19.6,19.6,20.0,20.2,20.4,20.6,20.8,21.0];
+const BBU_P_P1SD=[3.7,4.8,5.8,6.6,7.3,7.8,8.2,8.6,9.0,9.3,9.6,9.9,10.1,10.4,10.6,10.9,11.1,11.4,11.6,11.8,12.1,12.3,12.5,12.8,13.0,13.3,13.5,13.7,14.0,14.2,14.4,14.7,14.9,15.1,15.4,15.6,16.0,16.0,16.3,16.5,16.7,16.9,17.2,17.4,17.6,17.8,18.1,18.3,18.5,18.8,19.0,19.2,19.4,19.7,20.1,20.1,20.3,20.6,20.8,21.0,21.2];
+function statusBBULengkap(bb,u,jk){
+  if(bb==null)return{l:'—',cls:'badge-neutral'};
+  const idx=Math.min(60,u);
+  const m2=(jk==='P'?BBU_P_M2SD:BBU_L_M2SD)[idx];
+  const m3=(jk==='P'?BBU_P_M3SD:BBU_L_M3SD)[idx];
+  const p1=(jk==='P'?BBU_P_P1SD:BBU_L_P1SD)[idx];
+  if(bb<m3)return{l:'BB Sangat Kurang',cls:'badge-severe'};
+  if(bb<m2)return{l:'BB Kurang',cls:'badge-danger'};
+  if(p1&&bb>p1)return{l:'Risiko Gizi Lebih / Obesitas',cls:'badge-danger'};
+  return{l:'BB Normal',cls:'badge-ok'};
+}
+
+function statusGula(g){
+  if(g==null)return{l:'—',cls:'badge-neutral',color:'#94a3b8'};
+  if(g>=200)return{l:'Diabetes (≥200)',cls:'badge-danger',color:'#ef4444'};
+  if(g>=140)return{l:'Pra-Diabetes',cls:'badge-warn',color:'#f59e0b'};
+  if(g<70)return{l:'Hipoglikemia (<70)',cls:'badge-danger',color:'#7c3aed'};
+  if(g<80)return{l:'Gula Rendah',cls:'badge-warn',color:'#6d28d9'};
+  return{l:'Normal (80-139)',cls:'badge-ok',color:'#22c55e'};
+}
+function statusAU(au){if(au==null)return{l:'—',cls:'badge-neutral',color:'#94a3b8'};if(au>7)return{l:'Tinggi (risiko Gout)',cls:'badge-danger',color:'#ef4444'};if(au>6)return{l:'Batas Atas',cls:'badge-warn',color:'#f59e0b'};if(au<2.5)return{l:'Rendah',cls:'badge-warn',color:'#6d28d9'};return{l:'Normal (2,5–6)',cls:'badge-ok',color:'#22c55e'};}
+function statusKol(k){if(k==null)return{l:'—',cls:'badge-neutral',color:'#94a3b8'};if(k>=240)return{l:'Tinggi (≥240)',cls:'badge-danger',color:'#ef4444'};if(k>=200)return{l:'Batas (200-239)',cls:'badge-warn',color:'#f59e0b'};return{l:'Normal',cls:'badge-ok',color:'#22c55e'};}
+function overallLansia(l){
+  const ss=[statusTD(l.td),statusGula(l.gula),statusAU(l.asamUrat),statusKol(l.kolesterol)];
+  if(ss.some(s=>s.cls==='badge-severe'||s.cls==='badge-danger'))return{l:'Perlu Perhatian',cls:'badge-danger'};
+  if(ss.some(s=>s.cls==='badge-warn'))return{l:'Pantau',cls:'badge-warn'};
+  if(ss.every(s=>s.cls==='badge-neutral'))return{l:'Belum Diperiksa',cls:'badge-neutral'};
+  return{l:'Baik',cls:'badge-ok'};
+}
+
+// ═══ NAVIGATION ═══
+function showPage(page){
+  console.log('[DEBUG] showPage called with:', page);
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
+  // sync bottom nav
+  document.querySelectorAll('.bnav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  const map={dashboard:'Dashboard',balita:'Data Balita',imunisasi:'Imunisasi',lansia:'Data Lansia',laporan:'Laporan & Ekspor',konfig:'Konfigurasi'};
+  const sub={dashboard:'Ringkasan Data Posyandu',balita:'Pencatatan & Pertumbuhan Balita',imunisasi:'Pencatatan Imunisasi Balita',lansia:'Pemeriksaan Kesehatan Lansia',laporan:'Ekspor PDF Laporan',konfig:'Pengaturan Identitas Posyandu'};
+  document.getElementById('tbTitle').textContent=map[page]||page;
+  document.getElementById('tbMeta').textContent=sub[page]||'';
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sov').style.display='none';
+  if(page==='dashboard')renderDashboard();
+  if(page==='balita')renderBalita();
+  if(page==='lansia')renderLansia();
+  if(page==='imunisasi'){renderImunForm();renderRiwayatImun();}
+  if(page==='laporan')renderLaporan();
+  if(page==='konfig')renderKonfig();
+}
+document.querySelectorAll('.nav-item').forEach(el=>el.addEventListener('click',()=>showPage(el.dataset.page)));
+
+// FULLSCREEN
+function toggleFullscreen(){
+  const icon=document.getElementById('fsIcon');
+  if(!document.fullscreenElement){
+    document.documentElement.requestFullscreen().catch(()=>{});
+    icon.className='ri-fullscreen-exit-line';
+  } else {
+    document.exitFullscreen();
+    icon.className='ri-fullscreen-line';
+  }
+}
+document.addEventListener('fullscreenchange',()=>{
+  const icon=document.getElementById('fsIcon');
+  if(icon)icon.className=document.fullscreenElement?'ri-fullscreen-exit-line':'ri-fullscreen-line';
+});
+
+// ═══ DASHBOARD ═══
+let _dc={};
+function getLast12Months(){const m=[],n=new Date();for(let i=11;i>=0;i--){const d=new Date(n.getFullYear(),n.getMonth()-i,1);m.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);}return m;}
+
+function renderDashboard(){
+  const jB=db.balita.length,jL=db.lansia.length;
+  const stList=db.balita.filter(b=>cekStunting(b));
+  const lRisiko=db.lansia.filter(l=>overallLansia(l).cls==='badge-danger').length;
+  const lPantau=db.lansia.filter(l=>overallLansia(l).cls==='badge-warn').length;
+  document.getElementById('statsGrid').innerHTML=`
+    <div class="stat-card teal"><div class="stat-icon">👶</div><div class="stat-label">Balita Terdaftar</div><div class="stat-val">${jB}<span class="stat-unit"> anak</span></div></div>
+    <div class="stat-card mint"><div class="stat-icon">👴</div><div class="stat-label">Lansia Terdaftar</div><div class="stat-val">${jL}<span class="stat-unit"> orang</span></div></div>
+    <div class="stat-card amber" style="cursor:pointer">
+      <div class="stat-icon">📏</div><div class="stat-label">Potensi Stunting</div>
+      <div class="stat-val">${stList.length}<span class="stat-unit"> anak</span></div>
+      <div style="font-size:11px;color:var(--mu);margin-top:4px">${jB>0?Math.round(stList.length/jB*100):0}% dari total</div>
+    </div>
+    <div class="stat-card purple">
+      <div class="stat-icon">⚠️</div><div class="stat-label">Lansia Perlu Perhatian</div>
+      <div class="stat-val">${lRisiko}<span class="stat-unit"> orang</span></div>
+      <div style="font-size:11px;color:var(--mu);margin-top:4px">${lPantau} dipantau</div>
+    </div>`;
+
+  // init quick input
+  updateQPeserta();
+  const n=new Date();
+  if(!document.getElementById('qBulan').value)document.getElementById('qBulan').value=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`;
+
+  // KUNJUNGAN TERAKHIR
+  renderKunjunganTerakhir();
+
+  // GRAFIK KEHADIRAN — mulai dari bulan pertama data tersedia
+  const allBalitaBulans=[...new Set(db.balita.flatMap(b=>(b.riwayatBB||[]).map(r=>r.bulan||'')).filter(Boolean))].sort();
+  const allLansiaBulans=[...new Set(db.lansia.flatMap(l=>(l.riwayatPemeriksaan||[]).map(r=>r.bulan||'')).filter(Boolean))].sort();
+
+  function buildChartMonths(bulans){
+    if(bulans.length===0) return getLast12Months();
+    const first=bulans[0];
+    const now=new Date();
+    const nowYM=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+    const months=[];
+    let cur=new Date(first+'-01');
+    const end=new Date(nowYM+'-01');
+    while(cur<=end){
+      months.push(`${cur.getFullYear()}-${String(cur.getMonth()+1).padStart(2,'0')}`);
+      cur.setMonth(cur.getMonth()+1);
+    }
+    return months;
+  }
+
+  const bMonths=buildChartMonths(allBalitaBulans);
+  const lMonths=buildChartMonths(allLansiaBulans);
+  const bLabels=bMonths.map(fmtBulan);
+  const lLabels=lMonths.map(fmtBulan);
+  const bPerBulan=bMonths.map(m=>db.balita.filter(b=>(b.riwayatBB||[]).some(r=>(r.bulan||'')===m)).length);
+  const lPerBulan=lMonths.map(m=>db.lansia.filter(l=>(l.riwayatPemeriksaan||[]).some(r=>(r.bulan||'')===m)).length);
+
+  ['dashBalitaChart','dashLansiaChart'].forEach(id=>{if(_dc[id]){_dc[id].destroy();delete _dc[id];}});
+  const isDark=document.body.classList.contains('dark');
+  const gridC=isDark?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.04)';
+  const tickC=isDark?'#7a9ab5':'#64748b';
+  const cOpt=(color,label,data,labels)=>({type:'line',data:{labels,datasets:[{label,data,borderColor:color,backgroundColor:color.replace(')',',0.12)').replace('rgb','rgba'),fill:true,tension:0.4,pointRadius:4,pointHoverRadius:6,pointBackgroundColor:color,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:700},plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{family:'Outfit',size:10},color:tickC,maxRotation:45}},y:{beginAtZero:true,ticks:{stepSize:1,font:{family:'Outfit',size:10},color:tickC},grid:{color:gridC}}}}});
+  _dc['dashBalitaChart']=new Chart(document.getElementById('dashBalitaChart'),cOpt('rgb(23,164,196)','Balita',bPerBulan,bLabels));
+  _dc['dashLansiaChart']=new Chart(document.getElementById('dashLansiaChart'),cOpt('rgb(0,201,167)','Lansia',lPerBulan,lLabels));
+
+  renderStuntingCard('stuntingInfografis');
+  renderLansiaHealthCard('lansiaHealthInfografis');
+}
+
+// ═══ FILTER PENCATATAN ═══
+let _kunjFilter='all';
+function setFilterKunj(f){
+  _kunjFilter=f;
+  ['all','balita','lansia'].forEach(k=>{
+    const btn=document.getElementById('filterKunj_'+k);
+    if(!btn)return;
+    if(k===f){btn.className='btn btn-sm btn-primary';btn.style.padding='5px 12px';btn.style.fontSize='12px';btn.style.color='';btn.style.borderColor='';}
+    else{btn.className='btn btn-sm btn-outline';btn.style.padding='5px 12px';btn.style.fontSize='12px';
+      if(k==='balita'){btn.style.color='#0891b2';btn.style.borderColor='#0891b2';}
+      else if(k==='lansia'){btn.style.color='#d97706';btn.style.borderColor='#d97706';}
+      else{btn.style.color='';btn.style.borderColor='';}
+    }
+  });
+  renderKunjunganTerakhir();
+}
+
+function renderKunjunganTerakhir(){
+  const entries=[];
+  if(_kunjFilter!=='lansia') db.balita.forEach(b=>(b.riwayatBB||[]).forEach(r=>entries.push({jenis:'balita',nama:b.nama,id:b.id,bulan:r.bulan||'',detail:`BB: ${fmtDes(r.bb)} kg · TB: ${fmtDes(r.tb)} cm`})));
+  if(_kunjFilter!=='balita') db.lansia.forEach(l=>(l.riwayatPemeriksaan||[]).forEach(r=>entries.push({jenis:'lansia',nama:l.nama,id:l.id,bulan:r.bulan||'',detail:`TD: ${r.td||'—'} · Gula: ${r.gula!=null?fmtDes(r.gula):'—'} mg/dL`})));
+  entries.sort((a,z)=>z.bulan.localeCompare(a.bulan));
+  const top=entries.slice(0,8);
+  const el=document.getElementById('kunjunganTerakhir');
+  if(top.length===0){el.innerHTML='<div class="empty-state" style="padding:20px"><i class="ri-calendar-close-line"></i><p>Belum ada catatan pencatatan</p></div>';return;}
+  el.innerHTML=`<div class="kunjungan-list">${top.map(e=>`
+    <div class="kunj-item">
+      <div class="kunj-avatar ${e.jenis}">${e.jenis==='balita'?'👶':'👴'}</div>
+      <div style="flex:1;min-width:0">
+        <div class="kunj-name" style="cursor:pointer" onclick="${e.jenis==='balita'?`detailBalita('${e.id}')`:`detailLansia('${e.id}')`}">${e.nama}</div>
+        <div class="kunj-meta">${e.detail}</div>
+      </div>
+      <span class="kunj-badge badge badge-info">${fmtBulan(e.bulan)}</span>
+      <span class="badge" style="font-size:10px;${e.jenis==='balita'?'background:#e0f2fe;color:#0369a1':'background:#fef3c7;color:#d97706'}">${e.jenis==='balita'?'Balita':'Lansia'}</span>
+    </div>`).join('')}</div>`;
+}
+
+function renderStuntingCard(elId){
+  const el=document.getElementById(elId);if(!el)return;
+  const jB=db.balita.length;
+  if(jB===0){el.innerHTML='<div class="empty-state" style="padding:18px 0"><i class="ri-user-heart-line"></i><p>Belum ada data</p></div>';return;}
+  const sangat=db.balita.filter(b=>cekSangatPendek(b)).length;
+  const pendek=db.balita.filter(b=>cekStunting(b)&&!cekSangatPendek(b)).length;
+  const normal=jB-sangat-pendek;
+  el.innerHTML=`
+    <div style="display:flex;gap:8px;margin:10px 0">
+      ${[['Sangat Pendek',sangat,'badge-severe','#7f1d1d'],['Pendek (Stunted)',pendek,'badge-danger','var(--coral)'],['Normal',normal,'badge-ok','var(--mint)']].map(([l,v,cls,c])=>`
+      <div style="flex:1;background:#f8fafc;border:1px solid var(--bd);border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:20px;font-weight:800;color:${c}">${v}</div>
+        <div style="font-size:9px;font-weight:700;color:var(--mu);margin-top:2px;line-height:1.3">${l}</div>
+        <div style="font-size:10px;color:var(--mu)">${Math.round(v/jB*100)}%</div>
+      </div>`).join('')}
+    </div>
+    <div style="display:flex;height:8px;border-radius:99px;overflow:hidden">
+      <div style="background:#7f1d1d;width:${Math.round(sangat/jB*100)}%;transition:width .8s"></div>
+      <div style="background:var(--coral);width:${Math.round(pendek/jB*100)}%;transition:width .8s"></div>
+      <div style="background:var(--mint);flex:1"></div>
+    </div>
+    ${sangat+pendek>0?`<div style="font-size:12px;color:#991b1b;font-weight:600;margin-top:8px"><i class="ri-alert-line"></i> ${sangat+pendek} balita perlu tindak lanjut</div>`:'<div style="font-size:12px;color:var(--mint);font-weight:600;margin-top:8px">✅ Semua dalam rentang normal</div>'}`;
+}
+
+function renderLansiaHealthCard(elId){
+  const el=document.getElementById(elId);if(!el)return;
+  const jL=db.lansia.length;
+  if(jL===0){el.innerHTML='<div class="empty-state" style="padding:18px 0"><i class="ri-parent-line"></i><p>Belum ada data</p></div>';return;}
+  const perlu=db.lansia.filter(l=>overallLansia(l).cls==='badge-danger').length;
+  const pantau=db.lansia.filter(l=>overallLansia(l).cls==='badge-warn').length;
+  const baik=db.lansia.filter(l=>overallLansia(l).cls==='badge-ok').length;
+  const belum=jL-perlu-pantau-baik;
+  el.innerHTML=`
+    <div style="display:flex;gap:8px;margin:10px 0;flex-wrap:wrap">
+      ${[['Perlu Perhatian',perlu,'var(--coral)'],['Pantau',pantau,'var(--amber)'],['Baik',baik,'var(--mint)'],['Belum Diperiksa',belum,'#94a3b8']].map(([l,v,c])=>`
+      <div style="flex:1;min-width:65px;background:#f8fafc;border:1px solid var(--bd);border-radius:10px;padding:9px;text-align:center">
+        <div style="font-size:18px;font-weight:800;color:${c}">${v}</div>
+        <div style="font-size:9px;font-weight:700;color:var(--mu);margin-top:2px;line-height:1.3">${l}</div>
+      </div>`).join('')}
+    </div>
+    <div style="display:flex;height:8px;border-radius:99px;overflow:hidden">
+      <div style="background:var(--coral);width:${Math.round(perlu/jL*100)}%;transition:width .8s"></div>
+      <div style="background:var(--amber);width:${Math.round(pantau/jL*100)}%;transition:width .8s"></div>
+      <div style="background:var(--mint);width:${Math.round(baik/jL*100)}%;transition:width .8s"></div>
+      <div style="background:#e2e8f0;flex:1"></div>
+    </div>`;
+}
+
+// ═══ QUICK INPUT ═══
+let _qList=[];
+function updateQPeserta(){
+  const j=document.getElementById('qJenis').value,isB=j==='balita';
+  _qList=(isB?db.balita:db.lansia).map(x=>({id:x.id,nama:x.nama}));
+  document.getElementById('qPesertaInput').value='';
+  document.getElementById('qPesertaId').value='';
+  ['qBBGrp','qTBGrp','qLKGrp','qLLAGrp'].forEach(id=>document.getElementById(id).style.display=isB?'flex':'none');
+  ['qTDGrp','qGulaGrp','qAUGrp','qKolGrp'].forEach(id=>document.getElementById(id).style.display=isB?'none':'flex');
+}
+function filterQPeserta(){
+  const q=document.getElementById('qPesertaInput').value.toLowerCase();
+  document.getElementById('qPesertaId').value='';
+  const filtered=_qList.filter(x=>x.nama.toLowerCase().includes(q));
+  const dd=document.getElementById('qDropdown');
+  dd.innerHTML=filtered.map(x=>`<div class="combobox-opt" onmousedown="selectQPeserta('${x.id}','${x.nama.replace(/'/g,"\\'")}')">` +x.nama+'</div>').join('');
+  dd.classList.toggle('open',filtered.length>0&&q.length>0);
+}
+function openQDropdown(){
+  if(_qList.length>0){
+    document.getElementById('qDropdown').innerHTML=_qList.map(x=>`<div class="combobox-opt" onmousedown="selectQPeserta('${x.id}','${x.nama.replace(/'/g,"\\'")}')">` +x.nama+'</div>').join('');
+    document.getElementById('qDropdown').classList.add('open');
+  }
+}
+function closeQDropdown(){document.getElementById('qDropdown').classList.remove('open');}
+function selectQPeserta(id,nama){
+  document.getElementById('qPesertaInput').value=nama;
+  document.getElementById('qPesertaId').value=id;
+  closeQDropdown();
+}
+function simpanKunjungan(){
+  const j=document.getElementById('qJenis').value,id=document.getElementById('qPesertaId').value,bulan=document.getElementById('qBulan').value;
+  if(!id){toast('Pilih peserta dari daftar','error');return;}
+  if(!bulan){toast('Pilih bulan pemeriksaan','error');return;}
+  if(j==='balita'){
+    const bb=parseNum(document.getElementById('qBB').value),tb=parseNum(document.getElementById('qTB').value);
+    if(isNaN(bb)||isNaN(tb)){toast('Isi BB dan TB','error');return;}
+    const lk=document.getElementById('qLK').value?parseNum(document.getElementById('qLK').value):null;
+    const lla=document.getElementById('qLLA').value?parseNum(document.getElementById('qLLA').value):null;
+    simpanRiwayatBalita(id,bulan,bb,tb,lk,lla);
+  } else {
+    const td=document.getElementById('qTD').value.trim();
+    const gula=document.getElementById('qGula').value?parseNum(document.getElementById('qGula').value):null;
+    const au=document.getElementById('qAU').value?parseNum(document.getElementById('qAU').value):null;
+    const kol=document.getElementById('qKol').value?parseInt(String(document.getElementById('qKol').value).replace(',','.')):null;
+    if(!td&&gula===null&&au===null&&kol===null){toast('Isi minimal satu pemeriksaan','error');return;}
+    simpanRiwayatLansia(id,bulan,td,gula,au,kol);
+  }
+  ['qBB','qTB','qLK','qLLA','qTD','qGula','qAU','qKol'].forEach(f=>{const e=document.getElementById(f);if(e)e.value='';});
+  document.getElementById('qPesertaInput').value='';document.getElementById('qPesertaId').value='';
+  renderDashboard();
+}
+
+// ═══ RIWAYAT HELPERS ═══
+function simpanRiwayatBalita(id,bulan,bb,tb,lk,lla){
+  const idx=db.balita.findIndex(x=>x.id===id);if(idx===-1)return;
+  const rw=db.balita[idx].riwayatBB||[];
+  const ei=rw.findIndex(r=>r.bulan===bulan);
+  const entry={bulan,bb,tb};if(lk!=null)entry.lk=lk;if(lla!=null)entry.lla=lla;
+  if(ei!==-1)rw[ei]=entry;else rw.push(entry);
+  rw.sort((a,z)=>a.bulan.localeCompare(z.bulan));
+  db.balita[idx].riwayatBB=rw;
+  const lat=rw[rw.length-1];
+  db.balita[idx].bb=lat.bb;db.balita[idx].tb=lat.tb;
+  if(lat.lk!=null)db.balita[idx].lk=lat.lk;if(lat.lla!=null)db.balita[idx].lla=lat.lla;
+  saveDB();toast('Pengukuran balita tersimpan');
+}
+function simpanRiwayatLansia(id,bulan,td,gula,au,kol){
+  const idx=db.lansia.findIndex(x=>x.id===id);if(idx===-1)return;
+  const rp=db.lansia[idx].riwayatPemeriksaan||[];
+  const ei=rp.findIndex(r=>r.bulan===bulan);
+  const entry={bulan};if(td)entry.td=td;if(gula!=null)entry.gula=gula;if(au!=null)entry.asamUrat=au;if(kol!=null)entry.kolesterol=kol;
+  if(ei!==-1)rp[ei]=entry;else rp.push(entry);
+  rp.sort((a,z)=>a.bulan.localeCompare(z.bulan));
+  db.lansia[idx].riwayatPemeriksaan=rp;
+  const lat=rp[rp.length-1];
+  if(lat.td)db.lansia[idx].td=lat.td;if(lat.gula!=null)db.lansia[idx].gula=lat.gula;
+  if(lat.asamUrat!=null)db.lansia[idx].asamUrat=lat.asamUrat;if(lat.kolesterol!=null)db.lansia[idx].kolesterol=lat.kolesterol;
+  saveDB();toast('Pemeriksaan lansia tersimpan');
+}
+
+// MODAL CATAT
+let _cBId=null,_cLId=null;
+function openCatatBalita(id){
+  _cBId=id;const b=db.balita.find(x=>x.id===id);if(!b)return;
+  document.getElementById('cBalitaInfo').textContent=`${b.nama} · ${hitungUsiaDetail(b.tglLahir)}`;
+  const n=new Date();document.getElementById('cBulan').value=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`;
+  ['cBB','cTB','cLK','cLLA'].forEach(f=>document.getElementById(f).value='');
+  openModal('modalCatatBalita');
+}
+function simpanCatatBalita(){
+  const bb=parseNum(document.getElementById('cBB').value),tb=parseNum(document.getElementById('cTB').value),bulan=document.getElementById('cBulan').value;
+  if(!bulan||isNaN(bb)||isNaN(tb)){toast('Isi bulan, BB, dan TB','error');return;}
+  const lk=document.getElementById('cLK').value?parseNum(document.getElementById('cLK').value):null;
+  const lla=document.getElementById('cLLA').value?parseNum(document.getElementById('cLLA').value):null;
+  simpanRiwayatBalita(_cBId,bulan,bb,tb,lk,lla);
+  closeModal('modalCatatBalita');
+  if(document.getElementById('modalDetailBalita').classList.contains('open'))detailBalita(_cBId);
+  renderBalita();
+}
+function openCatatLansia(id){
+  _cLId=id;const l=db.lansia.find(x=>x.id===id);if(!l)return;
+  document.getElementById('cLansiaInfo').textContent=`${l.nama} · ${hitungUsiaThn(l.tglLahir)} tahun`;
+  document.getElementById('cLansiaDupWarn').style.display='none';
+  const n=new Date();document.getElementById('clBulan').value=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`;
+  ['clTD','clGula','clAU','clKol'].forEach(f=>document.getElementById(f).value='');
+  openModal('modalCatatLansia');
+  cekDupLansia();
+}
+function cekDupLansia(){
+  const bulan=document.getElementById('clBulan').value;
+  if(!bulan||!_cLId)return;
+  const l=db.lansia.find(x=>x.id===_cLId);if(!l)return;
+  const rp=l.riwayatPemeriksaan||[];
+  const ada=rp.find(r=>r.bulan===bulan);
+  const warnEl=document.getElementById('cLansiaDupWarn');
+  if(ada){
+    warnEl.style.display='block';
+    warnEl.innerHTML=`⚠️ Sudah ada pencatatan untuk <b>${fmtBulan(bulan)}</b>. Menyimpan akan <b>menggantikan</b> data bulan tersebut.`;
+  } else {
+    warnEl.style.display='none';
+  }
+}
+function simpanCatatLansia(){
+  const bulan=document.getElementById('clBulan').value,td=document.getElementById('clTD').value.trim();
+  const gula=document.getElementById('clGula').value?parseNum(document.getElementById('clGula').value):null;
+  const au=document.getElementById('clAU').value?parseNum(document.getElementById('clAU').value):null;
+  const kol=document.getElementById('clKol').value?parseInt(String(document.getElementById('clKol').value).replace(',','.')):null;
+  if(!bulan){toast('Pilih bulan','error');return;}
+  if(!td&&gula===null&&au===null&&kol===null){toast('Isi minimal satu hasil pemeriksaan','error');return;}
+  // upsert: replace existing entry for same month without touching other months
+  const idx=db.lansia.findIndex(x=>x.id===_cLId);if(idx===-1)return;
+  const rp=[...(db.lansia[idx].riwayatPemeriksaan||[])];
+  const ei=rp.findIndex(r=>r.bulan===bulan);
+  const entry={bulan};
+  if(td)entry.td=td;
+  if(gula!=null)entry.gula=gula;
+  if(au!=null)entry.asamUrat=au;
+  if(kol!=null)entry.kolesterol=kol;
+  if(ei!==-1)rp[ei]=entry;else rp.push(entry);
+  rp.sort((a,z)=>a.bulan.localeCompare(z.bulan));
+  db.lansia[idx].riwayatPemeriksaan=rp;
+  // Update primary fields from latest entry only
+  const lat=rp[rp.length-1];
+  if(lat.td)db.lansia[idx].td=lat.td;
+  if(lat.gula!=null)db.lansia[idx].gula=lat.gula;
+  if(lat.asamUrat!=null)db.lansia[idx].asamUrat=lat.asamUrat;
+  if(lat.kolesterol!=null)db.lansia[idx].kolesterol=lat.kolesterol;
+  saveDB();
+  closeModal('modalCatatLansia');
+  if(document.getElementById('modalDetailLansia').classList.contains('open'))detailLansia(_cLId);
+  renderLansia();
+  toast('Pemeriksaan tersimpan');
+}
+
+// ═══ BALITA ═══
+let editBId=null,_bSortCol='',_bSortDir=1;
+function setSortBalita(col){if(_bSortCol===col)_bSortDir*=-1;else{_bSortCol=col;_bSortDir=1;}renderBalita();}
+function openBalitaModal(id=null){
+  editBId=id;
+  document.getElementById('mBalitaTitle').innerHTML=`<i class="ri-user-heart-line"></i> ${id?'Edit':'Tambah'} Balita`;
+  ['bNama','bNamaIbu','bNamaAyah','bTglLahir','bAlamat','bNIK','bKK','bNIKIbu','bNIKAyah','bAnakKe'].forEach(f=>{const el=document.getElementById(f);if(el)el.value='';});
+  document.getElementById('bJK').value='L';
+  document.getElementById('bPosyandu').value='Posyandu Panda';
+  if(id){const b=db.balita.find(x=>x.id===id);if(!b)return;
+    ['Nama','NamaIbu','NamaAyah','Alamat','NIK','KK','NIKIbu','NIKAyah','AnakKe'].forEach(k=>{const el=document.getElementById('b'+k);if(el)el.value=b[k.charAt(0).toLowerCase()+k.slice(1)]||'';});
+    document.getElementById('bTglLahir').value=b.tglLahir?fmtTglDisplay(b.tglLahir):'';
+    document.getElementById('bJK').value=b.jk||'L';
+    document.getElementById('bPosyandu').value=b.posyandu||'Posyandu Panda';
+  }
+  openModal('modalBalita');
+}
+function simpanBalita(){
+  const nama=document.getElementById('bNama').value.trim(),namaIbu=document.getElementById('bNamaIbu').value.trim();
+  const tglLahirInput=document.getElementById('bTglLahir').value.trim(),tglLahir=parseTglInput(tglLahirInput),jk=document.getElementById('bJK').value;
+  const alamat=document.getElementById('bAlamat').value.trim();
+  const posyandu=document.getElementById('bPosyandu').value;
+  if(!nama||!namaIbu||!tglLahir||!alamat){toast('Isi semua field wajib (*)','error');return;}
+  const obj={nama,namaIbu,namaAyah:document.getElementById('bNamaAyah').value.trim(),tglLahir,jk,posyandu,alamat,
+    nik:document.getElementById('bNIK').value.trim(),kk:document.getElementById('bKK').value.trim(),
+    nikIbu:document.getElementById('bNIKIbu').value.trim(),nikAyah:document.getElementById('bNIKAyah').value.trim(),
+    anakKe:parseInt(String(document.getElementById('bAnakKe').value).replace(',','.'))||null};
+  if(editBId){
+    const idx=db.balita.findIndex(x=>x.id===editBId);if(idx!==-1){
+      db.balita[idx]={...db.balita[idx],...obj};
+    }
+  } else {
+    db.balita.push({id:uid(),...obj,bb:null,tb:null,lk:null,lla:null,riwayatBB:[]});
+  }
+  saveDB();closeModal('modalBalita');renderBalita();toast(editBId?'Data diperbarui':'Balita ditambahkan');editBId=null;
+}
+function hapusBalita(id){
+  if(!confirm('Hapus data balita ini?'))return;
+  db.balita=db.balita.filter(b=>b.id!==id);db.imunisasi=db.imunisasi.filter(i=>i.balitaId!==id);
+  saveDB();renderBalita();toast('Balita dihapus');
+}
+function renderBalita(){
+  console.log('[DEBUG] renderBalita called, balita count:', db.balita.length);
+  const q=(document.getElementById('searchBalita')?.value||'').toLowerCase();
+  const sortV=document.getElementById('sortBalita')?.value||'';
+  const fpsy=document.getElementById('filterPosyandu')?.value||'';
+  let list=db.balita.filter(b=>b.nama.toLowerCase().includes(q)||b.namaIbu.toLowerCase().includes(q));
+  if(fpsy)list=list.filter(b=>(b.posyandu||'')=== fpsy);
+  if(sortV==='usia_asc')list.sort((a,z)=>hitungUsia(z.tglLahir)-hitungUsia(a.tglLahir));
+  else if(sortV==='usia_desc')list.sort((a,z)=>hitungUsia(a.tglLahir)-hitungUsia(z.tglLahir));
+  else if(sortV==='jk_l')list=list.filter(b=>(b.jk||'L')==='L');
+  else if(sortV==='jk_p')list=list.filter(b=>(b.jk||'L')==='P');
+  if(_bSortCol==='nama')list.sort((a,z)=>_bSortDir*(a.nama.localeCompare(z.nama)));
+  else if(_bSortCol==='usia')list.sort((a,z)=>_bSortDir*(hitungUsia(a.tglLahir)-hitungUsia(z.tglLahir)));
+  const total=list.length;
+  const limitV=document.getElementById('limitBalita')?.value||'10';
+  const limit=limitV==='all'?total:Math.min(parseInt(limitV),total);
+  const shown=list.slice(0,limit);
+  document.getElementById('infoBalita').textContent=`Menampilkan ${shown.length} dari ${total} data`;
+  const tbody=document.getElementById('balitaTbody');
+  if(!tbody)return;
+  if(total===0){tbody.innerHTML=`<tr><td colspan="7"><div class="empty-state"><i class="ri-user-heart-line"></i><p>${q?'Tidak ditemukan':'Belum ada data balita'}</p></div></td></tr>`;return;}
+  tbody.innerHTML=shown.map((b,i)=>{
+    const usia=hitungUsia(b.tglLahir);
+    return `<tr>
+      <td style="color:var(--mu);font-size:12px">${i+1}</td>
+      <td class="td-name" style="cursor:pointer" onclick="detailBalita('${b.id}')">${b.nama}</td>
+      <td style="color:var(--mu);font-size:13px">${b.namaIbu||'—'}</td>
+      <td><span class="badge" style="${(b.jk||'L')==='L'?'background:#e0f2fe;color:#0369a1':'background:#fce7f3;color:#be185d'}">${(b.jk||'L')==='L'?'L':'P'}</span></td>
+      <td>${hitungUsiaDetail(b.tglLahir)}</td>
+      <td><span style="font-size:11px;font-weight:600;color:${(b.posyandu||'').includes('Panda')?'#7c3aed':'#0369a1'}">${b.posyandu||'—'}</span></td>
+      <td><div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button title="Lihat Detail" onclick="detailBalita('${b.id}')" style="display:flex;flex-direction:column;align-items:center;gap:1px;background:#eff6ff;border:1.5px solid #bfdbfe;color:#1d4ed8;border-radius:9px;padding:5px 8px;cursor:pointer;font-family:inherit"><i class="ri-eye-line" style="font-size:16px"></i><span style="font-size:9px;font-weight:700">Detail</span></button>
+        <button title="Catat Pengukuran" onclick="openCatatBalita('${b.id}')" style="display:flex;flex-direction:column;align-items:center;gap:1px;background:#f0fdf4;border:1.5px solid #86efac;color:#15803d;border-radius:9px;padding:5px 8px;cursor:pointer;font-family:inherit"><i class="ri-add-circle-line" style="font-size:16px"></i><span style="font-size:9px;font-weight:700">Catat</span></button>
+        <button title="Edit Data" onclick="openBalitaModal('${b.id}')" style="display:flex;flex-direction:column;align-items:center;gap:1px;background:#fefce8;border:1.5px solid #fde68a;color:#92400e;border-radius:9px;padding:5px 8px;cursor:pointer;font-family:inherit"><i class="ri-pencil-line" style="font-size:16px"></i><span style="font-size:9px;font-weight:700">Edit</span></button>
+        <button title="Hapus Data" onclick="hapusBalita('${b.id}')" style="display:flex;flex-direction:column;align-items:center;gap:1px;background:#fff1f2;border:1.5px solid #fecdd3;color:#be123c;border-radius:9px;padding:5px 8px;cursor:pointer;font-family:inherit"><i class="ri-delete-bin-line" style="font-size:16px"></i><span style="font-size:9px;font-weight:700">Hapus</span></button>
+      </div></td></tr>`;
+  }).join('');
+}
+
+// DETAIL BALITA
+let _dtC={};
+// ═══ CEK IMUNISASI TERLEWAT ═══
+// Batas usia toleransi (bulan) untuk tiap tahap agar tidak terlalu ketat
+const IMUN_BATAS={
+  'HB-0':1,'BCG':2,'OPV-1':2,
+  'DPT-HB-Hib 1':3,'OPV-2':3,'PCV-1':3,'RV-1':3,
+  'DPT-HB-Hib 2':4,'OPV-3':4,'PCV-2':4,'RV-2':4,
+  'DPT-HB-Hib 3':5,'OPV-4':5,'IPV-1':5,'RV-3':5,
+  'MR-1':10,'IPV-2':10,
+  'PCV-3':13,
+  'DPT-HB-Hib 4':19,'MR-2':19,
+};
+function getImunTerlewat(b){
+  const usia=hitungUsia(b.tglLahir);
+  const sudah=db.imunisasi.filter(i=>i.balitaId===b.id).map(i=>i.jenis);
+  const terlewat=[];
+  ALL_IMUN.forEach(j=>{
+    const batas=IMUN_BATAS[j.jenis];
+    if(!batas)return;
+    if(usia>=batas&&!sudah.includes(j.jenis)){
+      // Cari stage label
+      let stageLabel='';
+      IMUN_STAGES.forEach(s=>{if(s.items.some(x=>x.jenis===j.jenis))stageLabel=s.stage;});
+      terlewat.push({jenis:j.jenis,label:j.label,stage:stageLabel});
+    }
+  });
+  return terlewat;
+}
+
+function detailBalita(id){
+  const b=db.balita.find(x=>x.id===id);if(!b)return;
+  document.getElementById('detailBalitaTitle').innerHTML=`<i class="ri-user-heart-line" style="color:var(--t5)"></i> ${b.nama}`;
+  const usia=hitungUsia(b.tglLahir),jk=b.jk||'L';
+  const imunB=db.imunisasi.filter(i=>i.balitaId===id);
+  const imunDone=ALL_IMUN.filter(j=>imunB.some(i=>i.jenis===j.jenis));
+  const pct=Math.round(imunDone.length/ALL_IMUN.length*100);
+  const stTB=statusTBU(b.tb,usia,jk),stBB=statusBBU(b.bb,usia,jk);
+  const rw=(b.riwayatBB||[]).sort((a,z)=>a.bulan.localeCompare(z.bulan));
+  const rwL=rw.map(r=>fmtBulan(r.bulan));
+  const rwBB=rw.map(r=>r.bb),rwTB=rw.map(r=>r.tb),rwLK=rw.map(r=>r.lk||null),rwLLA=rw.map(r=>r.lla||null);
+  const rwUI=rw.map(r=>Math.min(60,hitungUsiaAtDate(b.tglLahir,r.bulan)));
+  const whoTBL=rwUI.map(u=>(jk==='P'?TBU_P_M2SD:TBU_L_M2SD)[u]||null);
+  const whoBBL=rwUI.map(u=>(jk==='P'?BBU_P_M2SD:BBU_L_M2SD)[u]||null);
+
+  const terlewat=getImunTerlewat(b);
+  const stBBLengkap=statusBBULengkap(b.bb,usia,jk);
+
+  // Peringatan balita
+  const balitaWarns=[];
+  if(stTB.skor<=-3)balitaWarns.push({t:'danger',m:'🔴 <b>Sangat Pendek (Severely Stunted)</b> — TB jauh di bawah -3SD. Segera rujuk ke Puskesmas.'});
+  else if(stTB.skor===-2)balitaWarns.push({t:'danger',m:'⚠️ <b>Pendek (Stunted)</b> — TB di bawah -2SD Permenkes No.2/2020. Perlu intervensi gizi.'});
+  if(stBBLengkap.cls==='badge-severe'&&stBBLengkap.l.includes('Sangat'))balitaWarns.push({t:'danger',m:'🔴 <b>Berat Badan Sangat Kurang</b> — Risiko malnutrisi berat. Lakukan penilaian gizi segera.'});
+  else if(stBBLengkap.cls==='badge-danger'&&stBBLengkap.l.includes('Kurang'))balitaWarns.push({t:'warn',m:'⚠️ <b>Berat Badan Kurang</b> — Perlu peningkatan asupan gizi dan pemantauan rutin.'});
+  else if(stBBLengkap.cls==='badge-danger'&&stBBLengkap.l.includes('Obesitas'))balitaWarns.push({t:'danger',m:'🔴 <b>Risiko Gizi Lebih / Obesitas</b> — BB di atas +1SD. Batasi asupan gula & lemak, konsultasikan ke petugas gizi.'});
+
+  document.getElementById('detailBalitaBody').innerHTML=`
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px">
+      <button class="btn btn-mint btn-sm" onclick="openCatatBalita('${b.id}')"><i class="ri-add-circle-line"></i>Catat Pengukuran</button>
+    </div>
+    ${balitaWarns.map(w=>`<div class="alert-box ${w.t}" style="margin-bottom:8px"><i class="ri-alert-line"></i><span>${w.m}</span></div>`).join('')}
+    ${terlewat.length>0?`<div style="background:#fef9c3;border:1.5px solid #fbbf24;border-radius:12px;padding:13px;margin-bottom:12px">
+      <div style="font-weight:700;font-size:13px;color:#92400e;margin-bottom:8px;display:flex;align-items:center;gap:6px"><i class="ri-time-line" style="font-size:16px"></i>⚠️ ${terlewat.length} Imunisasi Terlewat (usia: ${hitungUsiaDetail(b.tglLahir)})</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        ${terlewat.map(t=>`<div style="background:#fff;border:1.5px solid #f59e0b;border-radius:8px;padding:5px 11px;font-size:12px;font-weight:600;color:#78350f"><span style="opacity:.7;font-size:10px">${t.stage}</span><br>${t.label}</div>`).join('')}
+      </div>
+    </div>`:''}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px" class="two-col-sm">
+      <div><div class="detail-label" style="font-size:11px;color:var(--mu);text-transform:uppercase;font-weight:700">Nama Ibu</div><div style="font-weight:600">${b.namaIbu||'—'}</div></div>
+      <div><div class="detail-label" style="font-size:11px;color:var(--mu);text-transform:uppercase;font-weight:700">Tanggal Lahir</div><div style="font-weight:600">${fmt(b.tglLahir)} (${hitungUsiaDetail(b.tglLahir)})</div></div>
+      <div><div class="detail-label" style="font-size:11px;color:var(--mu);text-transform:uppercase;font-weight:700">Posyandu</div><div style="font-weight:600">${b.posyandu||'—'}</div></div>
+      <div><div class="detail-label" style="font-size:11px;color:var(--mu);text-transform:uppercase;font-weight:700">Jenis Kelamin</div><div style="font-weight:600">${(b.jk||'L')==='L'?'Laki-laki':'Perempuan'}</div></div>
+      <div><div class="detail-label" style="font-size:11px;color:var(--mu);text-transform:uppercase;font-weight:700">Berat Badan (terbaru)</div><div style="font-weight:600">${b.bb!=null?fmtDes(b.bb)+' kg':'-'} <span class="badge ${stBBLengkap.cls}" style="font-size:10px">${stBBLengkap.l}</span></div></div>
+      <div><div class="detail-label" style="font-size:11px;color:var(--mu);text-transform:uppercase;font-weight:700">Tinggi Badan (terbaru)</div><div style="font-weight:600">${b.tb!=null?fmtDes(b.tb)+' cm':'-'} <span class="badge ${stTB.cls}" style="font-size:10px">${stTB.l}</span></div></div>
+      ${b.lk!=null?`<div><div class="detail-label" style="font-size:11px;color:var(--mu);text-transform:uppercase;font-weight:700">Lingkar Kepala</div><div style="font-weight:600">${fmtDes(b.lk)} cm</div></div>`:''}
+      ${b.lla!=null?`<div><div class="detail-label" style="font-size:11px;color:var(--mu);text-transform:uppercase;font-weight:700">Lingkar Lengan Atas</div><div style="font-weight:600">${fmtDes(b.lla)} cm</div></div>`:''}
+      ${b.anakKe?`<div><div class="detail-label" style="font-size:11px;color:var(--mu);text-transform:uppercase;font-weight:700">Anak ke-</div><div style="font-weight:600">${b.anakKe}</div></div>`:''}
+      <div style="grid-column:1/-1"><div class="detail-label" style="font-size:11px;color:var(--mu);text-transform:uppercase;font-weight:700">Alamat</div><div style="font-weight:600">${b.alamat||'—'}</div></div>
+    </div>
+
+    <!-- RIWAYAT PENCATATAN BALITA (collapsed by default) -->
+    <div class="privasi-block" style="margin-bottom:12px">
+      <button class="privasi-toggle" style="background:#e0f2fe;border-color:#7dd3fc;color:#0369a1;width:100%;justify-content:space-between" onclick="togglePrivasi('pencatatanBalita')">
+        <span><i class="ri-table-line"></i> Riwayat Pencatatan (${rw.length} entri)</span>
+        <i class="ri-arrow-down-s-line" id="arrowPencatatanBalita"></i>
+      </button>
+      <div class="privasi-content" id="pencatatanBalita" style="display:none;grid-template-columns:1fr;padding:0;background:transparent;border:none">
+        ${rw.length===0
+          ?`<div style="padding:12px;color:var(--mu);font-size:13px;text-align:center">Belum ada pencatatan. Gunakan tombol "Catat Pengukuran".</div>`
+          :`<div style="overflow-x:auto;margin-top:8px">
+            <table style="width:100%;border-collapse:collapse;font-size:12px">
+              <thead><tr style="background:var(--t1)">
+                <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--t7);text-transform:uppercase;white-space:nowrap">Bulan</th>
+                <th style="padding:8px 10px;text-align:right;font-size:10px;font-weight:700;color:var(--t7)">BB (kg)</th>
+                <th style="padding:8px 10px;text-align:right;font-size:10px;font-weight:700;color:var(--t7)">TB (cm)</th>
+                <th style="padding:8px 10px;text-align:right;font-size:10px;font-weight:700;color:var(--t7)">LK (cm)</th>
+                <th style="padding:8px 10px;text-align:right;font-size:10px;font-weight:700;color:var(--t7)">LLA (cm)</th>
+                <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--t7)">Status BB</th>
+                <th style="padding:8px 10px;text-align:center;font-size:10px;font-weight:700;color:var(--t7)">Aksi</th>
+              </tr></thead>
+              <tbody>
+                ${rw.map((r,ri)=>{
+                  const uAtBulan=Math.min(60,hitungUsiaAtDate(b.tglLahir,r.bulan));
+                  const stBBR=statusBBULengkap(r.bb,uAtBulan,jk);
+                  const isLast=ri===rw.length-1;
+                  return `<tr style="border-bottom:1px solid var(--bd);${isLast?'background:rgba(23,164,196,0.05)':''}">
+                    <td style="padding:8px 10px;font-weight:${isLast?700:400};color:${isLast?'var(--t5)':'var(--tx)'}">
+                      ${fmtBulan(r.bulan)}${isLast?` <span style="font-size:10px;color:var(--mint);font-weight:700">(Terbaru)</span>`:''}
+                    </td>
+                    <td style="padding:8px 10px;text-align:right;font-weight:600">${r.bb!=null?fmtDes(r.bb):'—'}</td>
+                    <td style="padding:8px 10px;text-align:right;font-weight:600">${r.tb!=null?fmtDes(r.tb):'—'}</td>
+                    <td style="padding:8px 10px;text-align:right;color:var(--mu)">${r.lk!=null?fmtDes(r.lk):'—'}</td>
+                    <td style="padding:8px 10px;text-align:right;color:var(--mu)">${r.lla!=null?fmtDes(r.lla):'—'}</td>
+                    <td style="padding:8px 10px"><span class="badge ${stBBR.cls}" style="font-size:10px">${stBBR.l}</span></td>
+                    <td style="padding:8px 10px;text-align:center">
+                      <button onclick="bukaEditRiwayatBalita('${b.id}','${r.bulan}')" title="Edit baris ini"
+                        style="background:#eff6ff;border:1.5px solid #bfdbfe;color:#1d4ed8;border-radius:7px;padding:3px 9px;cursor:pointer;font-size:11px;font-weight:600;font-family:inherit">
+                        <i class="ri-pencil-line"></i> Edit
+                      </button>
+                    </td>
+                  </tr>`;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>`}
+      </div>
+    </div>
+
+    <!-- PRIVASI -->
+    <div class="privasi-block" style="margin-bottom:12px">
+      <button class="privasi-toggle" onclick="togglePrivasi('privBalita')"><i class="ri-shield-keyhole-line"></i> Lihat Data Kependudukan</button>
+      <div class="privasi-content" id="privBalita">
+        <div><div class="detail-label" style="font-size:10px;color:var(--mu);text-transform:uppercase;font-weight:700">NIK Balita</div><div style="font-weight:600;font-size:13px">${b.nik||'—'}</div></div>
+        <div><div class="detail-label" style="font-size:10px;color:var(--mu);text-transform:uppercase;font-weight:700">No. KK</div><div style="font-weight:600;font-size:13px">${b.kk||'—'}</div></div>
+        <div><div class="detail-label" style="font-size:10px;color:var(--mu);text-transform:uppercase;font-weight:700">NIK Ibu</div><div style="font-weight:600;font-size:13px">${b.nikIbu||'—'}</div></div>
+        <div><div class="detail-label" style="font-size:10px;color:var(--mu);text-transform:uppercase;font-weight:700">NIK Ayah</div><div style="font-weight:600;font-size:13px">${b.nikAyah||'—'}</div></div>
+        <div><div class="detail-label" style="font-size:10px;color:var(--mu);text-transform:uppercase;font-weight:700">Nama Ayah</div><div style="font-weight:600;font-size:13px">${b.namaAyah||'—'}</div></div>
+      </div>
+    </div>
+    <!-- GRAFIK -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px" class="two-col-sm">
+      <div style="background:var(--t0);border:1px solid var(--bd);border-radius:12px;padding:13px">
+        <div style="font-weight:700;font-size:13px;color:var(--t8);margin-bottom:8px"><i class="ri-scales-line"></i> Berat Badan
+          <span style="float:right;font-size:10px;font-weight:400;color:var(--mu)"><span style="color:#2563eb">─</span> Aktual &nbsp;<span style="color:#dc2626">- -</span> -2SD</span>
+        </div>
+        <div style="position:relative;height:165px"><canvas id="dtBBChart"></canvas></div>
+      </div>
+      <div style="background:var(--t0);border:1px solid var(--bd);border-radius:12px;padding:13px">
+        <div style="font-weight:700;font-size:13px;color:var(--t8);margin-bottom:8px"><i class="ri-ruler-line"></i> Tinggi Badan
+          <span style="float:right;font-size:10px;font-weight:400;color:var(--mu)"><span style="color:#16a34a">─</span> Aktual &nbsp;<span style="color:#ea580c">- -</span> -2SD</span>
+        </div>
+        <div style="position:relative;height:165px"><canvas id="dtTBChart"></canvas></div>
+      </div>
+    </div>
+    ${(b.lk||b.lla)?`<div style="background:var(--t0);border:1px solid var(--bd);border-radius:12px;padding:13px;margin-top:12px">
+      <div style="font-weight:700;font-size:13px;color:var(--t8);margin-bottom:8px"><i class="ri-circle-line"></i> Lingkar Kepala &amp; Lingkar Lengan Atas
+        <span style="float:right;font-size:10px;font-weight:400;color:var(--mu)"><span style="color:#7c3aed">─</span> LK &nbsp;<span style="color:#c2410c">─</span> LLA</span>
+      </div>
+      <div style="position:relative;height:145px"><canvas id="dtLKChart"></canvas></div>
+    </div>`:''}
+    <!-- IMUNISASI PER TAHAP -->
+    <div style="background:var(--t0);border:1px solid var(--bd);border-radius:12px;padding:13px;margin-top:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div style="font-weight:700;font-size:13px;color:var(--t8)"><i class="ri-syringe-line"></i> Imunisasi</div>
+        <span class="badge ${pct===100?'badge-ok':pct>=60?'badge-info':'badge-warn'}">${imunDone.length}/${ALL_IMUN.length} — ${pct}%</span>
+      </div>
+      <div class="imun-bar" style="margin-bottom:12px"><div class="imun-bar-fill" style="width:${pct}%;background:${pct===100?'var(--mint)':pct>=60?'var(--t4)':'var(--amber)'}"></div></div>
+      ${IMUN_STAGES.map(stage=>`
+        <div class="imun-stage">
+          <div class="imun-stage-title">${stage.stage}</div>
+          <div class="imun-grid">
+            ${stage.items.map(j=>{
+              const done=imunB.find(i=>i.jenis===j.jenis);
+              return `<div class="imun-card ${done?'done':'pending'}">
+                <div class="imun-icon">${done?'✅':'⏳'}</div>
+                <div class="imun-name">${j.label}</div>
+                <div class="imun-date">${done?`${fmt(done.tanggal)} <button onclick="openEditImun('${done.id}')" style="background:none;border:none;cursor:pointer;color:var(--t5);font-size:11px;padding:0"><i class="ri-pencil-line"></i></button>`:'Belum'}</div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>`).join('')}
+    </div>`;
+
+  openModal('modalDetailBalita');
+  ['dtBBChart','dtTBChart','dtLKChart'].forEach(cid=>{if(_dtC[cid]){_dtC[cid].destroy();delete _dtC[cid];}});
+  const cOpts={responsive:true,maintainAspectRatio:false,animation:{duration:800},plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{family:'Outfit',size:10}}},y:{beginAtZero:false,grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{family:'Outfit',size:10}}}}};
+  setTimeout(()=>{
+    _dtC['dtBBChart']=new Chart(document.getElementById('dtBBChart'),{type:'line',data:{labels:rwL,datasets:[{label:'BB',data:rwBB,borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.12)',fill:true,tension:0.4,pointRadius:5,borderWidth:2.5},{label:'-2SD',data:whoBBL,borderColor:'#dc2626',borderDash:[5,4],fill:false,tension:0.3,pointRadius:2,borderWidth:1.5}]},options:cOpts});
+    _dtC['dtTBChart']=new Chart(document.getElementById('dtTBChart'),{type:'line',data:{labels:rwL,datasets:[{label:'TB',data:rwTB,borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,.12)',fill:true,tension:0.4,pointRadius:5,borderWidth:2.5},{label:'-2SD',data:whoTBL,borderColor:'#ea580c',borderDash:[5,4],fill:false,tension:0.3,pointRadius:2,borderWidth:1.5}]},options:cOpts});
+    const lkEl=document.getElementById('dtLKChart');
+    if(lkEl)_dtC['dtLKChart']=new Chart(lkEl,{type:'line',data:{labels:rwL,datasets:[{label:'Lingkar Kepala (cm)',data:rwLK,borderColor:'#7c3aed',backgroundColor:'rgba(124,58,237,.1)',fill:true,tension:0.4,pointRadius:4,borderWidth:2},{label:'Lingkar Lengan Atas (cm)',data:rwLLA,borderColor:'#c2410c',backgroundColor:'rgba(194,65,12,.08)',fill:true,tension:0.4,pointRadius:4,borderWidth:2}]},options:{...cOpts,plugins:{legend:{display:true,position:'bottom',labels:{font:{family:'Outfit',size:10}}}}}});
+  },100);
+}
+
+function togglePrivasi(id){
+  const el=document.getElementById(id);if(!el)return;
+  // For new riwayat panels: use display none/block
+  if(id==='pencatatanBalita'||id==='pencatatanLansia'){
+    const isHidden=el.style.display==='none'||el.style.display==='';
+    el.style.display=isHidden?'block':'none';
+    const arrowId=id==='pencatatanBalita'?'arrowPencatatanBalita':'arrowPencatatanLansia';
+    const arrow=document.getElementById(arrowId);
+    if(arrow)arrow.className=isHidden?'ri-arrow-up-s-line':'ri-arrow-down-s-line';
+    return;
+  }
+  // For privasi panels: use show class
+  el.classList.toggle('show');
+  const btn=el.previousElementSibling;if(!btn)return;
+  const isShow=el.classList.contains('show');
+  if(id==='privBalita'||id==='privLansia'){
+    btn.innerHTML=isShow
+      ?'<i class="ri-eye-off-line"></i> Sembunyikan Kependudukan'
+      :'<i class="ri-shield-keyhole-line"></i> Lihat Data Kependudukan';
+  }
+}
+
+// ── EDIT/HAPUS RIWAYAT BALITA (per baris) ──
+function bukaEditRiwayatBalita(balitaId, bulan){
+  const b=db.balita.find(x=>x.id===balitaId);if(!b)return;
+  const rw=b.riwayatBB||[];
+  const r=rw.find(x=>x.bulan===bulan);if(!r)return;
+  document.getElementById('erBalitaId').value=balitaId;
+  document.getElementById('erBulanLama').value=bulan;
+  document.getElementById('erBalitaInfo').textContent=`${b.nama} · ${fmtBulan(bulan)}`;
+  document.getElementById('erBulan').value=bulan;
+  document.getElementById('erBB').value=r.bb!=null?r.bb:'';
+  document.getElementById('erTB').value=r.tb!=null?r.tb:'';
+  document.getElementById('erLK').value=r.lk!=null?r.lk:'';
+  document.getElementById('erLLA').value=r.lla!=null?r.lla:'';
+  openModal('modalEditRiwayatBalita');
+}
+function simpanEditRiwayatBalita(){
+  const balitaId=document.getElementById('erBalitaId').value;
+  const bulanLama=document.getElementById('erBulanLama').value;
+  const bulanBaru=document.getElementById('erBulan').value;
+  const bb=parseNum(document.getElementById('erBB').value);
+  const tb=parseNum(document.getElementById('erTB').value);
+  if(!bulanBaru||bb==null||isNaN(bb)||tb==null||isNaN(tb)){toast('Isi bulan, BB, dan TB','error');return;}
+  const lk=document.getElementById('erLK').value?parseNum(document.getElementById('erLK').value):null;
+  const lla=document.getElementById('erLLA').value?parseNum(document.getElementById('erLLA').value):null;
+  const idx=db.balita.findIndex(x=>x.id===balitaId);if(idx===-1)return;
+  const rw=db.balita[idx].riwayatBB||[];
+  const filtered=rw.filter(r=>r.bulan!==bulanLama);
+  const entry={bulan:bulanBaru,bb,tb};
+  if(lk!=null)entry.lk=lk;if(lla!=null)entry.lla=lla;
+  filtered.push(entry);
+  filtered.sort((a,z)=>a.bulan.localeCompare(z.bulan));
+  db.balita[idx].riwayatBB=filtered;
+  const lat=filtered[filtered.length-1];
+  db.balita[idx].bb=lat.bb;db.balita[idx].tb=lat.tb;
+  if(lat.lk!=null)db.balita[idx].lk=lat.lk;if(lat.lla!=null)db.balita[idx].lla=lat.lla;
+  saveDB();closeModal('modalEditRiwayatBalita');
+  toast('Pencatatan diperbarui');
+  detailBalita(balitaId);renderBalita();
+}
+function hapusRiwayatBalita(){
+  const balitaId=document.getElementById('erBalitaId').value;
+  const bulanLama=document.getElementById('erBulanLama').value;
+  if(!confirm(`Hapus pencatatan ${fmtBulan(bulanLama)}?`))return;
+  const idx=db.balita.findIndex(x=>x.id===balitaId);if(idx===-1)return;
+  const filtered=db.balita[idx].riwayatBB.filter(r=>r.bulan!==bulanLama);
+  filtered.sort((a,z)=>a.bulan.localeCompare(z.bulan));
+  db.balita[idx].riwayatBB=filtered;
+  if(filtered.length>0){
+    const lat=filtered[filtered.length-1];
+    db.balita[idx].bb=lat.bb;db.balita[idx].tb=lat.tb;
+    if(lat.lk!=null)db.balita[idx].lk=lat.lk;if(lat.lla!=null)db.balita[idx].lla=lat.lla;
+  } else {db.balita[idx].bb=null;db.balita[idx].tb=null;db.balita[idx].lk=null;db.balita[idx].lla=null;}
+  saveDB();closeModal('modalEditRiwayatBalita');
+  toast('Pencatatan dihapus');
+  detailBalita(balitaId);renderBalita();
+}
+
+// ── EDIT/HAPUS RIWAYAT LANSIA (per baris) ──
+function bukaEditRiwayatLansia(lansiaId, bulan){
+  const l=db.lansia.find(x=>x.id===lansiaId);if(!l)return;
+  const rp=l.riwayatPemeriksaan||[];
+  const r=rp.find(x=>x.bulan===bulan);if(!r)return;
+  document.getElementById('erLansiaId').value=lansiaId;
+  document.getElementById('erLBulanLama').value=bulan;
+  document.getElementById('erLansiaInfo').textContent=`${l.nama} · ${fmtBulan(bulan)}`;
+  document.getElementById('erLBulan').value=bulan;
+  document.getElementById('erLTD').value=r.td||'';
+  document.getElementById('erLGula').value=r.gula!=null?r.gula:'';
+  document.getElementById('erLAU').value=r.asamUrat!=null?r.asamUrat:'';
+  document.getElementById('erLKol').value=r.kolesterol!=null?r.kolesterol:'';
+  openModal('modalEditRiwayatLansia');
+}
+function simpanEditRiwayatLansia(){
+  const lansiaId=document.getElementById('erLansiaId').value;
+  const bulanLama=document.getElementById('erLBulanLama').value;
+  const bulanBaru=document.getElementById('erLBulan').value;
+  const td=document.getElementById('erLTD').value.trim();
+  const gula=document.getElementById('erLGula').value?parseNum(document.getElementById('erLGula').value):null;
+  const au=document.getElementById('erLAU').value?parseNum(document.getElementById('erLAU').value):null;
+  const kol=document.getElementById('erLKol').value?parseNum(document.getElementById('erLKol').value):null;
+  if(!bulanBaru){toast('Pilih bulan','error');return;}
+  const idx=db.lansia.findIndex(x=>x.id===lansiaId);if(idx===-1)return;
+  const rp=db.lansia[idx].riwayatPemeriksaan||[];
+  const filtered=rp.filter(r=>r.bulan!==bulanLama);
+  const entry={bulan:bulanBaru};
+  if(td)entry.td=td;if(gula!=null)entry.gula=gula;if(au!=null)entry.asamUrat=au;if(kol!=null)entry.kolesterol=Math.round(kol);
+  filtered.push(entry);
+  filtered.sort((a,z)=>a.bulan.localeCompare(z.bulan));
+  db.lansia[idx].riwayatPemeriksaan=filtered;
+  const lat=filtered[filtered.length-1];
+  if(lat.td)db.lansia[idx].td=lat.td;
+  if(lat.gula!=null)db.lansia[idx].gula=lat.gula;
+  if(lat.asamUrat!=null)db.lansia[idx].asamUrat=lat.asamUrat;
+  if(lat.kolesterol!=null)db.lansia[idx].kolesterol=lat.kolesterol;
+  saveDB();closeModal('modalEditRiwayatLansia');
+  toast('Pencatatan diperbarui');
+  detailLansia(lansiaId);renderLansia();
+}
+function hapusRiwayatLansia(){
+  const lansiaId=document.getElementById('erLansiaId').value;
+  const bulanLama=document.getElementById('erLBulanLama').value;
+  if(!confirm(`Hapus pencatatan ${fmtBulan(bulanLama)}?`))return;
+  const idx=db.lansia.findIndex(x=>x.id===lansiaId);if(idx===-1)return;
+  const filtered=db.lansia[idx].riwayatPemeriksaan.filter(r=>r.bulan!==bulanLama);
+  filtered.sort((a,z)=>a.bulan.localeCompare(z.bulan));
+  db.lansia[idx].riwayatPemeriksaan=filtered;
+  if(filtered.length>0){
+    const lat=filtered[filtered.length-1];
+    if(lat.td)db.lansia[idx].td=lat.td;if(lat.gula!=null)db.lansia[idx].gula=lat.gula;
+    if(lat.asamUrat!=null)db.lansia[idx].asamUrat=lat.asamUrat;if(lat.kolesterol!=null)db.lansia[idx].kolesterol=lat.kolesterol;
+  } else {delete db.lansia[idx].td;delete db.lansia[idx].gula;delete db.lansia[idx].asamUrat;delete db.lansia[idx].kolesterol;}
+  saveDB();closeModal('modalEditRiwayatLansia');
+  toast('Pencatatan dihapus');
+  detailLansia(lansiaId);renderLansia();
+}
+
+// ── LEGACY (kept for backward compat but now unused) ──
+function simpanEditPencatatanBalita(balitaId,bulanLama){bukaEditRiwayatBalita(balitaId,bulanLama);}
+function simpanEditPencatatanLansia(lansiaId,bulanLama){bukaEditRiwayatLansia(lansiaId,bulanLama);}
+
+// ═══ IMUNISASI ═══
+function renderImunForm(){
+  const sel=document.getElementById('imunBalitaSel');
+  _imunList=db.balita.map(b=>({id:b.id,nama:b.nama}));
+  document.getElementById('imunBalitaInput').value='';
+  sel.value='';
+  document.getElementById('imunChecklist').innerHTML=IMUN_STAGES.map(stage=>`
+    <div style="width:100%;margin-bottom:4px">
+      <div style="font-size:10px;font-weight:700;color:var(--t7);text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px">${stage.stage}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        ${stage.items.map(j=>`<label class="chk-item"><input type="checkbox" value="${j.jenis}" class="imun-cb"> ${j.label}</label>`).join('')}
+      </div>
+    </div>`).join('');
+}
+let _imunList=[];
+function filterImunBalita(){
+  const q=document.getElementById('imunBalitaInput').value.toLowerCase();
+  document.getElementById('imunBalitaSel').value='';
+  const filtered=_imunList.filter(x=>x.nama.toLowerCase().includes(q));
+  const dd=document.getElementById('imunDropdown');
+  dd.innerHTML=filtered.map(x=>`<div class="combobox-opt" onmousedown="selectImunBalita('${x.id}','${x.nama.replace(/'/g,"\\'")}')">` +x.nama+'</div>').join('');
+  dd.classList.toggle('open',filtered.length>0&&q.length>0);
+}
+function openImunDropdown(){
+  if(_imunList.length>0){
+    document.getElementById('imunDropdown').innerHTML=_imunList.map(x=>`<div class="combobox-opt" onmousedown="selectImunBalita('${x.id}','${x.nama.replace(/'/g,"\\'")}')">` +x.nama+'</div>').join('');
+    document.getElementById('imunDropdown').classList.add('open');
+  }
+}
+function closeImunDropdown(){document.getElementById('imunDropdown').classList.remove('open');}
+function selectImunBalita(id,nama){
+  document.getElementById('imunBalitaInput').value=nama;
+  document.getElementById('imunBalitaSel').value=id;
+  closeImunDropdown();
+  renderRiwayatImun();
+}
+function renderRiwayatImun(){
+  const bid=document.getElementById('imunBalitaSel')?.value,el=document.getElementById('riwayatImunContainer');
+  if(!bid){el.innerHTML='<div class="card-sub" style="margin:0">Pilih balita untuk melihat status imunisasi.</div>';return;}
+  const imunB=db.imunisasi.filter(i=>i.balitaId===bid);
+  const done=ALL_IMUN.filter(j=>imunB.some(i=>i.jenis===j.jenis)).length;
+  const pct=Math.round(done/ALL_IMUN.length*100);
+  el.innerHTML=`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:5px"><span>${done}/${ALL_IMUN.length} selesai</span><span style="color:var(--t6)">${pct}%</span></div><div class="imun-bar"><div class="imun-bar-fill" style="width:${pct}%;background:${pct===100?'var(--mint)':pct>=60?'var(--t4)':'var(--amber)'}"></div></div></div>
+    ${IMUN_STAGES.map(stage=>`
+      <div class="imun-stage">
+        <div class="imun-stage-title">${stage.stage}</div>
+        <div class="imun-grid">
+          ${stage.items.map(j=>{const rec=imunB.find(i=>i.jenis===j.jenis);
+            return `<div class="imun-card ${rec?'done':'pending'}">
+              <div class="imun-icon">${rec?'✅':'⏳'}</div>
+              <div class="imun-name" style="font-size:10px">${j.label}</div>
+              <div class="imun-date">${rec?`${fmt(rec.tanggal)} <button onclick="openEditImun('${rec.id}')" style="background:none;border:none;cursor:pointer;color:var(--t5);font-size:11px;padding:0"><i class="ri-pencil-line"></i></button>`:'Belum'}</div>
+            </div>`;}).join('')}
+        </div>
+      </div>`).join('')}`;
+}
+function simpanImunisasi(){
+  const bid=document.getElementById('imunBalitaSel').value,tglInput=document.getElementById('imunTgl').value.trim(),tgl=parseTglInput(tglInput);
+  if(!bid||!tgl){toast('Pilih balita dan tanggal (dd/mm/yyyy)','error');return;}
+  const checked=[...document.querySelectorAll('.imun-cb:checked')].map(c=>c.value);
+  if(checked.length===0){toast('Pilih minimal satu imunisasi','error');return;}
+  let added=0;
+  checked.forEach(jenis=>{if(!db.imunisasi.some(i=>i.balitaId===bid&&i.jenis===jenis)){db.imunisasi.push({id:uid(),balitaId:bid,jenis,tanggal:tgl});added++;}});
+  saveDB();renderRiwayatImun();document.querySelectorAll('.imun-cb').forEach(c=>c.checked=false);document.getElementById('imunTgl').value='';
+  toast(added>0?`${added} imunisasi disimpan`:'Sudah pernah dicatat');
+}
+function openEditImun(id){
+  const im=db.imunisasi.find(x=>x.id===id);if(!im)return;
+  document.getElementById('editImunId').value=id;
+  const sel=document.getElementById('editImunJenis');
+  sel.innerHTML=ALL_IMUN.map(j=>`<option value="${j.jenis}" ${j.jenis===im.jenis?'selected':''}>${j.label}</option>`).join('');
+  document.getElementById('editImunTgl').value=fmtTglDisplay(im.tanggal);
+  openModal('modalEditImun');
+}
+function simpanEditImun(){
+  const id=document.getElementById('editImunId').value,jenis=document.getElementById('editImunJenis').value,tglInput=document.getElementById('editImunTgl').value.trim(),tgl=parseTglInput(tglInput);
+  if(!tgl){toast('Isi tanggal (dd/mm/yyyy)','error');return;}
+  const idx=db.imunisasi.findIndex(x=>x.id===id);
+  if(idx!==-1){db.imunisasi[idx].jenis=jenis;db.imunisasi[idx].tanggal=tgl;}
+  saveDB();closeModal('modalEditImun');renderRiwayatImun();toast('Imunisasi diperbarui');
+  const im=db.imunisasi[idx];
+  if(im&&document.getElementById('modalDetailBalita').classList.contains('open')){const b=db.balita.find(x=>x.id===im.balitaId);if(b)detailBalita(b.id);}
+}
+
+// ═══ LANSIA ═══
+let editLId=null;
+function openLansiaModal(id=null){
+  editLId=id;
+  document.getElementById('mLansiaTitle').innerHTML=`<i class="ri-parent-line"></i> ${id?'Edit':'Tambah'} Lansia`;
+  ['lNama','lTglLahir','lAlamat','lTD','lGula','lAsamUrat','lKolesterol','lRiwayat','lNIK','lKK'].forEach(f=>document.getElementById(f).value='');
+  if(id){const l=db.lansia.find(x=>x.id===id);if(!l)return;
+    document.getElementById('lNama').value=l.nama||'';document.getElementById('lTglLahir').value=l.tglLahir?fmtTglDisplay(l.tglLahir):'';
+    document.getElementById('lAlamat').value=l.alamat||'';document.getElementById('lTD').value=l.td||'';
+    document.getElementById('lGula').value=l.gula!=null?l.gula:'';document.getElementById('lAsamUrat').value=l.asamUrat!=null?l.asamUrat:'';
+    document.getElementById('lKolesterol').value=l.kolesterol!=null?l.kolesterol:'';document.getElementById('lRiwayat').value=l.riwayat||'';
+    document.getElementById('lNIK').value=l.nik||'';document.getElementById('lKK').value=l.kk||'';
+  }
+  openModal('modalLansia');
+}
+function simpanLansia(){
+  const nama=document.getElementById('lNama').value.trim(),tglLahirInput=document.getElementById('lTglLahir').value.trim(),tglLahir=parseTglInput(tglLahirInput),alamat=document.getElementById('lAlamat').value.trim();
+  if(!nama||!tglLahir||!alamat){toast('Isi nama, tanggal lahir (dd/mm/yyyy), dan alamat','error');return;}
+  const td=document.getElementById('lTD').value.trim();
+  const gula=document.getElementById('lGula').value?parseNum(document.getElementById('lGula').value):null;
+  const asamUrat=document.getElementById('lAsamUrat').value?parseNum(document.getElementById('lAsamUrat').value):null;
+  const kolesterol=document.getElementById('lKolesterol').value?parseInt(String(document.getElementById('lKolesterol').value).replace(',','.')):null;
+  const riwayat=document.getElementById('lRiwayat').value.trim();
+  const nik=document.getElementById('lNIK').value.trim(),kk=document.getElementById('lKK').value.trim();
+  const bulan=new Date().toISOString().slice(0,7);
+  const entry={bulan};if(td)entry.td=td;if(gula!=null)entry.gula=gula;if(asamUrat!=null)entry.asamUrat=asamUrat;if(kolesterol!=null)entry.kolesterol=kolesterol;
+  if(editLId){
+    const idx=db.lansia.findIndex(x=>x.id===editLId);if(idx!==-1){
+      const rp=db.lansia[idx].riwayatPemeriksaan||[];const ei=rp.findIndex(r=>r.bulan===bulan);
+      if(ei!==-1)rp[ei]=entry;else rp.push(entry);
+      const u={...db.lansia[idx],nama,tglLahir,alamat,riwayat,nik,kk,riwayatPemeriksaan:rp};
+      if(td)u.td=td;else delete u.td;if(gula!=null)u.gula=gula;else delete u.gula;
+      if(asamUrat!=null)u.asamUrat=asamUrat;else delete u.asamUrat;if(kolesterol!=null)u.kolesterol=kolesterol;else delete u.kolesterol;
+      db.lansia[idx]=u;
+    }
+  } else {
+    const nl={id:uid(),nama,tglLahir,alamat,riwayat,nik,kk,riwayatPemeriksaan:[entry]};
+    if(td)nl.td=td;if(gula!=null)nl.gula=gula;if(asamUrat!=null)nl.asamUrat=asamUrat;if(kolesterol!=null)nl.kolesterol=kolesterol;
+    db.lansia.push(nl);
+  }
+  saveDB();closeModal('modalLansia');renderLansia();toast(editLId?'Data diperbarui':'Lansia ditambahkan');editLId=null;
+}
+function hapusLansia(id){if(!confirm('Hapus data lansia ini?'))return;db.lansia=db.lansia.filter(l=>l.id!==id);saveDB();renderLansia();toast('Lansia dihapus');}
+function renderLansia(){
+  const q=(document.getElementById('searchLansia')?.value||'').toLowerCase();
+  let list=db.lansia.filter(l=>l.nama.toLowerCase().includes(q));
+  const total=list.length;
+  const limitV=document.getElementById('limitLansia')?.value||'10';
+  const limit=limitV==='all'?total:Math.min(parseInt(limitV),total);
+  const shown=list.slice(0,limit);
+  document.getElementById('infoLansia').textContent=`Menampilkan ${shown.length} dari ${total} data`;
+  const tbody=document.getElementById('lansiaTbody');
+  if(!tbody)return;
+  if(total===0){tbody.innerHTML=`<tr><td colspan="9"><div class="empty-state"><i class="ri-parent-line"></i><p>${q?'Tidak ditemukan':'Belum ada data'}</p></div></td></tr>`;return;}
+  tbody.innerHTML=shown.map((l,i)=>{
+    const st=overallLansia(l);
+    return `<tr>
+      <td style="color:var(--mu);font-size:12px">${i+1}</td>
+      <td class="td-name" style="cursor:pointer" onclick="detailLansia('${l.id}')">${l.nama}</td>
+      <td>${hitungUsiaThn(l.tglLahir)} thn</td>
+      <td><span class="badge ${statusTD(l.td).cls}">${l.td||'—'}</span></td>
+      <td><span class="badge ${statusGula(l.gula).cls}">${l.gula!=null?fmtDes(l.gula)+' mg/dL':'—'}</span></td>
+      <td><span class="badge ${statusKol(l.kolesterol).cls}">${l.kolesterol!=null?fmtDes(l.kolesterol)+' mg/dL':'—'}</span></td>
+      <td><span class="badge ${statusAU(l.asamUrat).cls}">${l.asamUrat!=null?fmtDes(l.asamUrat)+' mg/dL':'—'}</span></td>
+      <td><span class="badge ${st.cls}">${st.l}</span></td>
+      <td><div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button title="Lihat Detail" onclick="detailLansia('${l.id}')" style="display:flex;flex-direction:column;align-items:center;gap:1px;background:#eff6ff;border:1.5px solid #bfdbfe;color:#1d4ed8;border-radius:9px;padding:5px 8px;cursor:pointer;font-family:inherit"><i class="ri-eye-line" style="font-size:16px"></i><span style="font-size:9px;font-weight:700">Detail</span></button>
+        <button title="Catat Pemeriksaan" onclick="openCatatLansia('${l.id}')" style="display:flex;flex-direction:column;align-items:center;gap:1px;background:#f0fdf4;border:1.5px solid #86efac;color:#15803d;border-radius:9px;padding:5px 8px;cursor:pointer;font-family:inherit"><i class="ri-add-circle-line" style="font-size:16px"></i><span style="font-size:9px;font-weight:700">Catat</span></button>
+        <button title="Edit Data" onclick="openLansiaModal('${l.id}')" style="display:flex;flex-direction:column;align-items:center;gap:1px;background:#fefce8;border:1.5px solid #fde68a;color:#92400e;border-radius:9px;padding:5px 8px;cursor:pointer;font-family:inherit"><i class="ri-pencil-line" style="font-size:16px"></i><span style="font-size:9px;font-weight:700">Edit</span></button>
+        <button title="Hapus Data" onclick="hapusLansia('${l.id}')" style="display:flex;flex-direction:column;align-items:center;gap:1px;background:#fff1f2;border:1.5px solid #fecdd3;color:#be123c;border-radius:9px;padding:5px 8px;cursor:pointer;font-family:inherit"><i class="ri-delete-bin-line" style="font-size:16px"></i><span style="font-size:9px;font-weight:700">Hapus</span></button>
+      </div></td></tr>`;
+  }).join('');
+}
+
+function detailLansia(id){
+  const l=db.lansia.find(x=>x.id===id);if(!l)return;
+  document.getElementById('detailLansiaTitle').innerHTML=`<i class="ri-parent-line" style="color:var(--t5)"></i> ${l.nama}`;
+  const usia=hitungUsiaThn(l.tglLahir);
+  const stTD=statusTD(l.td),stG=statusGula(l.gula),stAU=statusAU(l.asamUrat),stK=statusKol(l.kolesterol);
+
+  // Peringatan lengkap — semua kondisi abnormal
+  const warns=[];
+  // Tekanan Darah
+  if(stTD.cls==='badge-severe')warns.push({t:'danger',m:`🔴 <b>Krisis Hipertensi</b> (TD: ${l.td}) — Darurat medis! Segera rujuk ke IGD/Puskesmas. Risiko stroke dan gagal jantung akut.`});
+  else if(stTD.cls==='badge-danger')warns.push({t:'danger',m:`🔴 <b>${stTD.l}</b> (TD: ${l.td}) — Risiko tinggi stroke & serangan jantung. Konsultasikan ke dokter, batasi garam & lemak.`});
+  else if(l.td){const[s]=l.td.split('/').map(Number);if(s<90)warns.push({t:'warn',m:`⚠️ <b>Hipotensi</b> (TD: ${l.td}) — Tekanan darah terlalu rendah. Risiko pingsan. Perbanyak cairan, hindari berdiri mendadak.`});else if(stTD.cls==='badge-warn')warns.push({t:'warn',m:`⚠️ <b>${stTD.l}</b> (TD: ${l.td}) — Batasi asupan garam (<5g/hari), olahraga ringan rutin.`});}
+  // Gula Darah
+  if(l.gula!=null){
+    if(l.gula>=200)warns.push({t:'danger',m:`🔴 <b>Gula Darah Sangat Tinggi</b> (${fmtDes(l.gula)} mg/dL) — Indikasi Diabetes Mellitus. Segera konsultasikan ke dokter. Hindari makanan manis & karbohidrat tinggi.`});
+    else if(l.gula>=140)warns.push({t:'warn',m:`⚠️ <b>Pra-Diabetes</b> (${fmtDes(l.gula)} mg/dL) — Batasi gula, nasi putih, dan makanan olahan. Perbanyak sayur & aktivitas fisik.`});
+    else if(l.gula<70)warns.push({t:'danger',m:`🔴 <b>Hipoglikemia</b> (${fmtDes(l.gula)} mg/dL) — Gula darah terlalu rendah, berbahaya! Segera beri minuman/makanan manis, pantau kondisi.`});
+    else if(l.gula<80)warns.push({t:'warn',m:`⚠️ <b>Gula Darah Rendah</b> (${fmtDes(l.gula)} mg/dL) — Pantau asupan karbohidrat dan jadwal makan. Konsultasikan ke dokter jika berlanjut.`});
+  }
+  // Asam Urat
+  if(l.asamUrat!=null){
+    if(l.asamUrat>7)warns.push({t:'danger',m:`🔴 <b>Hiperurisemia</b> (${fmtDes(l.asamUrat)} mg/dL) — Risiko serangan Gout/Pirai. Hindari jeroan, seafood, kacang-kacangan, dan alkohol. Perbanyak air putih.`});
+    else if(l.asamUrat>6)warns.push({t:'warn',m:`⚠️ <b>Asam Urat Batas Atas</b> (${fmtDes(l.asamUrat)} mg/dL) — Kurangi makanan tinggi purin, perbanyak air putih minimal 2L/hari.`});
+    else if(l.asamUrat<2.5)warns.push({t:'warn',m:`⚠️ <b>Asam Urat Rendah</b> (${fmtDes(l.asamUrat)} mg/dL) — Bisa indikasi kondisi ginjal atau hati. Konsultasikan ke dokter.`});
+  }
+  // Kolesterol
+  if(l.kolesterol!=null){
+    if(l.kolesterol>=240)warns.push({t:'danger',m:`🔴 <b>Kolesterol Tinggi</b> (${fmtDes(l.kolesterol)} mg/dL) — Risiko penyakit jantung & stroke. Kurangi lemak jenuh, gorengan, dan daging berlemak. Perbanyak sayur & buah.`});
+    else if(l.kolesterol>=200)warns.push({t:'warn',m:`⚠️ <b>Kolesterol Batas Atas</b> (${fmtDes(l.kolesterol)} mg/dL) — Kurangi lemak jenuh, perbanyak serat. Rutin cek setiap 3 bulan.`});
+    else if(l.kolesterol<150)warns.push({t:'warn',m:`⚠️ <b>Kolesterol Rendah</b> (${fmtDes(l.kolesterol)} mg/dL) — Bisa indikasi malnutrisi atau masalah hati. Konsultasikan ke dokter.`});
+  }
+
+  const rp=(l.riwayatPemeriksaan||[]).sort((a,z)=>a.bulan.localeCompare(z.bulan));
+  const rpL=rp.map(r=>fmtBulan(r.bulan));
+  const rpSis=rp.map(r=>r.td?parseInt(r.td.split('/')[0]):null);
+  const rpDia=rp.map(r=>r.td?parseInt(r.td.split('/')[1]):null);
+  const rpG=rp.map(r=>r.gula||null),rpK=rp.map(r=>r.kolesterol||null),rpAU=rp.map(r=>r.asamUrat||null);
+
+  document.getElementById('detailLansiaBody').innerHTML=`
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+      <button class="btn btn-mint btn-sm" onclick="openCatatLansia('${l.id}')"><i class="ri-add-circle-line"></i>Catat Pemeriksaan</button>
+    </div>
+    ${warns.length>0
+      ?`<div style="display:flex;flex-direction:column;gap:7px;margin-bottom:14px">${warns.map(w=>`<div class="alert-box ${w.t}"><i class="ri-alert-line"></i><span>${w.m}</span></div>`).join('')}</div>`
+      :'<div class="alert-box info" style="margin-bottom:12px"><i class="ri-checkbox-circle-line"></i><span>✅ Semua pemeriksaan dalam batas normal. Pertahankan pola hidup sehat!</span></div>'}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px" class="two-col-sm">
+      <div><div style="font-size:11px;color:var(--mu);text-transform:uppercase;font-weight:700">Tanggal Lahir</div><div style="font-weight:600">${fmt(l.tglLahir)} (${usia} thn)</div></div>
+      <div><div style="font-size:11px;color:var(--mu);text-transform:uppercase;font-weight:700">Alamat</div><div style="font-weight:600">${l.alamat||'—'}</div></div>
+      ${l.riwayat?`<div style="grid-column:1/-1"><div style="font-size:11px;color:var(--mu);text-transform:uppercase;font-weight:700">Riwayat Penyakit</div><div style="font-weight:600;color:var(--coral)">${l.riwayat}</div></div>`:''}
+    </div>
+
+    <!-- RIWAYAT PENCATATAN LANSIA -->
+    <div class="privasi-block" style="margin-bottom:12px">
+      <button class="privasi-toggle" style="background:#fef3c7;border-color:#fcd34d;color:#92400e;width:100%;justify-content:space-between" onclick="togglePrivasi('pencatatanLansia')">
+        <span><i class="ri-table-line"></i> Riwayat Pencatatan (${rp.length} entri)</span>
+        <i class="ri-arrow-down-s-line" id="arrowPencatatanLansia"></i>
+      </button>
+      <div class="privasi-content" id="pencatatanLansia" style="display:none;grid-template-columns:1fr;padding:0;background:transparent;border:none">
+        ${rp.length===0
+          ?`<div style="padding:12px;color:var(--mu);font-size:13px;text-align:center">Belum ada pencatatan. Gunakan tombol "Catat Pemeriksaan".</div>`
+          :`<div style="overflow-x:auto;margin-top:8px">
+            <table style="width:100%;border-collapse:collapse;font-size:12px">
+              <thead><tr style="background:var(--t1)">
+                <th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--t7);text-transform:uppercase;white-space:nowrap">Bulan</th>
+                <th style="padding:8px 10px;text-align:center;font-size:10px;font-weight:700;color:var(--t7)">TD (mmHg)</th>
+                <th style="padding:8px 10px;text-align:right;font-size:10px;font-weight:700;color:var(--t7)">Gula</th>
+                <th style="padding:8px 10px;text-align:right;font-size:10px;font-weight:700;color:var(--t7)">Kolesterol</th>
+                <th style="padding:8px 10px;text-align:right;font-size:10px;font-weight:700;color:var(--t7)">Asam Urat</th>
+                <th style="padding:8px 10px;text-align:center;font-size:10px;font-weight:700;color:var(--t7)">Aksi</th>
+              </tr></thead>
+              <tbody>
+                ${rp.map((r,ri)=>{
+                  const isLast=ri===rp.length-1;
+                  const stTDr=statusTD(r.td),stGr=statusGula(r.gula);
+                  return `<tr style="border-bottom:1px solid var(--bd);${isLast?'background:rgba(23,164,196,0.05)':''}">
+                    <td style="padding:8px 10px;font-weight:${isLast?700:400};color:${isLast?'var(--t5)':'var(--tx)'}">
+                      ${fmtBulan(r.bulan)}${isLast?` <span style="font-size:10px;color:var(--mint);font-weight:700">(Terbaru)</span>`:''}
+                    </td>
+                    <td style="padding:8px 10px;text-align:center"><span class="badge ${stTDr.cls}" style="font-size:10px">${r.td||'—'}</span></td>
+                    <td style="padding:8px 10px;text-align:right"><span class="badge ${stGr.cls}" style="font-size:10px">${r.gula!=null?fmtDes(r.gula):'—'}</span></td>
+                    <td style="padding:8px 10px;text-align:right"><span class="badge ${statusKol(r.kolesterol).cls}" style="font-size:10px">${r.kolesterol!=null?fmtDes(r.kolesterol):'—'}</span></td>
+                    <td style="padding:8px 10px;text-align:right"><span class="badge ${statusAU(r.asamUrat).cls}" style="font-size:10px">${r.asamUrat!=null?fmtDes(r.asamUrat):'—'}</span></td>
+                    <td style="padding:8px 10px;text-align:center">
+                      <button onclick="bukaEditRiwayatLansia('${l.id}','${r.bulan}')" title="Edit baris ini"
+                        style="background:#eff6ff;border:1.5px solid #bfdbfe;color:#1d4ed8;border-radius:7px;padding:3px 9px;cursor:pointer;font-size:11px;font-weight:600;font-family:inherit">
+                        <i class="ri-pencil-line"></i> Edit
+                      </button>
+                    </td>
+                  </tr>`;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>`}
+      </div>
+    </div>
+
+    <!-- PRIVASI LANSIA -->
+    <div class="privasi-block" style="margin-bottom:12px">
+      <button class="privasi-toggle" onclick="togglePrivasi('privLansia')"><i class="ri-shield-keyhole-line"></i> Lihat Data Kependudukan</button>
+      <div class="privasi-content" id="privLansia">
+        <div><div style="font-size:10px;color:var(--mu);text-transform:uppercase;font-weight:700">NIK</div><div style="font-weight:600;font-size:13px">${l.nik||'—'}</div></div>
+        <div><div style="font-size:10px;color:var(--mu);text-transform:uppercase;font-weight:700">No. KK</div><div style="font-weight:600;font-size:13px">${l.kk||'—'}</div></div>
+      </div>
+    </div>
+    <div class="health-gauges" style="margin-bottom:12px">
+      ${l.td?`<div class="gauge-card"><div class="gauge-title">Tekanan Darah</div><div class="gauge-value" style="color:${stTD.color}">${l.td}</div><div class="gauge-unit">mmHg</div><span class="badge ${stTD.cls}" style="margin-top:7px">${stTD.l}</span></div>`:''}
+      ${l.gula!=null?`<div class="gauge-card"><div class="gauge-title">Gula Darah</div><div class="gauge-value" style="color:${stG.color}">${fmtDes(l.gula)}</div><div class="gauge-unit">mg/dL · normal: 80–139</div><span class="badge ${stG.cls}" style="margin-top:7px">${stG.l}</span><div class="gauge-bar"><div class="gauge-fill" style="width:${Math.min(100,l.gula/300*100)}%;background:${stG.color}"></div></div></div>`:''}
+      ${l.asamUrat!=null?`<div class="gauge-card"><div class="gauge-title">Asam Urat</div><div class="gauge-value" style="color:${stAU.color}">${fmtDes(l.asamUrat)}</div><div class="gauge-unit">mg/dL · normal: 2,5–6</div><span class="badge ${stAU.cls}" style="margin-top:7px">${stAU.l}</span><div class="gauge-bar"><div class="gauge-fill" style="width:${Math.min(100,l.asamUrat/10*100)}%;background:${stAU.color}"></div></div></div>`:''}
+      ${l.kolesterol!=null?`<div class="gauge-card"><div class="gauge-title">Kolesterol Total</div><div class="gauge-value" style="color:${stK.color}">${fmtDes(l.kolesterol)}</div><div class="gauge-unit">mg/dL · normal: 150–199</div><span class="badge ${stK.cls}" style="margin-top:7px">${stK.l}</span><div class="gauge-bar"><div class="gauge-fill" style="width:${Math.min(100,l.kolesterol/300*100)}%;background:${stK.color}"></div></div></div>`:''}
+    </div>
+    ${rp.length>1?`<div style="background:var(--t0);border:1px solid var(--bd);border-radius:12px;padding:13px">
+      <div style="font-weight:700;font-size:13px;color:var(--t8);margin-bottom:10px"><i class="ri-line-chart-line"></i> Grafik Tren Pemeriksaan</div>
+      <div style="position:relative;height:210px"><canvas id="dtLansiaChart"></canvas></div>
+    </div>`:'<div class="alert-box info"><i class="ri-information-line"></i><span>Grafik tren tersedia setelah 2+ kali pemeriksaan.</span></div>'}`;
+
+  openModal('modalDetailLansia');
+  if(rp.length>1){
+    setTimeout(()=>{
+      if(_dtC['dtLansiaChart']){_dtC['dtLansiaChart'].destroy();}
+      const ds=[];
+      if(rpSis.some(v=>v))ds.push({label:'Sistol (mmHg)',data:rpSis,borderColor:'#ef4444',tension:0.4,fill:false,pointRadius:4,borderWidth:2});
+      if(rpDia.some(v=>v))ds.push({label:'Diastol (mmHg)',data:rpDia,borderColor:'#f97316',tension:0.4,fill:false,pointRadius:4,borderWidth:2,borderDash:[4,3]});
+      if(rpG.some(v=>v))ds.push({label:'Gula (mg/dL)',data:rpG,borderColor:'#a855f7',tension:0.4,fill:false,pointRadius:4,borderWidth:2});
+      if(rpK.some(v=>v))ds.push({label:'Kolesterol (mg/dL)',data:rpK,borderColor:'#f59e0b',tension:0.4,fill:false,pointRadius:4,borderWidth:2});
+      if(rpAU.some(v=>v))ds.push({label:'Asam Urat×20',data:rpAU.map(v=>v?v*20:null),borderColor:'#22c55e',tension:0.4,fill:false,pointRadius:4,borderWidth:2,borderDash:[3,3]});
+      _dtC['dtLansiaChart']=new Chart(document.getElementById('dtLansiaChart'),{type:'line',data:{labels:rpL,datasets:ds},options:{responsive:true,maintainAspectRatio:false,animation:{duration:800},plugins:{legend:{position:'bottom',labels:{font:{family:'Outfit',size:10}}}},scales:{y:{beginAtZero:false,ticks:{font:{family:'Outfit'}}}}}});
+    },100);
+  }
+}
+
+// ═══ LAPORAN ═══
+let _lapC={};
+function renderLaporan(){
+  console.log('[DEBUG] renderLaporan called, balita:', db.balita.length, 'lansia:', db.lansia.length, 'imunisasi:', db.imunisasi.length);
+  renderStuntingCard('lapStunting');
+  renderLansiaHealthCard('lapLansia');
+  // Imunisasi summary
+  const jB=db.balita.length,lapImEl=document.getElementById('lapImun');
+  if(jB===0){lapImEl.innerHTML='<div class="empty-state" style="padding:16px 0"><i class="ri-syringe-line"></i><p>Belum ada data</p></div>';}
+  else{
+    const lengkap=db.balita.filter(b=>ALL_IMUN.every(j=>db.imunisasi.some(i=>i.balitaId===b.id&&i.jenis===j.jenis))).length;
+    const proses=db.balita.filter(b=>db.imunisasi.some(i=>i.balitaId===b.id)&&!ALL_IMUN.every(j=>db.imunisasi.some(i=>i.balitaId===b.id&&i.jenis===j.jenis))).length;
+    const belum=jB-lengkap-proses;
+    lapImEl.innerHTML=`<div style="display:flex;gap:7px;margin:8px 0">${[['Lengkap',lengkap,'var(--mint)'],['Proses',proses,'var(--t5)'],['Belum',belum,'var(--amber)']].map(([l,v,c])=>`<div style="flex:1;background:#f8fafc;border:1px solid var(--bd);border-radius:9px;padding:9px;text-align:center"><div style="font-size:18px;font-weight:800;color:${c}">${v}</div><div style="font-size:9px;font-weight:700;color:var(--mu);margin-top:2px">${l}</div></div>`).join('')}</div>
+    <div style="display:flex;height:7px;border-radius:99px;overflow:hidden"><div style="background:var(--mint);width:${Math.round(lengkap/jB*100)}%"></div><div style="background:var(--t4);width:${Math.round(proses/jB*100)}%"></div><div style="background:var(--amber);flex:1"></div></div>`;
+  }
+  // Statistik
+  const jL=db.lansia.length,jImun=db.imunisasi.length;
+  const bLengkap=db.balita.filter(b=>ALL_IMUN.every(j=>db.imunisasi.some(i=>i.balitaId===b.id&&i.jenis===j.jenis))).length;
+  const lR=db.lansia.filter(l=>overallLansia(l).cls==='badge-danger').length;
+  const lP=db.lansia.filter(l=>overallLansia(l).cls==='badge-warn').length;
+  document.getElementById('laporanStats').innerHTML=`<div style="display:flex;flex-direction:column;gap:9px;margin-top:10px">
+    ${[['👶 Total Balita',jB+' anak',`${bLengkap} imunisasi lengkap`,'var(--t5)'],['👴 Total Lansia',jL+' orang',`${lR} perlu perhatian, ${lP} pantau`,'var(--amber)'],['💉 Catatan Imunisasi',jImun+' record',`Rata-rata ${jB>0?fmtDes(jImun/jB):0} per balita`,'var(--mint)']].map(([l,v,sub,c])=>`
+    <div style="background:var(--t0);border:1px solid var(--bd);border-radius:11px;padding:12px;display:flex;justify-content:space-between;align-items:center">
+      <div><div style="font-size:13px;font-weight:700;color:var(--t8)">${l}</div><div style="font-size:11px;color:var(--mu)">${sub}</div></div>
+      <div style="font-size:19px;font-weight:800;color:${c}">${v}</div>
+    </div>`).join('')}
+  </div>`;
+  if(_lapC['imunPieChart']){_lapC['imunPieChart'].destroy();}
+  const iCnt={};ALL_IMUN.forEach(j=>{iCnt[j.jenis]=db.imunisasi.filter(i=>i.jenis===j.jenis).length;});
+  const topI=Object.entries(iCnt).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const pieCanvas=document.getElementById('imunPieChart');
+  if(topI.length>0&&pieCanvas)_lapC['imunPieChart']=new Chart(pieCanvas,{type:'doughnut',data:{labels:topI.map(([k])=>k),datasets:[{data:topI.map(([,v])=>v),backgroundColor:['#17a4c4','#00c9a7','#ffb830','#7c5cbf','#ff6b6b','#3bbedd','#22c55e','#f97316']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{family:'Outfit',size:10},boxWidth:10}}}}});
+  // set tahun default
+  if(!document.getElementById('pdfTahun').value)document.getElementById('pdfTahun').value=new Date().getFullYear();
+  if(!document.getElementById('pdfBulan').value){const n=new Date();document.getElementById('pdfBulan').value=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`;}
+}
+
+// ═══ EKSPOR ═══
+function eksporPDF(){
+  const jenis=document.getElementById('pdfJenis').value;
+  const bulanVal=document.getElementById('pdfBulan').value;
+  const tahunVal=parseInt(String(document.getElementById('pdfTahun').value).replace(',','.'))||new Date().getFullYear();
+  const pos=db.konfig.namaPosyandu,desa=db.konfig.desa,kec=db.konfig.kec,kab=db.konfig.kab;
+  const tglCetak=new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
+
+  // Filter data sesuai jenis laporan
+  let balitaData=db.balita,lansiaData=db.lansia,imunData=db.imunisasi;
+  let periodeLabel='';
+  if(jenis==='bulanan'&&bulanVal){
+    periodeLabel='Bulan: '+fmtBulan(bulanVal);
+    balitaData=db.balita.filter(b=>(b.riwayatBB||[]).some(r=>r.bulan===bulanVal));
+    lansiaData=db.lansia.filter(l=>(l.riwayatPemeriksaan||[]).some(r=>r.bulan===bulanVal));
+  }else if(jenis==='tahunan'){
+    periodeLabel='Tahun: '+tahunVal;
+    balitaData=db.balita.filter(b=>(b.riwayatBB||[]).some(r=>r.bulan&&r.bulan.startsWith(String(tahunVal))));
+    lansiaData=db.lansia.filter(l=>(l.riwayatPemeriksaan||[]).some(r=>r.bulan&&r.bulan.startsWith(String(tahunVal))));
+  }else{periodeLabel='Laporan Lengkap';}
+
+  const stList=balitaData.filter(b=>cekStunting(b)).length;
+  const lRisiko=lansiaData.filter(l=>overallLansia(l).cls==='badge-danger').length;
+
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Laporan ${pos}</title>
+  <style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:Arial,sans-serif;font-size:11px;color:#0f2d36;max-width:960px;margin:0 auto;padding:18px}
+  h1{font-size:15px;text-align:center;margin-bottom:3px}h2{font-size:12px;border-bottom:2px solid #17a4c4;padding-bottom:3px;margin:16px 0 8px;color:#0e5060}
+  .header{text-align:center;border-bottom:2px solid #0e5060;padding-bottom:10px;margin-bottom:14px}
+  .hdr-sub{font-size:11px;color:#5a7a85}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+  .stat{background:#f0fbfd;border:1px solid #d0eaf0;border-radius:7px;padding:9px;text-align:center}
+  .stat-v{font-size:20px;font-weight:800;color:#0e5060}.stat-l{font-size:9px;color:#5a7a85}
+  table{width:100%;border-collapse:collapse;margin-bottom:10px;font-size:10px}
+  th{background:#f0fbfd;padding:6px;text-align:left;border:1px solid #d0eaf0;font-size:9px;white-space:nowrap}
+  td{padding:5px 6px;border:1px solid #e2e8f0}
+  .badge-ok{color:#15803d;background:#dcfce7;padding:1px 6px;border-radius:99px}
+  .badge-danger{color:#b91c1c;background:#fee2e2;padding:1px 6px;border-radius:99px}
+  .badge-warn{color:#854d0e;background:#fef9c3;padding:1px 6px;border-radius:99px}
+  .badge-neutral{color:#64748b;background:#f1f5f9;padding:1px 6px;border-radius:99px}
+  .badge-severe{color:#fff;background:#7f1d1d;padding:1px 6px;border-radius:99px}
+  .periode{display:inline-block;background:#e0f7fc;color:#0e5060;padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;margin-bottom:10px}
+  @media print{body{padding:8px}}
+  </style></head><body>
+  <div class="header">
+    <h1>LAPORAN ${jenis.toUpperCase()} POSYANDU</h1>
+    <div class="hdr-sub">${pos} &middot; ${desa} &middot; ${kec} &middot; ${kab}</div>
+    <div class="hdr-sub">Dicetak: ${tglCetak}</div>
+  </div>
+  <div class="periode">${periodeLabel}</div>
+  <div class="stats">
+    <div class="stat"><div class="stat-v">${balitaData.length}</div><div class="stat-l">Balita ${jenis==='lengkap'?'Terdaftar':'Hadir'}</div></div>
+    <div class="stat"><div class="stat-v">${lansiaData.length}</div><div class="stat-l">Lansia ${jenis==='lengkap'?'Terdaftar':'Hadir'}</div></div>
+    <div class="stat"><div class="stat-v">${stList}</div><div class="stat-l">Potensi Stunting</div></div>
+    <div class="stat"><div class="stat-v">${lRisiko}</div><div class="stat-l">Lansia Perlu Perhatian</div></div>
+  </div>
+  <h2>Data Balita &amp; Status Gizi (Permenkes No.2/2020)</h2>
+  <table><thead><tr><th>#</th><th>Nama Balita</th><th>Ibu/Ortu</th><th>JK</th><th>Usia</th><th>BB (kg)</th><th>TB (cm)</th><th>LK (cm)</th><th>LLA (cm)</th><th>Status TB/U</th><th>Status BB/U</th><th>Imunisasi</th></tr></thead><tbody>
+  ${balitaData.map((b,i)=>{const u=hitungUsia(b.tglLahir),sTB=statusTBU(b.tb,u,b.jk||'L'),sBB=statusBBU(b.bb,u,b.jk||'L');const iD=db.imunisasi.filter(im=>im.balitaId===b.id).length;const pct=Math.round(iD/ALL_IMUN.length*100);
+    return `<tr><td>${i+1}</td><td>${b.nama}</td><td>${b.namaIbu||'—'}</td><td>${b.jk||'L'}</td><td>${u} bln</td><td>${fmtDes(b.bb)}</td><td>${fmtDes(b.tb)}</td><td>${b.lk!=null?fmtDes(b.lk):'—'}</td><td>${b.lla!=null?fmtDes(b.lla):'—'}</td><td><span class="${sTB.cls}">${sTB.l}</span></td><td><span class="${sBB.cls}">${sBB.l}</span></td><td>${pct}%</td></tr>`;}).join('')}
+  </tbody></table>
+  <h2>Data Lansia &amp; Status Kesehatan</h2>
+  <table><thead><tr><th>#</th><th>Nama</th><th>Usia</th><th>TD</th><th>Gula (mg/dL)</th><th>Kolesterol (mg/dL)</th><th>Asam Urat (mg/dL)</th><th>Riwayat Penyakit</th><th>Status</th></tr></thead><tbody>
+  ${lansiaData.map((l,i)=>{const s=overallLansia(l);
+    return `<tr><td>${i+1}</td><td>${l.nama}</td><td>${hitungUsiaThn(l.tglLahir)} thn</td><td>${l.td||'—'}</td><td>${l.gula!=null?fmtDes(l.gula):'—'}</td><td>${l.kolesterol!=null?fmtDes(l.kolesterol):'—'}</td><td>${l.asamUrat!=null?fmtDes(l.asamUrat):'—'}</td><td>${l.riwayat||'—'}</td><td><span class="${s.cls}">${s.l}</span></td></tr>`;}).join('')}
+  </tbody></table>
+  <script>window.onload=()=>{window.print()}<\/script></body></html>`);
+  w.document.close();
+}
+
+// ═══ KONFIGURASI ═══
+function renderKonfig(){
+  document.getElementById('kNama').value=db.konfig.namaPosyandu||'';
+  document.getElementById('kDesa').value=db.konfig.desa||'';
+  document.getElementById('kKec').value=db.konfig.kec||'';
+  document.getElementById('kKab').value=db.konfig.kab||'';
+  document.getElementById('dbStats').innerHTML=`📋 ${db.balita.length} balita &nbsp;|&nbsp; 👴 ${db.lansia.length} lansia &nbsp;|&nbsp; 💉 ${db.imunisasi.length} imunisasi`;
+}
+function simpanKonfig(){
+  db.konfig.namaPosyandu=document.getElementById('kNama').value.trim();
+  db.konfig.desa=document.getElementById('kDesa').value.trim();
+  db.konfig.kec=document.getElementById('kKec').value.trim();
+  db.konfig.kab=document.getElementById('kKab').value.trim();
+  saveDB();document.getElementById('sbSub').textContent=`${db.konfig.namaPosyandu} · ${db.konfig.desa}`;renderKonfig();toast('Konfigurasi disimpan');
+}
+function backupData(){
+  const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`backup_dapindu_${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  toast('Backup berhasil diunduh');
+}
+
+function imporJSON(e){
+  const file=e.target.files[0];if(!file)return;
+  if(!confirm('Import JSON akan MENGGANTIKAN seluruh data saat ini. Lanjutkan?')){e.target.value='';return;}
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const parsed=JSON.parse(ev.target.result);
+      if(!parsed.balita&&!parsed.lansia&&!parsed.imunisasi){toast('Format JSON tidak dikenali','error');return;}
+      db={...db,...parsed};
+      ['balita','lansia','imunisasi'].forEach(k=>{if(!db[k])db[k]=[];});
+      saveDB();
+      renderDashboard();
+      toast(`Impor berhasil — ${db.balita.length} balita, ${db.lansia.length} lansia`);
+      renderKonfig();
+    }catch(err){toast('Gagal membaca file JSON','error');console.error(err);}
+    e.target.value='';
+  };
+  reader.readAsText(file,'UTF-8');
+}
+
+function resetData(){
+  if(!confirm('PERHATIAN: Semua data lokal dan Firebase akan dihapus permanen!'))return;
+  // Clear Firebase
+  if(window._fbReady&&window._fbSave){
+    const empty={konfig:db.konfig,balita:[],lansia:[],imunisasi:[]};
+    window._fbSave(empty).catch(()=>{});
+  }
+  localStorage.removeItem(SK);
+  location.reload();
+}
+
+// ── DUMMY DATA TEST ──
+function pushDummyData(){
+  if(!window._fbSave){
+    toast('Firebase belum terhubung — tunggu sebentar lalu coba lagi','error');
+    return;
+  }
+  if(!confirm('Push dummy data ke Firebase sekarang?\nData lokal tidak akan berubah, hanya dikirim ke server untuk tes sinkronisasi.')){return;}
+
+  const now=new Date();
+  const bulanIni=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const bulanLalu=`${now.getFullYear()}-${String(now.getMonth()).padStart(2,'0')}`;
+
+  const dummy={
+    konfig:{
+      namaPosyandu:'Posyandu Ceria — TEST SYNC',
+      desa:'Desa Lestari',
+      kec:'Kec. Bahagia',
+      kab:'Kab. Sehat'
+    },
+    balita:[
+      {
+        id:'dummy_b1',
+        nama:'TEST — Siti Rahayu',
+        namaIbu:'Dewi Kartika',
+        namaAyah:'Arif Wibowo',
+        tglLahir:'2023-09-10',
+        jk:'P',
+        posyandu:'Posyandu Panda',
+        bb:8.1,tb:70,lk:43,lla:13.5,
+        alamat:'Jl. Mawar No.5',
+        nik:'',kk:'',nikIbu:'',nikAyah:'',anakKe:1,
+        riwayatBB:[
+          {bulan:bulanLalu,bb:7.8,tb:68.5,lk:42.5,lla:13},
+          {bulan:bulanIni,bb:8.1,tb:70,lk:43,lla:13.5}
+        ]
+      },
+      {
+        id:'dummy_b2',
+        nama:'TEST — Ahmad Fauzi',
+        namaIbu:'Siti Aminah',
+        namaAyah:'Hasan Basri',
+        tglLahir:'2022-05-20',
+        jk:'L',
+        posyandu:'Posyandu Kanguru',
+        bb:12.3,tb:85,lk:48,lla:15.5,
+        alamat:'Jl. Kenanga No.7',
+        nik:'',kk:'',nikIbu:'',nikAyah:'',anakKe:2,
+        riwayatBB:[
+          {bulan:bulanLalu,bb:11.9,tb:83,lk:47.5,lla:15},
+          {bulan:bulanIni,bb:12.3,tb:85,lk:48,lla:15.5}
+        ]
+      }
+    ],
+    imunisasi:[
+      {id:'dummy_i1',balitaId:'dummy_b1',jenis:'HB-0',tanggal:'2023-09-10'},
+      {id:'dummy_i2',balitaId:'dummy_b1',jenis:'BCG',tanggal:'2023-10-10'},
+      {id:'dummy_i3',balitaId:'dummy_b1',jenis:'DPT-HB-Hib 1',tanggal:'2023-11-10'},
+      {id:'dummy_i4',balitaId:'dummy_b2',jenis:'HB-0',tanggal:'2022-05-20'},
+      {id:'dummy_i5',balitaId:'dummy_b2',jenis:'BCG',tanggal:'2022-06-20'},
+      {id:'dummy_i6',balitaId:'dummy_b2',jenis:'DPT-HB-Hib 1',tanggal:'2022-07-20'},
+      {id:'dummy_i7',balitaId:'dummy_b2',jenis:'DPT-HB-Hib 2',tanggal:'2022-08-20'},
+      {id:'dummy_i8',balitaId:'dummy_b2',jenis:'DPT-HB-Hib 3',tanggal:'2022-09-20'},
+      {id:'dummy_i9',balitaId:'dummy_b2',jenis:'MR-1',tanggal:'2023-02-20'},
+    ],
+    lansia:[
+      {
+        id:'dummy_l1',
+        nama:'TEST — Wagiyem Prasetyo',
+        tglLahir:'1960-04-12',
+        alamat:'Jl. Flamboyan No.2',
+        nik:'',kk:'',
+        td:'135/88',gula:125,asamUrat:5.8,kolesterol:205,
+        riwayat:'Hipertensi ringan',
+        riwayatPemeriksaan:[
+          {bulan:bulanLalu,td:'132/85',gula:120,asamUrat:5.5,kolesterol:198},
+          {bulan:bulanIni,td:'135/88',gula:125,asamUrat:5.8,kolesterol:205}
+        ]
+      },
+      {
+        id:'dummy_l2',
+        nama:'TEST — Suharto Wiyono',
+        tglLahir:'1955-11-08',
+        alamat:'Jl. Dahlia No.14',
+        nik:'',kk:'',
+        td:'155/95',gula:188,asamUrat:7.2,kolesterol:242,
+        riwayat:'Hipertensi, Pra-Diabetes',
+        riwayatPemeriksaan:[
+          {bulan:bulanLalu,td:'150/92',gula:175,asamUrat:7.0,kolesterol:238},
+          {bulan:bulanIni,td:'155/95',gula:188,asamUrat:7.2,kolesterol:242}
+        ]
+      }
+    ],
+    _dummyPushedAt: new Date().toISOString(),
+    _dummyNote: 'Data tes sinkronisasi Firebase DAPINDU'
+  };
+
+  setSyncStatus('syncing','Mengirim dummy data…');
+  window._fbSave(dummy).then(()=>{
+    toast('✅ Dummy data berhasil dikirim ke Firebase! Cek di Firebase Console → Realtime Database → dapindu/main');
+    // Tampilkan link ke Firebase console
+    const det=document.getElementById('fbStatusDetail');
+    if(det){
+      det.innerHTML=`
+        <div style="color:#15803d;font-weight:600;margin-bottom:6px">✅ Dummy data berhasil dikirim!</div>
+        <div style="font-size:11px;color:var(--mu)">Verifikasi di Firebase Console:</div>
+        <a href="https://console.firebase.google.com/project/dapindu-62c37/database/dapindu-62c37-default-rtdb/data/dapindu/main"
+           target="_blank" rel="noopener"
+           style="font-size:11px;color:#0891b2;word-break:break-all">
+           Buka Firebase Console →
+        </a>`;
+    }
+  }).catch(e=>{
+    toast('❌ Gagal kirim dummy data: '+(e.message||e.code||'unknown'),'error');
+    const det=document.getElementById('fbStatusDetail');
+    if(det)det.innerHTML=`<span style="color:#b91c1c;font-weight:600">Error: ${e.code||e.message||'unknown'}</span>`;
+  });
+}
+
+// DARK MODE
+function toggleDark(){
+  const isDark=document.body.classList.toggle('dark');
+  localStorage.setItem('dapindu_dark',isDark?'1':'0');
+  document.getElementById('darkIcon').className=isDark?'ri-sun-line':'ri-moon-line';
+  document.getElementById('darkToggle').title=isDark?'Mode Terang':'Mode Gelap';
+  setTimeout(()=>{
+    const page=document.querySelector('.nav-item.active')?.dataset?.page;
+    if(page==='dashboard')renderDashboard();
+  },100);
+}
+
+// INIT
+// Expose db, SK, dan flag ke window agar Firebase module bisa akses
+window.db = db;
+window.SK = SK; 
+window._applyingRemote = false;
+// Sync watcher: Setiap kali window.db berubah (dari Firebase), update local db
+window._syncWindowDb = function() {
+  if(!window._applyingRemote && window.db) {
+    Object.assign(db, window.db);
+  }
+};
+// Expose functions to window
+window.setSyncStatus=setSyncStatus;
+window.renderDashboard=renderDashboard;
+window.renderBalita=renderBalita;
+window.renderLansia=renderLansia;
+window.renderKonfig=renderKonfig;
+
+document.getElementById('sbSub').textContent=`${db.konfig.namaPosyandu} · ${db.konfig.desa}`;
+if(localStorage.getItem('dapindu_dark')==='1'){
+  document.body.classList.add('dark');
+  document.getElementById('darkIcon').className='ri-sun-line';
+  document.getElementById('darkToggle').title='Mode Terang';
+}
+renderDashboard();
+</script>
+
+<!-- ═══ FIREBASE REALTIME DATABASE SYNC (ES Module v12.11.0) ═══ -->
+<script type="module">
+import { initializeApp }
+  from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js';
+import { getDatabase, ref, set, onValue }
+  from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-database.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBTqq4rSEbtCqDKl4TdT7Cos-kG5_1S0MA",
+  authDomain: "dapindu-62c37.firebaseapp.com",
+  databaseURL: "https://dapindu-62c37-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "dapindu-62c37",
+  storageBucket: "dapindu-62c37.firebasestorage.app",
+  messagingSenderId: "1062358956979",
+  appId: "1:1062358956979:web:4e098fa1a61536f5ac69c6"
+};
+
+const RTDB_PATH = 'dapindu/main';
+let _saving = false;
+let _saveQueue = null;
+let _firstValue = true;
+
+try {
+  const app = initializeApp(firebaseConfig);
+  const rtdb = getDatabase(app);
+  const dbRef = ref(rtdb, RTDB_PATH);
+
+  // ── SIMPAN ke Realtime Database ──
+  async function pushToRTDB(payload) {
+    _saving = true;
+    window.setSyncStatus?.('syncing', 'Menyimpan ke server…');
+    try {
+      // RTDB tidak bisa simpan objek dengan array langsung jika ada karakter khusus
+      // Simpan sebagai JSON string untuk keamanan
+      await set(dbRef, {
+        payload: JSON.stringify(payload),
+        ts: Date.now()
+      });
+      window.setSyncStatus?.('synced', 'Tersinkron ✓');
+    } catch(err) {
+      console.error('[DAPINDU] RTDB write error:', err.code, err.message);
+      window.setSyncStatus?.('offline', 'Gagal simpan: ' + (err.code || err.message));
+    } finally {
+      _saving = false;
+      if (_saveQueue !== null) {
+        const next = _saveQueue;
+        _saveQueue = null;
+        pushToRTDB(next);
+      }
+    }
+  }
+
+  // Expose ke window.saveDB
+  window._fbSave = (data) => {
+    if (_saving) {
+      _saveQueue = data; // antri, timpa jika ada yang pending
+      return Promise.resolve();
+    }
+    return pushToRTDB(data);
+  };
+
+  // ── LISTENER REALTIME dari RTDB ──
+  onValue(dbRef,
+    (snapshot) => {
+      if (_firstValue) {
+        _firstValue = false;
+        if (!snapshot.exists()) {
+          // Belum ada data di server → upload data lokal sekarang
+          console.log('[DAPINDU] RTDB kosong, upload data lokal...');
+          pushToRTDB(JSON.parse(JSON.stringify(window.db)));
+          window.setSyncStatus?.('syncing', 'Upload data awal…');
+          return;
+        }
+        // Sudah ada data → merge remote ke lokal
+        _applyRemote(snapshot);
+        window._fbReady = true;
+        return;
+      }
+
+      // Update dari perangkat/tab lain
+      if (_saving) return; // abaikan echo write kita sendiri
+      _applyRemote(snapshot);
+    },
+    (err) => {
+      console.error('[DAPINDU] RTDB onValue error:', err.code, err.message);
+      window.setSyncStatus?.('offline', 'Offline: ' + (err.code || 'unknown'));
+    }
+  );
+
+  window._fbReady = false;
+  window.setSyncStatus?.('syncing', 'Menghubungkan ke server…');
+
+} catch(initErr) {
+  console.error('[DAPINDU] Firebase init error:', initErr);
+  window.setSyncStatus?.('offline', 'Firebase tidak dapat dimuat');
+}
+
+// ── Terapkan data dari RTDB ke local db ──
+function _applyRemote(snapshot) {
+  if (!snapshot.exists()) return;
+  window._applyingRemote = true;
+  try {
+    const val = snapshot.val();
+    if (!val) return;
+
+    let remote;
+    // Data tersimpan sebagai { payload: "...", ts: ... }
+    if (typeof val === 'object' && val.payload) {
+      remote = JSON.parse(val.payload);
+    } else if (typeof val === 'string') {
+      remote = JSON.parse(val);
+    } else {
+      remote = val;
+    }
+
+    if (!remote || typeof remote !== 'object') return;
+
+    // Merge ke db lokal (remote menang) - update via window.db
+    const merged = { ...window.db, ...remote };
+    ['balita','lansia','imunisasi'].forEach(k => { if (!merged[k]) merged[k] = []; });
+    Object.assign(window.db, merged);
+
+    // Sync local db variable dengan window.db
+    if(window._syncWindowDb) window._syncWindowDb();
+
+    // Cache ke localStorage
+    localStorage.setItem(window.SK, JSON.stringify(window.db));
+
+    window.setSyncStatus?.('synced', 'Tersinkron ✓');
+
+    // Re-render halaman aktif
+    const page = document.querySelector('.bnav-item.active, .nav-item.active')?.dataset?.page;
+    const render = {
+      dashboard: window.renderDashboard,
+      balita:    window.renderBalita,
+      lansia:    window.renderLansia,
+      konfig:    window.renderKonfig,
+    };
+    (render[page] || window.renderDashboard)?.();
+
+  } catch(e) {
+    console.error('[DAPINDU] _applyRemote error:', e);
+  } finally {
+    window._applyingRemote = false;
+  }
+}
+</script>
+
+</body>
+</html>
