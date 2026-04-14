@@ -150,21 +150,37 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--tx);font-s
 .sidebar-footer .ver{font-size:10px;color:rgba(255,255,255,0.25)}
 /* MAIN */
 .main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-width:0}
-.topbar{background:var(--wh);border-bottom:1px solid var(--bd);padding:13px 28px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
-.topbar-left{display:flex;align-items:center;gap:12px}
+.topbar{background:var(--wh);border-bottom:1px solid var(--bd);padding:10px 28px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;position:sticky;top:0;z-index:100}
+.topbar-left{display:flex;align-items:center;gap:12px;flex-shrink:0}
 .menu-toggle{display:none;background:none;border:none;cursor:pointer;color:var(--tx);font-size:22px;padding:4px}
 .page-title{font-size:19px;font-weight:800;color:var(--t8)}
 .page-meta{font-size:12px;color:var(--mu);margin-top:1px}
-.topbar-right{display:flex;align-items:center;gap:8px}
-.tbtn{display:inline-flex;align-items:center;gap:6px;padding:8px 15px;border-radius:99px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--bd);background:var(--wh);color:var(--tx);transition:all .15s;font-family:inherit}
-.tbtn:hover{border-color:var(--t4);color:var(--t7)}
+.topbar-right{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
+.topbar-actions{display:flex;align-items:center;gap:6px}
+/* tbtn base — subtle filled */
+.tbtn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--bd);background:var(--t0);color:var(--t7);transition:all .18s;font-family:inherit;white-space:nowrap}
+.tbtn:hover{background:var(--t1);color:var(--t8);border-color:var(--t3)}
+body.dark .tbtn{background:#1a2535;color:#a5c8f0;border-color:#2a3e55}
+body.dark .tbtn:hover{background:#1e2f42;color:#67e8f9;border-color:#3bbedd}
+/* Tombol tambah data: warna tetap sama di dark mode */
+body.dark .tbtn.add-balita{background:#0891b2;color:#fff;border-color:#0891b2;box-shadow:0 2px 8px rgba(8,145,178,.3)}
+body.dark .tbtn.add-balita:hover{background:#0e7490;border-color:#0e7490;box-shadow:0 4px 12px rgba(8,145,178,.4)}
+body.dark .tbtn.add-lansia{background:#d97706;color:#fff;border-color:#d97706;box-shadow:0 2px 8px rgba(217,119,6,.3)}
+body.dark .tbtn.add-lansia:hover{background:#b45309;border-color:#b45309;box-shadow:0 4px 12px rgba(217,119,6,.4)}
+/* dark toggle */
+#darkToggle{background:var(--t1);color:var(--t6);border-color:var(--t3)}
+#darkToggle:hover{background:var(--t4);color:#fff;border-color:var(--t4)}
+body.dark #darkToggle{background:#1e3a4a;color:#7dd3fc;border-color:#2a4a5e}
+body.dark #darkToggle:hover{background:var(--t6);color:#fff;border-color:var(--t6)}
 .tbtn.primary{background:var(--t7);color:#fff;border-color:var(--t7)}
 .tbtn.primary:hover{background:var(--t8)}
-.tbtn.add-balita{background:#0891b2;color:#fff;border-color:#0891b2;gap:4px}
-.tbtn.add-balita:hover{background:#0e7490}
-.tbtn.add-lansia{background:#d97706;color:#fff;border-color:#d97706;gap:4px}
-.tbtn.add-lansia:hover{background:#b45309}
-.tbtn i.main-icon{font-size:18px}.tbtn i.plus-icon{font-size:12px;opacity:.85}
+/* add balita */
+.tbtn.add-balita{background:#0891b2;color:#fff;border-color:#0891b2;gap:5px;box-shadow:0 2px 8px rgba(8,145,178,.2)}
+.tbtn.add-balita:hover{background:#0e7490;border-color:#0e7490;transform:translateY(-1px);box-shadow:0 4px 12px rgba(8,145,178,.32)}
+/* add lansia */
+.tbtn.add-lansia{background:#d97706;color:#fff;border-color:#d97706;gap:5px;box-shadow:0 2px 8px rgba(217,119,6,.2)}
+.tbtn.add-lansia:hover{background:#b45309;border-color:#b45309;transform:translateY(-1px);box-shadow:0 4px 12px rgba(217,119,6,.32)}
+.tbtn i.main-icon{font-size:17px}.tbtn i.plus-icon{font-size:11px;opacity:.9}
 .content{padding:24px 28px;flex:1}
 .page{display:none;animation:fadeUp .25s ease}.page.active{display:block}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
@@ -321,6 +337,253 @@ body.dark .sync-indicator.synced{background:#14532d;color:#86efac}
 body.dark .sync-indicator.syncing{background:#713f12;color:#fde68a}
 body.dark .sync-indicator.offline{background:#7f1d1d;color:#fca5a5}
 body.dark .sync-indicator.init{background:#1e293b;color:#94a3b8}
+
+/* ════════════════════════════════════════════════
+   LOGIN SCREEN STYLES
+   ════════════════════════════════════════════════ */
+/* ═══ LOGIN SCREEN ═══ */
+/* Container utama: scrollable, tidak overflow:hidden */
+#loginScreen{
+  position:fixed;inset:0;z-index:10000;
+  overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  opacity:1;visibility:visible;
+  transition:opacity .4s ease,visibility .4s ease;
+  /* bg fallback kalau .ls-bg belum render */
+  background:linear-gradient(160deg,#d4f0f7 0%,#e8f6fa 40%,#ddf5f0 100%);
+}
+body.dark #loginScreen{background:linear-gradient(160deg,#060e18 0%,#0a1520 40%,#081510 100%)}
+#loginScreen.hidden{opacity:0;visibility:hidden;pointer-events:none}
+#loginScreen.gone{display:none!important}
+
+/* Background deco — fixed di balik konten */
+.ls-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.ls-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 15% 20%,rgba(23,164,196,.18) 0%,transparent 60%),radial-gradient(ellipse 60% 80% at 85% 80%,rgba(0,201,167,.14) 0%,transparent 55%),linear-gradient(160deg,#d4f0f7 0%,#e8f6fa 40%,#ddf5f0 100%);transition:all .5s ease}
+body.dark .ls-bg::before{background:radial-gradient(ellipse 80% 60% at 15% 20%,rgba(17,107,127,.25) 0%,transparent 60%),radial-gradient(ellipse 60% 80% at 85% 80%,rgba(0,150,120,.18) 0%,transparent 55%),linear-gradient(160deg,#060e18 0%,#0a1520 40%,#081510 100%)}
+.ls-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(23,164,196,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(23,164,196,.04) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 30%,transparent 100%)}
+body.dark .ls-grid{background-image:linear-gradient(rgba(59,190,221,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(59,190,221,.06) 1px,transparent 1px)}
+.ls-orb{position:absolute;border-radius:50%;filter:blur(60px);opacity:.35;animation:lsFloat var(--dur,12s) ease-in-out infinite;animation-delay:var(--delay,0s)}
+body.dark .ls-orb{opacity:.2}
+.ls-orb-1{width:400px;height:400px;background:radial-gradient(circle,var(--t4),transparent);top:-100px;left:-80px;--dur:14s;--delay:0s}
+.ls-orb-2{width:300px;height:300px;background:radial-gradient(circle,var(--mint),transparent);bottom:-60px;right:-60px;--dur:11s;--delay:-4s}
+.ls-orb-3{width:200px;height:200px;background:radial-gradient(circle,var(--t5),transparent);bottom:30%;left:5%;--dur:16s;--delay:-7s}
+@keyframes lsFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-40px) scale(1.05)}66%{transform:translate(-20px,20px) scale(.95)}}
+
+/* Dark toggle — fixed, selalu di atas segalanya termasuk konten scroll */
+.ls-dark-btn{
+  position:fixed;top:16px;right:16px;
+  z-index:10001;/* lebih tinggi dari loginScreen */
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.95);
+  box-shadow:0 4px 16px rgba(14,80,96,.15);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:18px;color:var(--t7);
+  transition:all .2s;
+  /* pastikan bisa diklik di touch */
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+body.dark .ls-dark-btn{background:rgba(17,29,43,.92);border-color:rgba(59,190,221,.2);color:#7dd3fc;box-shadow:0 4px 16px rgba(0,0,0,.4)}
+.ls-dark-btn:hover{transform:rotate(20deg) scale(1.1)}
+.ls-dark-btn:active{transform:scale(.93)}
+
+/* Scroll wrapper — full height, centering via flex + min-height */
+.ls-wrap{
+  position:relative;z-index:1;
+  width:100%;max-width:420px;
+  margin:0 auto;
+  min-height:100vh;min-height:100dvh;
+  display:flex;align-items:center;justify-content:center;
+  padding:80px 16px 32px;/* top 80px biar tidak ketutup dark btn */
+  padding-bottom:calc(32px + env(safe-area-inset-bottom,0px));
+  box-sizing:border-box;
+}
+
+/* Card */
+.ls-card{
+  width:100%;
+  background:rgba(255,255,255,.82);
+  backdrop-filter:blur(28px) saturate(1.8);-webkit-backdrop-filter:blur(28px) saturate(1.8);
+  border:1px solid rgba(255,255,255,.92);
+  border-radius:28px;
+  box-shadow:0 2px 0 rgba(255,255,255,.9) inset,0 20px 60px rgba(14,80,96,.18),0 2px 12px rgba(14,80,96,.08);
+  overflow:hidden;
+  position:relative;
+  animation:lsCardIn .6s cubic-bezier(.34,1.56,.64,1) forwards;
+  transform:scale(.94) translateY(16px);opacity:0;
+}
+body.dark .ls-card{background:rgba(17,29,43,.88);border-color:rgba(59,190,221,.14);box-shadow:0 2px 0 rgba(59,190,221,.08) inset,0 20px 60px rgba(0,0,0,.55),0 2px 12px rgba(0,0,0,.35)}
+@keyframes lsCardIn{to{transform:scale(1) translateY(0);opacity:1}}
+
+.ls-accent{height:4px;background:linear-gradient(90deg,var(--t7),var(--t4),var(--mint),var(--t5));background-size:200% 100%;animation:lsGrad 3s ease-in-out infinite}
+@keyframes lsGrad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.ls-body{padding:28px 28px 24px}
+.ls-foot{padding:12px 28px 20px;text-align:center;border-top:1px solid rgba(208,234,240,.5)}
+body.dark .ls-foot{border-top-color:rgba(30,51,71,.7)}
+.ls-foot-txt{font-size:11px;color:var(--mu);font-weight:500}
+.ls-foot-txt span{color:var(--t6);font-weight:700}
+body.dark .ls-foot-txt span{color:var(--t4)}
+
+/* Brand */
+.ls-brand{text-align:center;margin-bottom:24px}
+.ls-logo{display:inline-flex;align-items:center;justify-content:center;width:60px;height:60px;background:linear-gradient(135deg,var(--mint),var(--t4));border-radius:18px;font-size:28px;margin-bottom:10px;box-shadow:0 8px 24px rgba(0,201,167,.4),0 2px 6px rgba(0,201,167,.2);animation:lsLogoPulse 3s ease-in-out infinite}
+@keyframes lsLogoPulse{0%,100%{box-shadow:0 8px 24px rgba(0,201,167,.4),0 2px 6px rgba(0,201,167,.2)}50%{box-shadow:0 10px 32px rgba(0,201,167,.55),0 2px 8px rgba(0,201,167,.25)}}
+.ls-title{font-size:22px;font-weight:900;color:var(--t8);letter-spacing:-.5px;line-height:1.1}
+body.dark .ls-title{color:#a5d8f0}
+.ls-sub{font-size:11px;color:var(--mu);font-weight:500;text-transform:uppercase;letter-spacing:1px;margin-top:3px}
+.ls-desc{font-size:13px;color:var(--mu);margin-top:5px}
+.ls-divider{height:1px;background:linear-gradient(90deg,transparent,var(--bd),transparent);margin:4px 0 18px}
+body.dark .ls-divider{background:linear-gradient(90deg,transparent,rgba(59,190,221,.15),transparent)}
+
+/* Tag posyandu */
+.ls-tag{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:linear-gradient(135deg,var(--t1),var(--ml));border:1px solid rgba(59,190,221,.25);border-radius:99px;font-size:11px;font-weight:700;color:var(--t7);margin-bottom:14px;letter-spacing:.2px}
+body.dark .ls-tag{background:linear-gradient(135deg,rgba(17,107,127,.2),rgba(0,120,90,.15));border-color:rgba(59,190,221,.2);color:var(--t3)}
+.ls-tag i{font-size:13px;color:var(--mint)}
+
+/* Form fields */
+.ls-field{margin-bottom:13px}
+.ls-label{display:block;font-size:11px;font-weight:700;color:var(--t7);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;padding-left:2px}
+body.dark .ls-label{color:#7dd3fc}
+.ls-input-wrap{position:relative;display:flex;align-items:center}
+.ls-fi{position:absolute;left:14px;font-size:18px;color:var(--mu);pointer-events:none;transition:color .2s;z-index:1}
+.ls-input{width:100%;padding:13px 14px 13px 44px;font-family:'Outfit',sans-serif;font-size:16px;font-weight:500;background:rgba(240,251,253,.7);border:1.5px solid var(--bd);border-radius:14px;color:var(--tx);outline:none;transition:all .2s cubic-bezier(.4,0,.2,1);-webkit-appearance:none;touch-action:manipulation}
+body.dark .ls-input{background:rgba(10,21,32,.6);border-color:#1e3347;color:#dde6f0}
+body.dark .ls-input::placeholder{color:#3a5a78}
+.ls-input:focus{border-color:var(--t5);background:rgba(255,255,255,.95);box-shadow:0 0 0 4px rgba(23,164,196,.12),0 2px 8px rgba(23,164,196,.08)}
+body.dark .ls-input:focus{border-color:var(--t4);background:rgba(14,30,48,.9);box-shadow:0 0 0 4px rgba(59,190,221,.12)}
+.ls-input-wrap:focus-within .ls-fi{color:var(--t5)}
+.ls-eye{position:absolute;right:14px;font-size:18px;color:var(--mu);cursor:pointer;transition:color .2s;z-index:1;padding:6px;border-radius:8px;background:none;border:none;display:flex;align-items:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-width:36px;min-height:36px;justify-content:center}
+.ls-eye:hover{color:var(--t5);background:var(--t0)}
+body.dark .ls-eye:hover{background:#1e3347}
+
+/* Forgot */
+.ls-forgot-row{display:flex;justify-content:flex-end;margin-top:-4px;margin-bottom:18px}
+.ls-forgot{font-size:12px;font-weight:600;color:var(--t6);cursor:pointer;padding:4px 6px;border-radius:6px;transition:all .15s;border:none;background:none;font-family:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:32px;display:flex;align-items:center}
+.ls-forgot:hover{color:var(--t4);background:var(--t0)}
+body.dark .ls-forgot{color:var(--t4)}
+body.dark .ls-forgot:hover{background:#1e3347}
+
+/* Submit button */
+.ls-btn{width:100%;padding:15px 20px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--t7) 0%,var(--t5) 60%,var(--t4) 100%);border:none;border-radius:14px;cursor:pointer;position:relative;overflow:hidden;transition:all .2s cubic-bezier(.4,0,.2,1);letter-spacing:.2px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(20,135,160,.35),0 1px 4px rgba(20,135,160,.2);touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:50px}
+.ls-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15) 0%,transparent 60%);border-radius:inherit}
+.ls-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 24px rgba(20,135,160,.4),0 2px 8px rgba(20,135,160,.25)}
+.ls-btn:active:not(:disabled){transform:translateY(1px);box-shadow:0 2px 8px rgba(20,135,160,.2)}
+.ls-btn:disabled{opacity:.65;cursor:not-allowed;transform:none}
+.ls-spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:lsSpin .7s linear infinite;display:none;flex-shrink:0}
+.ls-btn.loading .ls-spinner{display:block}
+.ls-btn.loading .ls-btn-icon{display:none}
+@keyframes lsSpin{to{transform:rotate(360deg)}}
+
+/* Error / info boxes */
+.ls-err{display:none;align-items:flex-start;gap:9px;padding:12px 14px;background:#fff5f5;border:1.5px solid #fecaca;border-radius:12px;font-size:13px;font-weight:500;color:#b91c1c;margin-bottom:13px}
+body.dark .ls-err{background:#2a0a0a;border-color:#7f1d1d;color:#fca5a5}
+.ls-err.show{display:flex;animation:lsShake .4s cubic-bezier(.36,.07,.19,.97)}
+.ls-err i,.ls-info i{font-size:16px;flex-shrink:0;margin-top:1px}
+.ls-info{display:none;align-items:flex-start;gap:9px;padding:12px 14px;background:var(--ml);border:1.5px solid rgba(0,201,167,.35);border-radius:12px;font-size:13px;font-weight:500;color:#006e5c;margin-bottom:13px}
+body.dark .ls-info{background:#0a2420;border-color:rgba(0,201,167,.25);color:#5de8cf}
+.ls-info.show{display:flex}
+@keyframes lsShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+
+/* Success overlay */
+.ls-success{display:none;position:absolute;inset:0;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-radius:27px;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:10}
+body.dark .ls-success{background:rgba(17,29,43,.96)}
+.ls-success.show{display:flex}
+.ls-success-ico{width:64px;height:64px;background:linear-gradient(135deg,var(--mint),var(--t4));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;animation:lsPop .5s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 24px rgba(0,201,167,.45)}
+@keyframes lsPop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.ls-success-txt{font-size:16px;font-weight:700;color:var(--t8)}
+body.dark .ls-success-txt{color:#a5d8f0}
+.ls-success-sub{font-size:13px;color:var(--mu)}
+
+/* Reset view */
+.ls-view{display:block}
+.ls-view.hidden{display:none}
+.ls-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--mu);background:none;border:none;cursor:pointer;font-family:'Outfit',sans-serif;padding:6px 2px;margin-bottom:14px;transition:color .15s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:36px}
+.ls-back:hover{color:var(--t5)}
+.ls-back i{font-size:16px}
+.ls-rtitle{font-size:18px;font-weight:800;color:var(--t8);margin-bottom:4px}
+body.dark .ls-rtitle{color:#a5d8f0}
+.ls-rdesc{font-size:13px;color:var(--mu);margin-bottom:18px;line-height:1.5}
+
+/* ── RESPONSIVE MOBILE ── */
+@media(max-width:480px){
+  .ls-wrap{
+    align-items:flex-end;
+    padding:60px 0 0;/* card nempel ke bawah */
+    min-height:100svh;
+  }
+  .ls-card{
+    border-radius:24px 24px 0 0;
+    /* pastikan card punya ruang scroll sendiri kalau konten panjang */
+    max-height:calc(100svh - 60px);
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .ls-body{padding:22px 18px 18px}
+  .ls-foot{padding:10px 18px calc(16px + env(safe-area-inset-bottom,0px))}
+  .ls-logo{width:48px;height:48px;font-size:24px;border-radius:14px;margin-bottom:8px}
+  .ls-title{font-size:20px}
+  .ls-desc{display:none}/* hemat ruang */
+  .ls-brand{margin-bottom:16px}
+  .ls-divider{margin:4px 0 14px}
+  .ls-dark-btn{top:12px;right:12px;width:40px;height:40px;font-size:17px}
+}
+@media(max-width:360px){
+  .ls-body{padding:18px 14px 16px}
+  .ls-input{font-size:15px}
+}
+
+/* ── AUTH GUARD LOADING SCREEN ── */
+#authGuard{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:linear-gradient(160deg,#d4f0f7 0%,#e8f6fa 40%,#ddf5f0 100%);transition:opacity .4s ease}
+body.dark #authGuard{background:linear-gradient(160deg,#060e18 0%,#0a1520 40%,#081510 100%)}
+#authGuard.fade-out{opacity:0;pointer-events:none}
+.ag-logo{width:60px;height:60px;background:linear-gradient(135deg,var(--mint),var(--t4));border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 8px 24px rgba(0,201,167,.4);animation:agPulse 2s ease-in-out infinite}
+@keyframes agPulse{0%,100%{box-shadow:0 8px 24px rgba(0,201,167,.4)}50%{box-shadow:0 10px 32px rgba(0,201,167,.6)}}
+.ag-title{font-size:20px;font-weight:900;color:var(--t8);letter-spacing:-.3px}
+body.dark .ag-title{color:#a5d8f0}
+.ag-sub{font-size:12px;color:var(--mu);font-weight:500}
+.ag-spinner{width:28px;height:28px;border:3px solid rgba(23,164,196,.2);border-top-color:var(--t5);border-radius:50%;animation:spin .7s linear infinite;margin-top:4px}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* ── LOGOUT BUTTON — filled red ── */
+.tbtn.logout-btn{background:#fee2e2;color:#b91c1c;border-color:#fca5a5}
+.tbtn.logout-btn:hover{background:#ef4444;color:#fff;border-color:#ef4444;transform:translateY(-1px);box-shadow:0 4px 12px rgba(239,68,68,.3)}
+body.dark .tbtn.logout-btn{background:rgba(127,29,29,.4);color:#fca5a5;border-color:#7f1d1d}
+body.dark .tbtn.logout-btn:hover{background:#ef4444;color:#fff;border-color:#ef4444}
+/* ── USER INFO CHIP ── */
+.user-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;background:var(--t0);border:1.5px solid var(--bd);font-size:12px;font-weight:600;color:var(--t7);max-width:160px;overflow:hidden}
+.user-chip i{font-size:15px;color:var(--t5);flex-shrink:0}
+.user-chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body.dark .user-chip{background:var(--t0);border-color:var(--bd);color:var(--t3)}
+body.dark .user-chip i{color:var(--t4)}
+@media(max-width:480px){.user-chip{display:none}}
+/* ── TOPBAR RESPONSIVE ── */
+/* logout text label */
+.logout-txt{font-size:13px}
+/* topbar actions row — full width on mobile */
+.topbar-actions{width:100%;justify-content:stretch}
+.topbar-actions .tbtn{flex:1;justify-content:center}
+@media(max-width:768px){
+  .topbar{padding:10px 14px;gap:6px}
+  .topbar-actions .tbtn span{font-size:12px}
+}
+@media(max-width:480px){
+  .topbar{padding:8px 12px;gap:6px}
+  .page-title{font-size:16px}
+  .page-meta{display:none}
+  /* row 1: title + util icons (sync, dark, logout) */
+  .topbar-right{flex-wrap:nowrap;gap:5px}
+  /* shrink util buttons on mobile */
+  #darkToggle{padding:7px 10px}
+  .tbtn.logout-btn .logout-txt{display:none}
+  .tbtn.logout-btn{padding:7px 10px}
+  /* sync indicator — just dot, no text */
+  #syncStatus .sync-label-txt{display:none}
+  /* row 2: add buttons full width */
+  .topbar-actions{gap:6px}
+  .topbar-actions .tbtn{font-size:12px;padding:8px 10px}
+  .topbar-actions .tbtn i.main-icon{font-size:15px}
+}
 .sync-dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0}
 .sync-dot.pulse{animation:syncPulse 1.2s ease-in-out infinite}
 @keyframes syncPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
@@ -341,7 +604,6 @@ body.dark .bottom-nav{background:#111c2a;border-top-color:rgba(255,255,255,.08)}
   .bottom-nav{display:flex}
   .fs-btn{display:flex}
   .menu-toggle{display:none!important}
-  .topbar{padding:10px 12px}
   .form-grid{grid-template-columns:1fr}
   .stats-grid{grid-template-columns:1fr 1fr;gap:10px}
   .health-gauges{grid-template-columns:1fr 1fr}
@@ -352,15 +614,151 @@ body.dark .bottom-nav{background:#111c2a;border-top-color:rgba(255,255,255,.08)}
   .stats-grid{grid-template-columns:1fr 1fr}
   .health-gauges{grid-template-columns:1fr}
   .imun-grid{grid-template-columns:repeat(2,1fr)}
-  .page-title{font-size:15px}
   .lap-grid{grid-template-columns:1fr}
   .content{padding:10px 8px}
-  .topbar-right .tbtn:not(.add-balita):not(.add-lansia){display:none}
 }
 @media(max-width:360px){.stats-grid{grid-template-columns:1fr}}
+/* ════════════════════════════════
+   USER MANAGEMENT PAGE
+   ════════════════════════════════ */
+/* Role badges */
+.role-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700}
+.role-badge.admin{background:linear-gradient(135deg,rgba(20,135,160,.15),rgba(0,201,167,.12));color:var(--t7);border:1px solid rgba(20,135,160,.25)}
+.role-badge.kader{background:rgba(124,92,191,.1);color:#6d4eb0;border:1px solid rgba(124,92,191,.2)}
+body.dark .role-badge.admin{background:rgba(59,190,221,.12);color:#7dd3fc;border-color:rgba(59,190,221,.25)}
+body.dark .role-badge.kader{background:rgba(167,139,250,.1);color:#c4b5fd;border-color:rgba(167,139,250,.2)}
+/* Status badges */
+.status-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700}
+.status-badge.aktif{background:#dcfce7;color:#15803d}
+.status-badge.nonaktif{background:#fee2e2;color:#b91c1c}
+body.dark .status-badge.aktif{background:#14532d;color:#86efac}
+body.dark .status-badge.nonaktif{background:#7f1d1d;color:#fca5a5}
+/* Status dot */
+.u-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}
+.u-dot.aktif{background:#22c55e}
+.u-dot.nonaktif{background:#ef4444}
+/* User avatar */
+.u-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0}
+.u-avatar.admin{background:linear-gradient(135deg,var(--t6),var(--mint));color:#fff}
+.u-avatar.kader{background:linear-gradient(135deg,#7c5cbf,#a78bfa);color:#fff}
+/* Admin-only elements */
+.admin-only{display:none}
+body.is-admin .admin-only{display:flex}
+body.is-admin .admin-only-block{display:block}
+.admin-only-block{display:none}
+/* Current user row highlight */
+tr.current-user td{background:rgba(23,164,196,.05)!important}
+body.dark tr.current-user td{background:rgba(59,190,221,.07)!important}
+/* User info card in topbar */
+.role-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:700;background:linear-gradient(135deg,rgba(20,135,160,.12),rgba(0,201,167,.08));color:var(--t7);border:1px solid rgba(20,135,160,.2)}
+.role-chip.kader{background:rgba(124,92,191,.1);color:#6d4eb0;border-color:rgba(124,92,191,.2)}
+body.dark .role-chip{background:rgba(59,190,221,.12);color:#7dd3fc;border-color:rgba(59,190,221,.2)}
+body.dark .role-chip.kader{background:rgba(167,139,250,.1);color:#c4b5fd;border-color:rgba(167,139,250,.2)}
+/* Skeleton loader */
+.skel{background:linear-gradient(90deg,var(--t0) 25%,var(--bd) 50%,var(--t0) 75%);background-size:200% 100%;animation:skelAnim 1.4s infinite;border-radius:6px;height:14px}
+@keyframes skelAnim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
 </style>
 </head>
 <body>
+<!-- ═══ LOGIN SCREEN ═══ -->
+<div id="loginScreen">
+  <div class="ls-bg" aria-hidden="true">
+    <div class="ls-grid"></div>
+    <div class="ls-orb ls-orb-1"></div>
+    <div class="ls-orb ls-orb-2"></div>
+    <div class="ls-orb ls-orb-3"></div>
+  </div>
+
+  <button class="ls-dark-btn" onclick="toggleDark()" aria-label="Toggle dark mode">
+    <i id="lsDarkIcon" class="ri-moon-line"></i>
+  </button>
+
+  <div class="ls-wrap">
+    <div class="ls-card">
+      <div class="ls-accent"></div>
+
+      <!-- Success overlay -->
+      <div class="ls-success" id="lsSuccess">
+        <div class="ls-success-ico">✓</div>
+        <div class="ls-success-txt">Login Berhasil!</div>
+        <div class="ls-success-sub" id="lsSuccessSub">Memuat DAPINDU…</div>
+      </div>
+
+      <div class="ls-body">
+        <!-- LOGIN VIEW -->
+        <div class="ls-view" id="lsLoginView">
+          <div class="ls-brand">
+            <div class="ls-logo">🏥</div>
+            <div class="ls-title">DAPINDU</div>
+            <div class="ls-sub">Data Pintar Posyandu</div>
+            <div class="ls-desc">Masuk untuk mengakses sistem</div>
+          </div>
+          <div class="ls-divider"></div>
+          <div style="text-align:center">
+            <div class="ls-tag"><i class="ri-map-pin-2-line"></i><span id="lsPosyanduLabel">Posyandu</span></div>
+          </div>
+          <div class="ls-err" id="lsErr"><i class="ri-error-warning-line"></i><span id="lsErrMsg">Email atau password salah.</span></div>
+          <div class="ls-field">
+            <label class="ls-label" for="lsEmail">Email</label>
+            <div class="ls-input-wrap">
+              <i class="ri-mail-line ls-fi"></i>
+              <input type="email" id="lsEmail" class="ls-input" placeholder="nama@email.com" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false"/>
+            </div>
+          </div>
+          <div class="ls-field">
+            <label class="ls-label" for="lsPass">Password</label>
+            <div class="ls-input-wrap">
+              <i class="ri-lock-line ls-fi"></i>
+              <input type="password" id="lsPass" class="ls-input" placeholder="••••••••" autocomplete="current-password" style="padding-right:50px"/>
+              <button class="ls-eye" type="button" onclick="lsTogglePass()" aria-label="Tampilkan password"><i class="ri-eye-line" id="lsPassIcon"></i></button>
+            </div>
+          </div>
+          <div class="ls-forgot-row">
+            <button class="ls-forgot" type="button" onclick="lsShowReset()">Lupa password?</button>
+          </div>
+          <button class="ls-btn" id="lsLoginBtn" type="button" onclick="lsDoLogin()">
+            <span class="ls-spinner"></span>
+            <i class="ri-login-circle-line ls-btn-icon" style="font-size:18px"></i>
+            <span id="lsLoginBtnTxt">Masuk ke DAPINDU</span>
+          </button>
+        </div><!-- /login view -->
+
+        <!-- RESET VIEW -->
+        <div class="ls-view hidden" id="lsResetView">
+          <button class="ls-back" type="button" onclick="lsShowLogin()"><i class="ri-arrow-left-s-line"></i> Kembali</button>
+          <div class="ls-rtitle">Reset Password</div>
+          <div class="ls-rdesc">Masukkan email akunmu. Kami akan mengirimkan tautan untuk reset password.</div>
+          <div class="ls-info" id="lsResetInfo"><i class="ri-mail-check-line"></i><span id="lsResetInfoMsg">Email reset dikirim. Cek inbox kamu.</span></div>
+          <div class="ls-err" id="lsResetErr"><i class="ri-error-warning-line"></i><span id="lsResetErrMsg">Gagal mengirim email reset.</span></div>
+          <div class="ls-field">
+            <label class="ls-label" for="lsResetEmail">Email Akun</label>
+            <div class="ls-input-wrap">
+              <i class="ri-mail-line ls-fi"></i>
+              <input type="email" id="lsResetEmail" class="ls-input" placeholder="nama@email.com" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false"/>
+            </div>
+          </div>
+          <button class="ls-btn" id="lsResetBtn" type="button" onclick="lsDoReset()" style="margin-top:6px">
+            <span class="ls-spinner"></span>
+            <i class="ri-mail-send-line ls-btn-icon" style="font-size:18px"></i>
+            <span id="lsResetBtnTxt">Kirim Email Reset</span>
+          </button>
+        </div><!-- /reset view -->
+      </div><!-- /ls-body -->
+
+      <div class="ls-foot"><div class="ls-foot-txt"><span>DAPINDU</span> · Data Pintar Posyandu &middot; v1.0</div></div>
+    </div><!-- /ls-card -->
+  </div><!-- /ls-wrap -->
+</div><!-- /loginScreen -->
+
+<!-- ═══ AUTH GUARD (shown briefly while Firebase checks session) ═══ -->
+<div id="authGuard">
+  <div class="ag-logo">🏥</div>
+  <div class="ag-title">DAPINDU</div>
+  <div class="ag-sub">Memverifikasi sesi…</div>
+  <div class="ag-spinner"></div>
+</div>
+
 <div class="toast-c" id="toastC"></div>
 <div class="sov" id="sov" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:199" onclick="toggleSidebar()"></div>
 <div class="app">
@@ -381,7 +779,9 @@ body.dark .bottom-nav{background:#111c2a;border-top-color:rgba(255,255,255,.08)}
     <div class="nav-item lansia-item" data-page="lansia"><i class="ri-parent-line"></i>Data Lansia</div>
     <div class="nav-sec">Lainnya</div>
     <div class="nav-item" data-page="laporan"><i class="ri-file-chart-line"></i>Laporan &amp; Ekspor</div>
-    <div class="nav-item" data-page="konfig"><i class="ri-settings-3-line"></i>Konfigurasi</div>
+    <div class="nav-sec admin-only" style="display:none">⚙️ Admin</div>
+    <div class="nav-item admin-only" data-page="pengguna" style="display:none"><i class="ri-shield-user-line"></i>Manajemen Pengguna</div>
+    <div class="nav-item admin-only" data-page="konfig" style="display:none"><i class="ri-settings-3-line"></i>Konfigurasi</div>
   </nav>
   <div class="sidebar-footer"><div class="ver">DAPINDU v1.0 · 2025</div></div>
 </aside>
@@ -393,10 +793,15 @@ body.dark .bottom-nav{background:#111c2a;border-top-color:rgba(255,255,255,.08)}
       <div><div class="page-title" id="tbTitle">Dashboard</div><div class="page-meta" id="tbMeta">Ringkasan Data Posyandu</div></div>
     </div>
     <div class="topbar-right">
-      <span class="sync-indicator init" id="syncStatus"><span class="sync-dot"></span><span id="syncLabel">Menghubungkan…</span></span>
+      <span class="sync-indicator init" id="syncStatus"><span class="sync-dot"></span><span id="syncLabel" class="sync-label-txt">Menghubungkan…</span></span>
+      <div class="user-chip" id="userChip" style="display:none"><i class="ri-user-3-line"></i><span id="userEmail">—</span></div>
+      <span class="role-chip" id="roleChip" style="display:none">Admin</span>
       <button class="tbtn" id="darkToggle" onclick="toggleDark()" title="Ganti Mode Tampilan" style="padding:8px 11px"><i class="ri-moon-line" id="darkIcon"></i></button>
-      <button class="tbtn add-balita" onclick="openBalitaModal()"><i class="ri-user-heart-line main-icon"></i><i class="ri-add-line plus-icon"></i> Tambah Data Balita</button>
-      <button class="tbtn add-lansia" onclick="openLansiaModal()"><i class="ri-parent-line main-icon"></i><i class="ri-add-line plus-icon"></i> Tambah Data Lansia</button>
+      <button class="tbtn logout-btn" onclick="doLogout()" title="Keluar"><i class="ri-logout-circle-r-line" style="font-size:16px"></i><span class="logout-txt">Keluar</span></button>
+    </div>
+    <div class="topbar-actions">
+      <button class="tbtn add-balita" onclick="openBalitaModal()"><i class="ri-user-heart-line main-icon"></i><i class="ri-add-line plus-icon"></i><span> Tambah Balita</span></button>
+      <button class="tbtn add-lansia" onclick="openLansiaModal()"><i class="ri-parent-line main-icon"></i><i class="ri-add-line plus-icon"></i><span> Tambah Lansia</span></button>
     </div>
   </div>
   <div class="content">
@@ -615,6 +1020,61 @@ body.dark .bottom-nav{background:#111c2a;border-top-color:rgba(255,255,255,.08)}
       </div>
     </div>
   </div>
+
+  <!-- MANAJEMEN PENGGUNA -->
+  <div class="page" id="page-pengguna">
+    <!-- Header stats -->
+    <div class="stats-grid" id="userStatsGrid" style="margin-bottom:20px">
+      <div class="stat-card teal"><div class="stat-icon">👥</div><div class="stat-label">Total Pengguna</div><div class="stat-val" id="uStatTotal">—</div></div>
+      <div class="stat-card mint"><div class="stat-icon">✅</div><div class="stat-label">Aktif</div><div class="stat-val" id="uStatAktif">—</div></div>
+      <div class="stat-card amber"><div class="stat-icon">🔴</div><div class="stat-label">Nonaktif</div><div class="stat-val" id="uStatNonaktif">—</div></div>
+      <div class="stat-card purple"><div class="stat-icon">🛡️</div><div class="stat-label">Admin</div><div class="stat-val" id="uStatAdmin">—</div></div>
+    </div>
+
+    <!-- Info panel -->
+    <div class="alert-box info" style="margin-bottom:16px">
+      <i class="ri-information-line"></i>
+      <div><strong>Cara menambah pengguna baru:</strong> Buat akun di Firebase Console → Authentication → Add user. Lalu isi profil & role di bawah ini.</div>
+    </div>
+
+    <!-- Tabel pengguna -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title"><i class="ri-shield-user-line"></i>Daftar Pengguna</div>
+          <div class="card-sub">Kelola role, status, dan profil kader posyandu</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <input type="text" placeholder="🔍 Cari nama / email…" id="searchUser" style="padding:7px 11px;font-size:13px;width:200px" oninput="renderPengguna()">
+          <select id="filterUserRole" onchange="renderPengguna()" style="font-size:12px;padding:7px 10px;border-radius:8px;width:auto">
+            <option value="">Semua Role</option>
+            <option value="admin">Admin</option>
+            <option value="kader">Kader</option>
+          </select>
+          <select id="filterUserStatus" onchange="renderPengguna()" style="font-size:12px;padding:7px 10px;border-radius:8px;width:auto">
+            <option value="">Semua Status</option>
+            <option value="aktif">Aktif</option>
+            <option value="nonaktif">Nonaktif</option>
+          </select>
+          <button class="btn btn-outline btn-sm" onclick="refreshPengguna()"><i class="ri-refresh-line"></i>Refresh</button>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>#</th>
+            <th>Pengguna</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Terakhir Login</th>
+            <th>Didaftarkan</th>
+            <th>Aksi</th>
+          </tr></thead>
+          <tbody id="userTbody"><tr><td colspan="7" style="text-align:center;padding:32px;color:var(--mu)"><i class="ri-loader-4-line"></i> Memuat data pengguna…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div><!-- /page-pengguna -->
   </div><!-- /content -->
 </main>
 </div>
@@ -626,7 +1086,8 @@ body.dark .bottom-nav{background:#111c2a;border-top-color:rgba(255,255,255,.08)}
   <button class="bnav-item balita-nav" data-page="imunisasi" onclick="showPage('imunisasi')"><i class="ri-syringe-line"></i>Imunisasi</button>
   <button class="bnav-item lansia-nav" data-page="lansia" onclick="showPage('lansia')"><i class="ri-parent-line"></i>Lansia</button>
   <button class="bnav-item" data-page="laporan" onclick="showPage('laporan')"><i class="ri-file-chart-line"></i>Laporan</button>
-  <button class="bnav-item" data-page="konfig" onclick="showPage('konfig')"><i class="ri-settings-3-line"></i>Konfig</button>
+  <button class="bnav-item admin-only" data-page="pengguna" onclick="showPage('pengguna')" style="display:none"><i class="ri-shield-user-line"></i>Pengguna</button>
+  <button class="bnav-item admin-only" data-page="konfig" onclick="showPage('konfig')" style="display:none"><i class="ri-settings-3-line"></i>Konfig</button>
 </nav>
 
 <!-- FULLSCREEN BUTTON -->
@@ -995,18 +1456,26 @@ function showPage(page){
   document.querySelectorAll('.bnav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
-  const map={dashboard:'Dashboard',balita:'Data Balita',imunisasi:'Imunisasi',lansia:'Data Lansia',laporan:'Laporan & Ekspor',konfig:'Konfigurasi'};
-  const sub={dashboard:'Ringkasan Data Posyandu',balita:'Pencatatan & Pertumbuhan Balita',imunisasi:'Pencatatan Imunisasi Balita',lansia:'Pemeriksaan Kesehatan Lansia',laporan:'Ekspor PDF Laporan',konfig:'Pengaturan Identitas Posyandu'};
+  const map={dashboard:'Dashboard',balita:'Data Balita',imunisasi:'Imunisasi',lansia:'Data Lansia',laporan:'Laporan & Ekspor',konfig:'Konfigurasi',pengguna:'Manajemen Pengguna'};
+  const sub={dashboard:'Ringkasan Data Posyandu',balita:'Pencatatan & Pertumbuhan Balita',imunisasi:'Pencatatan Imunisasi Balita',lansia:'Pemeriksaan Kesehatan Lansia',laporan:'Ekspor PDF Laporan',konfig:'Pengaturan Identitas Posyandu',pengguna:'Kelola Akun & Role Kader Posyandu'};
   document.getElementById('tbTitle').textContent=map[page]||page;
   document.getElementById('tbMeta').textContent=sub[page]||'';
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('sov').style.display='none';
+  // Guard: halaman admin-only tidak bisa diakses kader
+  const adminPages = ['pengguna', 'konfig'];
+  if (adminPages.includes(page) && window._currentUserRole && window._currentUserRole !== 'admin') {
+    showPage('dashboard');
+    return;
+  }
+
   if(page==='dashboard')renderDashboard();
   if(page==='balita')renderBalita();
   if(page==='lansia')renderLansia();
   if(page==='imunisasi'){renderImunForm();renderRiwayatImun();}
   if(page==='laporan')renderLaporan();
   if(page==='konfig')renderKonfig();
+  if(page==='pengguna')renderPengguna();
 }
 document.querySelectorAll('.nav-item').forEach(el=>el.addEventListener('click',()=>showPage(el.dataset.page)));
 
@@ -2326,8 +2795,11 @@ function pushDummyData(){
 function toggleDark(){
   const isDark=document.body.classList.toggle('dark');
   localStorage.setItem('dapindu_dark',isDark?'1':'0');
-  document.getElementById('darkIcon').className=isDark?'ri-sun-line':'ri-moon-line';
+  const icon=isDark?'ri-sun-line':'ri-moon-line';
+  document.getElementById('darkIcon').className=icon;
   document.getElementById('darkToggle').title=isDark?'Mode Terang':'Mode Gelap';
+  const lsIcon=document.getElementById('lsDarkIcon');
+  if(lsIcon) lsIcon.className=icon;
   setTimeout(()=>{
     const page=document.querySelector('.nav-item.active')?.dataset?.page;
     if(page==='dashboard')renderDashboard();
@@ -2357,16 +2829,378 @@ if(localStorage.getItem('dapindu_dark')==='1'){
   document.body.classList.add('dark');
   document.getElementById('darkIcon').className='ri-sun-line';
   document.getElementById('darkToggle').title='Mode Terang';
+  const lsIcon=document.getElementById('lsDarkIcon');
+  if(lsIcon) lsIcon.className='ri-sun-line';
 }
 renderDashboard();
+
+// ═══════════════════════════════════════════════════
+// USER MANAGEMENT
+// ═══════════════════════════════════════════════════
+
+// Path RTDB untuk data pengguna
+const USERS_PATH = 'dapindu/users';
+
+// Cache data pengguna di memory
+window._usersCache = {};
+window._currentUserRole = null;
+window._currentUid = null;
+
+// ── Apply role ke UI: tampilkan/sembunyikan elemen admin-only ──
+function applyRole(role) {
+  window._currentUserRole = role;
+  const isAdmin = role === 'admin';
+  document.body.classList.toggle('is-admin', isAdmin);
+
+  // Tampilkan/sembunyikan elemen admin-only di sidebar & topbar
+  // (BUKAN halaman .page — itu dikontrol showPage())
+  document.querySelectorAll('.admin-only').forEach(el => {
+    // Jangan sentuh elemen yang punya class 'page' — biarkan showPage() yang urus
+    if (el.classList.contains('page')) return;
+    el.style.display = isAdmin
+      ? (el.tagName === 'BUTTON' || el.tagName === 'SPAN' || el.tagName === 'A' ? 'inline-flex' : 'flex')
+      : 'none';
+  });
+
+  // Update role chip di topbar
+  const chip = document.getElementById('roleChip');
+  if (chip) {
+    chip.textContent = isAdmin ? '🛡️ Admin' : '🌿 Kader';
+    chip.className = 'role-chip' + (isAdmin ? '' : ' kader');
+    chip.style.display = 'inline-flex';
+  }
+
+  // Kalau kader sedang di halaman admin-only, redirect ke dashboard
+  if (!isAdmin) {
+    const activePage = document.querySelector('.nav-item.active')?.dataset?.page;
+    if (activePage === 'pengguna' || activePage === 'konfig') {
+      showPage('dashboard');
+    }
+  }
+}
+
+// ── Init user: cek/buat profil di RTDB, tentukan role ──
+window.initUserProfile = async function(uid, email, rtdb) {
+  window._currentUid = uid;
+  const { ref, get, set, update, onValue } = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-database.js');
+  const usersRef = ref(rtdb, USERS_PATH);
+  const userRef  = ref(rtdb, `${USERS_PATH}/${uid}`);
+
+  // ── Langkah 1: cek apakah profil user ini sudah ada ──
+  let myProfile = null;
+  try {
+    const mySnap = await get(userRef);
+    if (mySnap.exists()) myProfile = mySnap.val();
+  } catch(e) {
+    console.warn('[DAPINDU] Tidak bisa baca profil user (mungkin rules belum update):', e.code);
+  }
+
+  if (myProfile) {
+    // ── Profil sudah ada: cek status, apply role ──
+    if (myProfile.status === 'nonaktif') {
+      toast('Akun kamu dinonaktifkan oleh admin.', 'error');
+      setTimeout(() => window.doLogout?.(), 2000);
+      return;
+    }
+    update(userRef, { lastLogin: Date.now() }).catch(()=>{});
+    applyRole(myProfile.role || 'kader');
+    window._usersCache[uid] = { ...myProfile, lastLogin: Date.now() };
+
+  } else {
+    // ── Profil belum ada: tentukan role ──
+    // Cek apakah ada pengguna lain di RTDB
+    let isFirstUser = false;
+    try {
+      const allSnap = await get(usersRef);
+      // Kalau node users kosong atau tidak ada → ini adalah user pertama
+      if (!allSnap.exists()) {
+        isFirstUser = true;
+      } else {
+        const others = allSnap.val();
+        // Hapus uid sendiri kalau kebetulan sudah ada key-nya
+        delete others[uid];
+        isFirstUser = Object.keys(others).length === 0;
+      }
+    } catch(e) {
+      // Kalau get usersRef juga gagal (belum ada rules/path) → anggap first user
+      console.warn('[DAPINDU] Tidak bisa baca daftar users, asumsi first user:', e.code);
+      isFirstUser = true;
+    }
+
+    const newProfile = {
+      email,
+      nama: email.split('@')[0],
+      role: isFirstUser ? 'admin' : 'kader',
+      status: 'aktif',
+      createdAt: Date.now(),
+      lastLogin: Date.now(),
+    };
+
+    try {
+      await set(userRef, newProfile);
+      console.log('[DAPINDU] Profil baru dibuat, role:', newProfile.role);
+    } catch(e) {
+      // Write gagal — kemungkinan rules belum update
+      // Tetap apply admin kalau isFirstUser agar tidak lock out
+      console.error('[DAPINDU] Gagal tulis profil baru:', e.code, '— cek Security Rules!');
+      toast('⚠️ Perlu update Firebase Security Rules. Lihat panduan di komentar HTML.', 'error');
+    }
+
+    applyRole(newProfile.role);
+    window._usersCache[uid] = newProfile;
+  }
+
+  // ── Realtime listener: pantau perubahan profil sendiri ──
+  // (misalnya kalau admin nonaktifkan akun ini dari device lain)
+  try {
+    onValue(userRef, (s) => {
+      if (!s.exists()) return;
+      const p = s.val();
+      // Hanya react ke perubahan status, bukan perubahan lain
+      if (p.status === 'nonaktif' && window._currentUid === uid) {
+        toast('Akun kamu dinonaktifkan. Sesi akan diakhiri.', 'error');
+        setTimeout(() => window.doLogout?.(), 2500);
+      }
+      // Update cache
+      window._usersCache[uid] = p;
+    });
+  } catch(e) {
+    console.warn('[DAPINDU] Tidak bisa pasang listener profil:', e.code);
+  }
+};
+
+// ── Render halaman manajemen pengguna ──
+async function renderPengguna() {
+  const tbody = document.getElementById('userTbody');
+  if (!tbody) return;
+
+  const search = (document.getElementById('searchUser')?.value || '').toLowerCase();
+  const filterRole = document.getElementById('filterUserRole')?.value || '';
+  const filterStatus = document.getElementById('filterUserStatus')?.value || '';
+
+  const users = window._usersCache;
+  let rows = Object.entries(users);
+
+  // Filter
+  if (search) rows = rows.filter(([,u]) =>
+    (u.nama||'').toLowerCase().includes(search) ||
+    (u.email||'').toLowerCase().includes(search));
+  if (filterRole)   rows = rows.filter(([,u]) => u.role === filterRole);
+  if (filterStatus) rows = rows.filter(([,u]) => u.status === filterStatus);
+
+  // Stats
+  const all = Object.values(users);
+  document.getElementById('uStatTotal').textContent   = all.length;
+  document.getElementById('uStatAktif').textContent   = all.filter(u=>u.status==='aktif').length;
+  document.getElementById('uStatNonaktif').textContent= all.filter(u=>u.status==='nonaktif').length;
+  document.getElementById('uStatAdmin').textContent   = all.filter(u=>u.role==='admin').length;
+
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--mu)"><i class="ri-user-search-line" style="font-size:28px;display:block;margin-bottom:8px;opacity:.4"></i>Tidak ada pengguna ditemukan</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = rows.map(([uid, u], i) => {
+    const isSelf = uid === window._currentUid;
+    const roleBadge = u.role === 'admin'
+      ? `<span class="role-badge admin"><i class="ri-shield-line"></i> Admin</span>`
+      : `<span class="role-badge kader"><i class="ri-user-line"></i> Kader</span>`;
+    const statusBadge = u.status === 'aktif'
+      ? `<span class="status-badge aktif"><span class="u-dot aktif"></span>Aktif</span>`
+      : `<span class="status-badge nonaktif"><span class="u-dot nonaktif"></span>Nonaktif</span>`;
+    const avatarClass = u.role === 'admin' ? 'admin' : 'kader';
+    const initials = (u.nama||u.email||'?').charAt(0).toUpperCase();
+    const lastLogin = u.lastLogin ? new Date(u.lastLogin).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+    const createdAt = u.createdAt ? new Date(u.createdAt).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+    const selfTag = isSelf ? ' <span style="font-size:10px;background:var(--t1);color:var(--t7);padding:1px 6px;border-radius:99px;font-weight:700">Kamu</span>' : '';
+
+    const canEdit = !isSelf; // tidak bisa edit diri sendiri dari sini
+    const editBtn = canEdit
+      ? `<button class="btn btn-outline btn-sm btn-icon" onclick="openUserModal('${uid}')" title="Edit profil & role"><i class="ri-edit-line"></i></button>`
+      : `<button class="btn btn-outline btn-sm btn-icon" disabled title="Tidak bisa edit akun sendiri" style="opacity:.4"><i class="ri-edit-line"></i></button>`;
+    const toggleStatusBtn = canEdit
+      ? (u.status === 'aktif'
+          ? `<button class="btn btn-sm" onclick="toggleUserStatus('${uid}','nonaktif')" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca" title="Nonaktifkan"><i class="ri-forbid-line"></i></button>`
+          : `<button class="btn btn-sm" onclick="toggleUserStatus('${uid}','aktif')" style="background:#dcfce7;color:#15803d;border-color:#bbf7d0" title="Aktifkan kembali"><i class="ri-check-line"></i></button>`)
+      : '';
+    const resetBtn = `<button class="btn btn-outline btn-sm btn-icon" onclick="resetUserPassword('${u.email}')" title="Kirim reset password"><i class="ri-lock-password-line"></i></button>`;
+
+    return `<tr${isSelf?' class="current-user"':''}>
+      <td style="color:var(--mu);font-size:12px">${i+1}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="u-avatar ${avatarClass}">${initials}</div>
+          <div>
+            <div class="td-name">${u.nama||'—'}${selfTag}</div>
+            <div style="font-size:11px;color:var(--mu);margin-top:1px">${u.email||'—'}</div>
+          </div>
+        </div>
+      </td>
+      <td>${roleBadge}</td>
+      <td>${statusBadge}</td>
+      <td style="font-size:12px;color:var(--mu)">${lastLogin}</td>
+      <td style="font-size:12px;color:var(--mu)">${createdAt}</td>
+      <td>
+        <div style="display:flex;gap:5px;align-items:center">
+          ${editBtn}
+          ${toggleStatusBtn}
+          ${resetBtn}
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+window.renderPengguna = renderPengguna;
+
+// ── Refresh: ambil ulang data dari RTDB ──
+window.refreshPengguna = async function() {
+  const tbody = document.getElementById('userTbody');
+  if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--mu)"><i class="ri-loader-4-line"></i> Memuat ulang…</td></tr>';
+  await window._loadAllUsers?.();
+  renderPengguna();
+  toast('Data pengguna diperbarui', 'success');
+};
+
+// ── Toggle status aktif/nonaktif ──
+window.toggleUserStatus = async function(uid, newStatus) {
+  const user = window._usersCache[uid];
+  if (!user) return;
+  const label = newStatus === 'nonaktif' ? 'nonaktifkan' : 'aktifkan kembali';
+  if (!confirm(`Yakin ingin ${label} akun ${user.nama||user.email}?`)) return;
+  try {
+    const { ref, update } = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-database.js');
+    const userRef = ref(window._rtdbInstance, `${USERS_PATH}/${uid}`);
+    await update(userRef, { status: newStatus });
+    window._usersCache[uid].status = newStatus;
+    renderPengguna();
+    toast(`Akun ${user.nama||user.email} berhasil ${label === 'nonaktifkan' ? 'dinonaktifkan' : 'diaktifkan'}`, 'success');
+  } catch(e) {
+    toast('Gagal mengubah status: ' + e.message, 'error');
+  }
+};
+
+// ── Reset password via email ──
+window.resetUserPassword = async function(email) {
+  if (!email) return;
+  if (!confirm(`Kirim email reset password ke ${email}?`)) return;
+  try {
+    const { getAuth, sendPasswordResetEmail } = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js');
+    await sendPasswordResetEmail(getAuth(), email);
+    toast(`Email reset password dikirim ke ${email}`, 'success');
+  } catch(e) {
+    toast('Gagal kirim reset: ' + e.message, 'error');
+  }
+};
+
+// ── Modal edit profil & role ──
+window.openUserModal = function(uid) {
+  const u = window._usersCache[uid];
+  if (!u) return;
+  // Hapus modal lama kalau ada
+  document.getElementById('userModal')?.remove();
+
+  const isLastAdmin = Object.values(window._usersCache).filter(x=>x.role==='admin').length <= 1 && u.role === 'admin';
+
+  const modal = document.createElement('div');
+  modal.id = 'userModal';
+  modal.className = 'modal-overlay open';
+  modal.innerHTML = `
+    <div class="modal" style="max-width:440px">
+      <div class="modal-hdr">
+        <div class="modal-title"><i class="ri-shield-user-line"></i> Edit Pengguna</div>
+        <button class="modal-close" onclick="document.getElementById('userModal').remove()"><i class="ri-close-line"></i></button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding:14px;background:var(--t0);border-radius:12px">
+          <div class="u-avatar ${u.role==='admin'?'admin':'kader'}" style="width:48px;height:48px;font-size:20px">${(u.nama||u.email||'?').charAt(0).toUpperCase()}</div>
+          <div>
+            <div style="font-weight:700;font-size:15px">${u.nama||'—'}</div>
+            <div style="font-size:12px;color:var(--mu)">${u.email||'—'}</div>
+          </div>
+        </div>
+        <div class="form-grid" style="grid-template-columns:1fr">
+          <div class="form-group">
+            <label>Nama Tampilan</label>
+            <input type="text" id="umNama" value="${u.nama||''}" placeholder="Nama lengkap">
+          </div>
+          <div class="form-group">
+            <label>Role</label>
+            <select id="umRole" ${isLastAdmin?'disabled title="Minimal harus ada 1 admin"':''}>
+              <option value="admin" ${u.role==='admin'?'selected':''}>🛡️ Admin</option>
+              <option value="kader" ${u.role==='kader'?'selected':''}>🌿 Kader</option>
+            </select>
+            ${isLastAdmin?'<div style="font-size:11px;color:var(--amber);margin-top:4px">⚠️ Pengguna ini adalah satu-satunya admin, role tidak dapat diubah.</div>':''}
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="umStatus">
+              <option value="aktif" ${u.status==='aktif'?'selected':''}>✅ Aktif</option>
+              <option value="nonaktif" ${u.status==='nonaktif'?'selected':''}>🔴 Nonaktif</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-ftr">
+        <button class="btn btn-outline" onclick="document.getElementById('userModal').remove()">Batal</button>
+        <button class="btn btn-primary" onclick="saveUserEdit('${uid}')"><i class="ri-save-line"></i>Simpan</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+};
+
+// ── Simpan edit pengguna ──
+window.saveUserEdit = async function(uid) {
+  const nama   = document.getElementById('umNama')?.value.trim();
+  const role   = document.getElementById('umRole')?.value;
+  const status = document.getElementById('umStatus')?.value;
+  if (!nama) { toast('Nama tidak boleh kosong', 'error'); return; }
+
+  try {
+    const { ref, update } = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-database.js');
+    const userRef = ref(window._rtdbInstance, `${USERS_PATH}/${uid}`);
+    await update(userRef, { nama, role, status });
+    window._usersCache[uid] = { ...window._usersCache[uid], nama, role, status };
+    document.getElementById('userModal')?.remove();
+    renderPengguna();
+    toast(`Profil ${nama} berhasil diperbarui`, 'success');
+  } catch(e) {
+    toast('Gagal menyimpan: ' + e.message, 'error');
+  }
+};
+
 </script>
 
-<!-- ═══ FIREBASE REALTIME DATABASE SYNC (ES Module v12.11.0) ═══ -->
+<!-- ═══════════════════════════════════════════════════════
+  FIREBASE REALTIME DATABASE SECURITY RULES
+  Update rules ini di: Firebase Console → Realtime Database → Rules
+
+{
+  "rules": {
+    "dapindu": {
+      "users": {
+        ".read": "auth != null",
+        "$uid": {
+          ".write": "auth != null && (auth.uid === $uid || root.child('dapindu/users/' + auth.uid + '/role').val() === 'admin')"
+        }
+      },
+      "main": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    }
+  }
+}
+═══════════════════════════════════════════════════════ -->
+<!-- ═══ FIREBASE AUTH + RTDB — STANDALONE (ES Module v12.11.0) ═══ -->
 <script type="module">
 import { initializeApp }
   from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js';
-import { getDatabase, ref, set, onValue }
+import { getDatabase, ref, get, set, onValue, update }
   from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-database.js';
+import { getAuth, onAuthStateChanged, signOut,
+         signInWithEmailAndPassword, sendPasswordResetEmail,
+         browserSessionPersistence, setPersistence }
+  from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBTqq4rSEbtCqDKl4TdT7Cos-kG5_1S0MA",
@@ -2378,27 +3212,318 @@ const firebaseConfig = {
   appId: "1:1062358956979:web:4e098fa1a61536f5ac69c6"
 };
 
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const rtdb = getDatabase(app);
+
 const RTDB_PATH = 'dapindu/main';
-let _saving = false;
+let _saving    = false;
 let _saveQueue = null;
 let _firstValue = true;
 
-try {
-  const app = initializeApp(firebaseConfig);
-  const rtdb = getDatabase(app);
+// ─────────────────────────────────────────────
+// SCREEN HELPERS
+// ─────────────────────────────────────────────
+
+// Pending forceHide timers — dibatalkan kalau logout cepat
+let _hideTimers = [];
+
+function cancelHideTimers() {
+  _hideTimers.forEach(t => clearTimeout(t));
+  _hideTimers = [];
+}
+
+function dismissAuthGuard() {
+  const ag = document.getElementById('authGuard');
+  if (!ag) return;
+  ag.classList.add('fade-out');
+  setTimeout(() => ag.remove(), 420);
+}
+
+function resetLoginCard() {
+  // Reset semua state card login agar bersih saat ditampilkan ulang
+  document.getElementById('lsSuccess')?.classList.remove('show');
+  document.getElementById('lsErr')?.classList.remove('show');
+  document.getElementById('lsResetErr')?.classList.remove('show');
+  document.getElementById('lsResetInfo')?.classList.remove('show');
+  document.getElementById('lsResetView')?.classList.add('hidden');
+  document.getElementById('lsLoginView')?.classList.remove('hidden');
+  const loginBtn = document.getElementById('lsLoginBtn');
+  if (loginBtn) { loginBtn.classList.remove('loading'); loginBtn.disabled = false; }
+  document.getElementById('lsLoginBtnTxt').textContent = 'Masuk ke DAPINDU';
+  document.getElementById('lsEmail').value = '';
+  document.getElementById('lsPass').value = '';
+}
+
+function showLoginScreen() {
+  cancelHideTimers(); // batalkan semua pending hide dari showAppScreen
+  dismissAuthGuard();
+  resetLoginCard();   // bersihkan state card (hapus "Login Berhasil!", reset form)
+
+  const ls = document.getElementById('loginScreen');
+  // Reset semua inline style
+  ls.style.cssText = '';
+  ls.classList.remove('gone');
+  void ls.offsetHeight; // force reflow
+  ls.classList.remove('hidden');
+
+  // Restore posyandu label
+  try {
+    const saved = localStorage.getItem(window.SK || 'dapindu_db');
+    if (saved) {
+      const db = JSON.parse(saved);
+      const nama = db?.konfig?.namaPosyandu;
+      const desa = db?.konfig?.desa;
+      if (nama) document.getElementById('lsPosyanduLabel').textContent = desa ? `${nama} · ${desa}` : nama;
+    }
+  } catch(e) {}
+}
+
+function showAppScreen(user) {
+  cancelHideTimers(); // reset timer sebelumnya
+  dismissAuthGuard();
+  const ls = document.getElementById('loginScreen');
+  if (!ls) return;
+  // Idempotent: kalau login screen sudah hidden/gone, tidak perlu proses lagi
+  // kecuali untuk update chip — skip hide animation aja
+  const alreadyHidden = ls.classList.contains('gone') || ls.style.display === 'none';
+  if (alreadyHidden) {
+    // Hanya update chip, tidak perlu animasi lagi
+    const chip = document.getElementById('userChip');
+    const emailEl = document.getElementById('userEmail');
+    if (chip && emailEl && chip.style.display === 'none') {
+      emailEl.textContent = user.email; chip.style.display = 'inline-flex';
+    }
+    return;
+  }
+
+  ls.classList.add('hidden');
+
+  // Catat timer agar bisa dibatalkan kalau logout terjadi sebelum selesai
+  const t1 = setTimeout(() => {
+    ls.classList.add('gone');
+    ls.style.display = 'none';
+    ls.style.pointerEvents = 'none';
+    ls.style.visibility = 'hidden';
+  }, 450);
+  const t2 = setTimeout(() => {
+    ls.style.display = 'none';
+    ls.style.pointerEvents = 'none';
+    ls.style.visibility = 'hidden';
+  }, 850);
+  _hideTimers = [t1, t2];
+
+  // Show user chip
+  const chip = document.getElementById('userChip');
+  const emailEl = document.getElementById('userEmail');
+  if (chip && emailEl) { emailEl.textContent = user.email; chip.style.display = 'inline-flex'; }
+  // Init user profile & role dari RTDB
+  if (window.initUserProfile) window.initUserProfile(user.uid, user.email, rtdb);
+}
+
+// ─────────────────────────────────────────────
+// AUTH STATE LISTENER — single source of truth
+// ─────────────────────────────────────────────
+let _rtdbStarted = false;
+let _authReady   = false; // true setelah onAuthStateChanged pertama kali fire
+
+// Set session persistence: sesi hanya bertahan selama tab terbuka.
+// Saat tab ditutup & dibuka lagi → wajib login ulang.
+setPersistence(auth, browserSessionPersistence)
+  .then(() => {
+    // Pasang listener setelah persistence di-set
+    onAuthStateChanged(auth, (user) => {
+      _authReady = true;
+      if (!user) {
+        showLoginScreen();
+        return;
+      }
+      showAppScreen(user);
+      if (!_rtdbStarted) {
+        _rtdbStarted = true;
+        startRTDB();
+      }
+    });
+  })
+  .catch((err) => {
+    // Fallback: kalau setPersistence gagal (rare), tetap jalankan listener
+    console.warn('[DAPINDU] setPersistence error:', err);
+    onAuthStateChanged(auth, (user) => {
+      _authReady = true;
+      if (!user) { showLoginScreen(); return; }
+      showAppScreen(user);
+      if (!_rtdbStarted) { _rtdbStarted = true; startRTDB(); }
+    });
+  });
+
+// ─────────────────────────────────────────────
+// LOGIN ACTIONS (exposed to window for inline onclick)
+// ─────────────────────────────────────────────
+function lsErr(id, msg) {
+  const box = document.getElementById(id);
+  box.querySelector('span').textContent = msg;
+  box.classList.remove('show');
+  void box.offsetHeight; // reflow to retrigger animation
+  box.classList.add('show');
+}
+function lsHideErr(id) { document.getElementById(id)?.classList.remove('show'); }
+function lsSetLoading(btnId, txtId, loading, txt) {
+  const btn = document.getElementById(btnId);
+  btn.classList.toggle('loading', loading);
+  btn.disabled = loading;
+  if (txt) document.getElementById(txtId).textContent = txt;
+}
+function lsFirebaseErr(code) {
+  const map = {
+    'auth/invalid-email':          'Format email tidak valid.',
+    'auth/user-disabled':          'Akun ini dinonaktifkan.',
+    'auth/user-not-found':         'Email tidak terdaftar.',
+    'auth/wrong-password':         'Password salah. Coba lagi.',
+    'auth/invalid-credential':     'Email atau password salah.',
+    'auth/too-many-requests':      'Terlalu banyak percobaan. Coba lagi.',
+    'auth/network-request-failed': 'Tidak ada koneksi internet.',
+    'auth/missing-password':       'Password tidak boleh kosong.',
+  };
+  return map[code] || `Gagal: ${code}`;
+}
+
+window.lsTogglePass = () => {
+  const inp = document.getElementById('lsPass');
+  const ico = document.getElementById('lsPassIcon');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  ico.className = inp.type === 'password' ? 'ri-eye-line' : 'ri-eye-off-line';
+};
+window.lsShowReset = () => {
+  document.getElementById('lsLoginView').classList.add('hidden');
+  document.getElementById('lsResetView').classList.remove('hidden');
+  document.getElementById('lsResetEmail').value = document.getElementById('lsEmail').value;
+  lsHideErr('lsErr');
+};
+window.lsShowLogin = () => {
+  document.getElementById('lsResetView').classList.add('hidden');
+  document.getElementById('lsLoginView').classList.remove('hidden');
+  lsHideErr('lsResetErr');
+  document.getElementById('lsResetInfo').classList.remove('show');
+};
+window.lsDoLogin = async () => {
+  const email = document.getElementById('lsEmail').value.trim();
+  const pass  = document.getElementById('lsPass').value;
+  lsHideErr('lsErr');
+  if (!email) { lsErr('lsErr','Email tidak boleh kosong.'); return; }
+  if (!pass)  { lsErr('lsErr','Password tidak boleh kosong.'); return; }
+  lsSetLoading('lsLoginBtn','lsLoginBtnTxt', true, 'Memverifikasi…');
+  try {
+    const cred = await signInWithEmailAndPassword(auth, email, pass);
+    // Tampilkan animasi sukses singkat
+    document.getElementById('lsSuccessSub').textContent = `Selamat datang, ${cred.user.email}`;
+    document.getElementById('lsSuccess').classList.add('show');
+    // Langsung panggil showAppScreen setelah 700ms — tidak tunggu onAuthStateChanged
+    // (penting untuk file:// / content:// dan berbagai kondisi browser mobile)
+    setTimeout(() => showAppScreen(cred.user), 700);
+  } catch(err) {
+    lsSetLoading('lsLoginBtn','lsLoginBtnTxt', false, 'Masuk ke DAPINDU');
+    lsErr('lsErr', lsFirebaseErr(err.code));
+  }
+};
+window.lsDoReset = async () => {
+  const email = document.getElementById('lsResetEmail').value.trim();
+  lsHideErr('lsResetErr');
+  document.getElementById('lsResetInfo').classList.remove('show');
+  if (!email) { lsErr('lsResetErr','Masukkan email akun kamu.'); return; }
+  lsSetLoading('lsResetBtn','lsResetBtnTxt', true, 'Mengirim…');
+  try {
+    await sendPasswordResetEmail(auth, email);
+    document.getElementById('lsResetInfoMsg').textContent = `Link reset dikirim ke ${email}. Cek inbox kamu.`;
+    document.getElementById('lsResetInfo').classList.add('show');
+  } catch(err) {
+    lsErr('lsResetErr', lsFirebaseErr(err.code));
+  } finally {
+    lsSetLoading('lsResetBtn','lsResetBtnTxt', false, 'Kirim Email Reset');
+  }
+};
+
+// Enter key support for login/reset
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter') return;
+  const ls = document.getElementById('loginScreen');
+  if (ls.classList.contains('hidden') || ls.classList.contains('gone')) return;
+  if (!document.getElementById('lsResetView').classList.contains('hidden')) {
+    window.lsDoReset();
+  } else {
+    window.lsDoLogin();
+  }
+});
+
+// ─────────────────────────────────────────────
+// LOGOUT
+// ─────────────────────────────────────────────
+window.doLogout = async () => {
+  if (!confirm('Yakin ingin keluar dari DAPINDU?')) return;
+  // Langsung tampilkan login screen tanpa tunggu onAuthStateChanged
+  // agar tidak ada delay & tidak ada race condition
+  showLoginScreen();
+  // Reset role & state
+  window._currentUserRole = null;
+  window._currentUid = null;
+  window._usersCache = {};
+  window._rtdbStarted = false;
+  _rtdbStarted = false;
+  document.body.classList.remove('is-admin');
+  const roleChip = document.getElementById('roleChip');
+  if (roleChip) roleChip.style.display = 'none';
+  const userChip = document.getElementById('userChip');
+  if (userChip) userChip.style.display = 'none';
+  try {
+    await signOut(auth);
+    // onAuthStateChanged akan fire user=null — showLoginScreen dipanggil lagi tapi idempotent
+  } catch(err) {
+    console.error('[DAPINDU] Logout error:', err);
+  }
+};
+
+// ─────────────────────────────────────────────
+// REALTIME DATABASE SYNC
+// ─────────────────────────────────────────────
+function startRTDB() {
+  // Expose rtdb instance agar user management JS bisa pakai dynamic import
+  window._rtdbInstance = rtdb;
+
+  // Load semua profil pengguna ke cache (admin only usage)
+  window._loadAllUsers = async () => {
+    try {
+      const usersSnap = await get(ref(rtdb, 'dapindu/users'));
+      if (usersSnap.exists()) {
+        window._usersCache = usersSnap.val();
+      }
+    } catch(e) {
+      // Kalau rules belum update, log warning tapi jangan crash
+      console.warn('[DAPINDU] loadAllUsers: akses ditolak atau path belum ada.', e.code);
+      console.warn('[DAPINDU] → Pastikan Security Rules sudah diupdate di Firebase Console.');
+    }
+  };
+  // Realtime listener users — wrapped try/catch agar tidak matikan koneksi RTDB utama
+  try {
+    onValue(ref(rtdb, 'dapindu/users'), (snap) => {
+      if (snap.exists()) {
+        window._usersCache = snap.val();
+        const activePage = document.querySelector('.nav-item.active')?.dataset?.page;
+        if (activePage === 'pengguna') window.renderPengguna?.();
+      }
+    }, (err) => {
+      // Error handler untuk listener — jangan sampai crash
+      console.warn('[DAPINDU] users listener error:', err.code, '— cek Security Rules.');
+    });
+  } catch(e) {
+    console.warn('[DAPINDU] Tidak bisa pasang users listener:', e);
+  }
+
   const dbRef = ref(rtdb, RTDB_PATH);
 
-  // ── SIMPAN ke Realtime Database ──
   async function pushToRTDB(payload) {
     _saving = true;
     window.setSyncStatus?.('syncing', 'Menyimpan ke server…');
     try {
-      // RTDB tidak bisa simpan objek dengan array langsung jika ada karakter khusus
-      // Simpan sebagai JSON string untuk keamanan
-      await set(dbRef, {
-        payload: JSON.stringify(payload),
-        ts: Date.now()
-      });
+      await set(dbRef, { payload: JSON.stringify(payload), ts: Date.now() });
       window.setSyncStatus?.('synced', 'Tersinkron ✓');
     } catch(err) {
       console.error('[DAPINDU] RTDB write error:', err.code, err.message);
@@ -2406,42 +3531,30 @@ try {
     } finally {
       _saving = false;
       if (_saveQueue !== null) {
-        const next = _saveQueue;
-        _saveQueue = null;
-        pushToRTDB(next);
+        const next = _saveQueue; _saveQueue = null; pushToRTDB(next);
       }
     }
   }
 
-  // Expose ke window.saveDB
   window._fbSave = (data) => {
-    if (_saving) {
-      _saveQueue = data; // antri, timpa jika ada yang pending
-      return Promise.resolve();
-    }
+    if (_saving) { _saveQueue = data; return Promise.resolve(); }
     return pushToRTDB(data);
   };
 
-  // ── LISTENER REALTIME dari RTDB ──
   onValue(dbRef,
     (snapshot) => {
       if (_firstValue) {
         _firstValue = false;
         if (!snapshot.exists()) {
-          // Belum ada data di server → upload data lokal sekarang
-          console.log('[DAPINDU] RTDB kosong, upload data lokal...');
           pushToRTDB(JSON.parse(JSON.stringify(window.db)));
           window.setSyncStatus?.('syncing', 'Upload data awal…');
           return;
         }
-        // Sudah ada data → merge remote ke lokal
         _applyRemote(snapshot);
         window._fbReady = true;
         return;
       }
-
-      // Update dari perangkat/tab lain
-      if (_saving) return; // abaikan echo write kita sendiri
+      if (_saving) return;
       _applyRemote(snapshot);
     },
     (err) => {
@@ -2452,55 +3565,31 @@ try {
 
   window._fbReady = false;
   window.setSyncStatus?.('syncing', 'Menghubungkan ke server…');
-
-} catch(initErr) {
-  console.error('[DAPINDU] Firebase init error:', initErr);
-  window.setSyncStatus?.('offline', 'Firebase tidak dapat dimuat');
 }
 
-// ── Terapkan data dari RTDB ke local db ──
+// ─────────────────────────────────────────────
+// APPLY REMOTE DATA
+// ─────────────────────────────────────────────
 function _applyRemote(snapshot) {
   if (!snapshot.exists()) return;
   window._applyingRemote = true;
   try {
     const val = snapshot.val();
     if (!val) return;
-
     let remote;
-    // Data tersimpan sebagai { payload: "...", ts: ... }
-    if (typeof val === 'object' && val.payload) {
-      remote = JSON.parse(val.payload);
-    } else if (typeof val === 'string') {
-      remote = JSON.parse(val);
-    } else {
-      remote = val;
-    }
-
+    if (typeof val === 'object' && val.payload) remote = JSON.parse(val.payload);
+    else if (typeof val === 'string') remote = JSON.parse(val);
+    else remote = val;
     if (!remote || typeof remote !== 'object') return;
-
-    // Merge ke db lokal (remote menang) - update via window.db
     const merged = { ...window.db, ...remote };
     ['balita','lansia','imunisasi'].forEach(k => { if (!merged[k]) merged[k] = []; });
     Object.assign(window.db, merged);
-
-    // Sync local db variable dengan window.db
-    if(window._syncWindowDb) window._syncWindowDb();
-
-    // Cache ke localStorage
+    if (window._syncWindowDb) window._syncWindowDb();
     localStorage.setItem(window.SK, JSON.stringify(window.db));
-
     window.setSyncStatus?.('synced', 'Tersinkron ✓');
-
-    // Re-render halaman aktif
     const page = document.querySelector('.bnav-item.active, .nav-item.active')?.dataset?.page;
-    const render = {
-      dashboard: window.renderDashboard,
-      balita:    window.renderBalita,
-      lansia:    window.renderLansia,
-      konfig:    window.renderKonfig,
-    };
+    const render = { dashboard: window.renderDashboard, balita: window.renderBalita, lansia: window.renderLansia, konfig: window.renderKonfig };
     (render[page] || window.renderDashboard)?.();
-
   } catch(e) {
     console.error('[DAPINDU] _applyRemote error:', e);
   } finally {
