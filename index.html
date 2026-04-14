@@ -618,6 +618,36 @@ body.dark .bottom-nav{background:#111c2a;border-top-color:rgba(255,255,255,.08)}
   .content{padding:10px 8px}
 }
 @media(max-width:360px){.stats-grid{grid-template-columns:1fr}}
+/* ── PASSWORD VERIFY MODAL (kader kependudukan) ── */
+#passwdVerifyOverlay{position:fixed;inset:0;z-index:6000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(10,40,50,.5);backdrop-filter:blur(6px);opacity:0;visibility:hidden;transition:all .2s}
+#passwdVerifyOverlay.open{opacity:1;visibility:visible}
+.pv-modal{background:var(--wh);border-radius:20px;width:100%;max-width:360px;padding:28px 24px 20px;box-shadow:0 20px 60px rgba(0,0,0,.2);transform:scale(.95);transition:transform .2s;position:relative}
+#passwdVerifyOverlay.open .pv-modal{transform:scale(1)}
+body.dark .pv-modal{background:#1a2535;border:1px solid #2a3e55}
+.pv-icon{width:52px;height:52px;background:linear-gradient(135deg,var(--t6),var(--mint));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 14px;box-shadow:0 6px 18px rgba(20,135,160,.3)}
+.pv-title{font-size:16px;font-weight:800;color:var(--t8);text-align:center;margin-bottom:4px}
+body.dark .pv-title{color:#a5d8f0}
+.pv-desc{font-size:12px;color:var(--mu);text-align:center;margin-bottom:18px;line-height:1.5}
+.pv-err{display:none;align-items:center;gap:7px;padding:9px 12px;background:#fff5f5;border:1.5px solid #fecaca;border-radius:10px;font-size:12px;font-weight:500;color:#b91c1c;margin-bottom:12px}
+body.dark .pv-err{background:#2a0a0a;border-color:#7f1d1d;color:#fca5a5}
+.pv-err.show{display:flex}
+.pv-input-wrap{position:relative;display:flex;align-items:center;margin-bottom:14px}
+.pv-input{width:100%;padding:12px 42px 12px 14px;font-family:'Outfit',sans-serif;font-size:15px;background:var(--t0);border:1.5px solid var(--bd);border-radius:12px;color:var(--tx);outline:none;transition:all .2s}
+body.dark .pv-input{background:rgba(10,21,32,.6);border-color:#1e3347;color:#dde6f0}
+.pv-input:focus{border-color:var(--t5);box-shadow:0 0 0 3px rgba(23,164,196,.1)}
+body.dark .pv-input:focus{border-color:var(--t4)}
+.pv-eye{position:absolute;right:12px;background:none;border:none;cursor:pointer;font-size:17px;color:var(--mu);padding:4px;display:flex;align-items:center}
+.pv-btns{display:flex;gap:8px}
+.pv-btn-cancel{flex:1;padding:10px;background:var(--t0);border:1.5px solid var(--bd);border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;color:var(--mu);cursor:pointer;transition:all .15s}
+.pv-btn-cancel:hover{border-color:var(--t4);color:var(--t7)}
+.pv-btn-ok{flex:2;padding:10px;background:linear-gradient(135deg,var(--t7),var(--t5));border:none;border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s;box-shadow:0 3px 10px rgba(20,135,160,.3)}
+.pv-btn-ok:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 5px 14px rgba(20,135,160,.4)}
+.pv-btn-ok:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.pv-spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:pvSpin .6s linear infinite;display:none}
+.pv-btn-ok.loading .pv-spinner{display:block}
+.pv-btn-ok.loading .pv-btn-ok-txt{display:none}
+@keyframes pvSpin{to{transform:rotate(360deg)}}
+
 /* ════════════════════════════════
    USER MANAGEMENT PAGE
    ════════════════════════════════ */
@@ -1092,6 +1122,28 @@ body.dark .role-chip.kader{background:rgba(167,139,250,.1);color:#c4b5fd;border-
 
 <!-- FULLSCREEN BUTTON -->
 <button class="fs-btn" id="fsBtn" onclick="toggleFullscreen()" title="Layar Penuh"><i class="ri-fullscreen-line" id="fsIcon"></i></button>
+
+
+<!-- ═══ PASSWORD VERIFY MODAL ═══ -->
+<div id="passwdVerifyOverlay">
+  <div class="pv-modal">
+    <div class="pv-icon">🔐</div>
+    <div class="pv-title">Verifikasi Identitas</div>
+    <div class="pv-desc">Masukkan password kamu untuk melihat data kependudukan yang dilindungi</div>
+    <div class="pv-err" id="pvErr"><i class="ri-error-warning-line"></i><span id="pvErrMsg">Password salah</span></div>
+    <div class="pv-input-wrap">
+      <input type="password" id="pvPassInput" class="pv-input" placeholder="Password kamu…" autocomplete="current-password">
+      <button class="pv-eye" type="button" onclick="pvToggleEye()"><i class="ri-eye-line" id="pvEyeIcon"></i></button>
+    </div>
+    <div class="pv-btns">
+      <button class="pv-btn-cancel" onclick="closePvModal()">Batal</button>
+      <button class="pv-btn-ok" id="pvOkBtn" onclick="pvVerify()">
+        <span class="pv-spinner"></span>
+        <span class="pv-btn-ok-txt"><i class="ri-shield-check-line"></i> Verifikasi</span>
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- MODAL BALITA -->
 <div class="modal-overlay" id="modalBalita">
@@ -1611,7 +1663,7 @@ function renderStuntingCard(elId){
   el.innerHTML=`
     <div style="display:flex;gap:8px;margin:10px 0">
       ${[['Sangat Pendek',sangat,'badge-severe','#7f1d1d'],['Pendek (Stunted)',pendek,'badge-danger','var(--coral)'],['Normal',normal,'badge-ok','var(--mint)']].map(([l,v,cls,c])=>`
-      <div style="flex:1;background:#f8fafc;border:1px solid var(--bd);border-radius:10px;padding:10px;text-align:center">
+      <div style="flex:1;background:var(--t0);border:1px solid var(--bd);border-radius:10px;padding:10px;text-align:center">
         <div style="font-size:20px;font-weight:800;color:${c}">${v}</div>
         <div style="font-size:9px;font-weight:700;color:var(--mu);margin-top:2px;line-height:1.3">${l}</div>
         <div style="font-size:10px;color:var(--mu)">${Math.round(v/jB*100)}%</div>
@@ -1636,7 +1688,7 @@ function renderLansiaHealthCard(elId){
   el.innerHTML=`
     <div style="display:flex;gap:8px;margin:10px 0;flex-wrap:wrap">
       ${[['Perlu Perhatian',perlu,'var(--coral)'],['Pantau',pantau,'var(--amber)'],['Baik',baik,'var(--mint)'],['Belum Diperiksa',belum,'#94a3b8']].map(([l,v,c])=>`
-      <div style="flex:1;min-width:65px;background:#f8fafc;border:1px solid var(--bd);border-radius:10px;padding:9px;text-align:center">
+      <div style="flex:1;min-width:65px;background:var(--t0);border:1px solid var(--bd);border-radius:10px;padding:9px;text-align:center">
         <div style="font-size:18px;font-weight:800;color:${c}">${v}</div>
         <div style="font-size:9px;font-weight:700;color:var(--mu);margin-top:2px;line-height:1.3">${l}</div>
       </div>`).join('')}
@@ -1841,6 +1893,7 @@ function simpanBalita(){
   saveDB();closeModal('modalBalita');renderBalita();toast(editBId?'Data diperbarui':'Balita ditambahkan');editBId=null;
 }
 function hapusBalita(id){
+  if(window._currentUserRole==='kader'){toast('Kader tidak memiliki izin menghapus data','error');return;}
   if(!confirm('Hapus data balita ini?'))return;
   db.balita=db.balita.filter(b=>b.id!==id);db.imunisasi=db.imunisasi.filter(i=>i.balitaId!==id);
   saveDB();renderBalita();toast('Balita dihapus');
@@ -1879,7 +1932,7 @@ function renderBalita(){
         <button title="Lihat Detail" onclick="detailBalita('${b.id}')" style="display:flex;flex-direction:column;align-items:center;gap:1px;background:#eff6ff;border:1.5px solid #bfdbfe;color:#1d4ed8;border-radius:9px;padding:5px 8px;cursor:pointer;font-family:inherit"><i class="ri-eye-line" style="font-size:16px"></i><span style="font-size:9px;font-weight:700">Detail</span></button>
         <button title="Catat Pengukuran" onclick="openCatatBalita('${b.id}')" style="display:flex;flex-direction:column;align-items:center;gap:1px;background:#f0fdf4;border:1.5px solid #86efac;color:#15803d;border-radius:9px;padding:5px 8px;cursor:pointer;font-family:inherit"><i class="ri-add-circle-line" style="font-size:16px"></i><span style="font-size:9px;font-weight:700">Catat</span></button>
         <button title="Edit Data" onclick="openBalitaModal('${b.id}')" style="display:flex;flex-direction:column;align-items:center;gap:1px;background:#fefce8;border:1.5px solid #fde68a;color:#92400e;border-radius:9px;padding:5px 8px;cursor:pointer;font-family:inherit"><i class="ri-pencil-line" style="font-size:16px"></i><span style="font-size:9px;font-weight:700">Edit</span></button>
-        <button title="Hapus Data" onclick="hapusBalita('${b.id}')" style="display:flex;flex-direction:column;align-items:center;gap:1px;background:#fff1f2;border:1.5px solid #fecdd3;color:#be123c;border-radius:9px;padding:5px 8px;cursor:pointer;font-family:inherit"><i class="ri-delete-bin-line" style="font-size:16px"></i><span style="font-size:9px;font-weight:700">Hapus</span></button>
+        ${window._currentUserRole!=='kader'?`<button title="Hapus Data" onclick="hapusBalita('${b.id}')" style="display:flex;flex-direction:column;align-items:center;gap:1px;background:#fff1f2;border:1.5px solid #fecdd3;color:#be123c;border-radius:9px;padding:5px 8px;cursor:pointer;font-family:inherit"><i class="ri-delete-bin-line" style="font-size:16px"></i><span style="font-size:9px;font-weight:700">Hapus</span></button>`:''}
       </div></td></tr>`;
   }).join('');
 }
@@ -2089,7 +2142,24 @@ function togglePrivasi(id){
     if(arrow)arrow.className=isHidden?'ri-arrow-up-s-line':'ri-arrow-down-s-line';
     return;
   }
-  // For privasi panels: use show class
+  // Untuk panel kependudukan — kader wajib verifikasi password
+  if((id==='privBalita'||id==='privLansia') && window._currentUserRole==='kader'){
+    // Kalau sudah terbuka, boleh tutup langsung tanpa verifikasi
+    if(el.classList.contains('show')){
+      el.classList.remove('show');
+      const btn=el.previousElementSibling;
+      if(btn) btn.innerHTML='<i class="ri-shield-keyhole-line"></i> Lihat Data Kependudukan';
+      return;
+    }
+    // Belum terbuka → minta verifikasi password
+    openPvModal(() => {
+      el.classList.add('show');
+      const btn=el.previousElementSibling;
+      if(btn) btn.innerHTML='<i class="ri-eye-off-line"></i> Sembunyikan Kependudukan';
+    });
+    return;
+  }
+  // For privasi panels: use show class (admin langsung tanpa verifikasi)
   el.classList.toggle('show');
   const btn=el.previousElementSibling;if(!btn)return;
   const isShow=el.classList.contains('show');
@@ -2346,7 +2416,9 @@ function simpanLansia(){
   }
   saveDB();closeModal('modalLansia');renderLansia();toast(editLId?'Data diperbarui':'Lansia ditambahkan');editLId=null;
 }
-function hapusLansia(id){if(!confirm('Hapus data lansia ini?'))return;db.lansia=db.lansia.filter(l=>l.id!==id);saveDB();renderLansia();toast('Lansia dihapus');}
+function hapusLansia(id){
+  if(window._currentUserRole==='kader'){toast('Kader tidak memiliki izin menghapus data','error');return;}
+  if(!confirm('Hapus data lansia ini?'))return;db.lansia=db.lansia.filter(l=>l.id!==id);saveDB();renderLansia();toast('Lansia dihapus');}
 function renderLansia(){
   const q=(document.getElementById('searchLansia')?.value||'').toLowerCase();
   let list=db.lansia.filter(l=>l.nama.toLowerCase().includes(q));
@@ -2373,7 +2445,7 @@ function renderLansia(){
         <button title="Lihat Detail" onclick="detailLansia('${l.id}')" style="display:flex;flex-direction:column;align-items:center;gap:1px;background:#eff6ff;border:1.5px solid #bfdbfe;color:#1d4ed8;border-radius:9px;padding:5px 8px;cursor:pointer;font-family:inherit"><i class="ri-eye-line" style="font-size:16px"></i><span style="font-size:9px;font-weight:700">Detail</span></button>
         <button title="Catat Pemeriksaan" onclick="openCatatLansia('${l.id}')" style="display:flex;flex-direction:column;align-items:center;gap:1px;background:#f0fdf4;border:1.5px solid #86efac;color:#15803d;border-radius:9px;padding:5px 8px;cursor:pointer;font-family:inherit"><i class="ri-add-circle-line" style="font-size:16px"></i><span style="font-size:9px;font-weight:700">Catat</span></button>
         <button title="Edit Data" onclick="openLansiaModal('${l.id}')" style="display:flex;flex-direction:column;align-items:center;gap:1px;background:#fefce8;border:1.5px solid #fde68a;color:#92400e;border-radius:9px;padding:5px 8px;cursor:pointer;font-family:inherit"><i class="ri-pencil-line" style="font-size:16px"></i><span style="font-size:9px;font-weight:700">Edit</span></button>
-        <button title="Hapus Data" onclick="hapusLansia('${l.id}')" style="display:flex;flex-direction:column;align-items:center;gap:1px;background:#fff1f2;border:1.5px solid #fecdd3;color:#be123c;border-radius:9px;padding:5px 8px;cursor:pointer;font-family:inherit"><i class="ri-delete-bin-line" style="font-size:16px"></i><span style="font-size:9px;font-weight:700">Hapus</span></button>
+        ${window._currentUserRole!=='kader'?`<button title="Hapus Data" onclick="hapusLansia('${l.id}')" style="display:flex;flex-direction:column;align-items:center;gap:1px;background:#fff1f2;border:1.5px solid #fecdd3;color:#be123c;border-radius:9px;padding:5px 8px;cursor:pointer;font-family:inherit"><i class="ri-delete-bin-line" style="font-size:16px"></i><span style="font-size:9px;font-weight:700">Hapus</span></button>`:''}
       </div></td></tr>`;
   }).join('');
 }
@@ -2521,7 +2593,7 @@ function renderLaporan(){
     const lengkap=db.balita.filter(b=>ALL_IMUN.every(j=>db.imunisasi.some(i=>i.balitaId===b.id&&i.jenis===j.jenis))).length;
     const proses=db.balita.filter(b=>db.imunisasi.some(i=>i.balitaId===b.id)&&!ALL_IMUN.every(j=>db.imunisasi.some(i=>i.balitaId===b.id&&i.jenis===j.jenis))).length;
     const belum=jB-lengkap-proses;
-    lapImEl.innerHTML=`<div style="display:flex;gap:7px;margin:8px 0">${[['Lengkap',lengkap,'var(--mint)'],['Proses',proses,'var(--t5)'],['Belum',belum,'var(--amber)']].map(([l,v,c])=>`<div style="flex:1;background:#f8fafc;border:1px solid var(--bd);border-radius:9px;padding:9px;text-align:center"><div style="font-size:18px;font-weight:800;color:${c}">${v}</div><div style="font-size:9px;font-weight:700;color:var(--mu);margin-top:2px">${l}</div></div>`).join('')}</div>
+    lapImEl.innerHTML=`<div style="display:flex;gap:7px;margin:8px 0">${[['Lengkap',lengkap,'var(--mint)'],['Proses',proses,'var(--t5)'],['Belum',belum,'var(--amber)']].map(([l,v,c])=>`<div style="flex:1;background:var(--t0);border:1px solid var(--bd);border-radius:9px;padding:9px;text-align:center"><div style="font-size:18px;font-weight:800;color:${c}">${v}</div><div style="font-size:9px;font-weight:700;color:var(--mu);margin-top:2px">${l}</div></div>`).join('')}</div>
     <div style="display:flex;height:7px;border-radius:99px;overflow:hidden"><div style="background:var(--mint);width:${Math.round(lengkap/jB*100)}%"></div><div style="background:var(--t4);width:${Math.round(proses/jB*100)}%"></div><div style="background:var(--amber);flex:1"></div></div>`;
   }
   // Statistik
@@ -2833,6 +2905,81 @@ if(localStorage.getItem('dapindu_dark')==='1'){
   if(lsIcon) lsIcon.className='ri-sun-line';
 }
 renderDashboard();
+
+// ═══════════════════════════════════════════════════
+// PASSWORD VERIFY MODAL (kader — lihat kependudukan)
+// ═══════════════════════════════════════════════════
+let _pvCallback = null;
+let _pvGranted  = false;
+let _pvGrantTimer = null;
+
+function openPvModal(callback) {
+  if (window._currentUserRole !== 'kader') { callback(); return; }
+  if (_pvGranted) { callback(); return; }
+  _pvCallback = callback;
+  document.getElementById('pvPassInput').value = '';
+  document.getElementById('pvErr').classList.remove('show');
+  document.getElementById('pvEyeIcon').className = 'ri-eye-line';
+  document.getElementById('pvPassInput').type = 'password';
+  const btn = document.getElementById('pvOkBtn');
+  btn.classList.remove('loading'); btn.disabled = false;
+  document.getElementById('passwdVerifyOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('pvPassInput').focus(), 120);
+}
+
+function closePvModal() {
+  document.getElementById('passwdVerifyOverlay').classList.remove('open');
+  _pvCallback = null;
+}
+
+function pvToggleEye() {
+  const inp = document.getElementById('pvPassInput');
+  const ico = document.getElementById('pvEyeIcon');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  ico.className = inp.type === 'password' ? 'ri-eye-line' : 'ri-eye-off-line';
+}
+
+async function pvVerify() {
+  const pass = document.getElementById('pvPassInput').value;
+  if (!pass) {
+    document.getElementById('pvErrMsg').textContent = 'Password tidak boleh kosong';
+    document.getElementById('pvErr').classList.add('show'); return;
+  }
+  const btn = document.getElementById('pvOkBtn');
+  btn.classList.add('loading'); btn.disabled = true;
+  document.getElementById('pvErr').classList.remove('show');
+  try {
+    const { EmailAuthProvider, reauthenticateWithCredential, getAuth } =
+      await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js');
+    const user = getAuth().currentUser;
+    if (!user) throw { code: 'no-user' };
+    await reauthenticateWithCredential(user, EmailAuthProvider.credential(user.email, pass));
+    // Grant akses 10 menit
+    _pvGranted = true;
+    clearTimeout(_pvGrantTimer);
+    _pvGrantTimer = setTimeout(() => { _pvGranted = false; }, 10 * 60 * 1000);
+    closePvModal();
+    if (_pvCallback) { _pvCallback(); _pvCallback = null; }
+  } catch(err) {
+    btn.classList.remove('loading'); btn.disabled = false;
+    const map = {
+      'auth/wrong-password':'Password salah. Coba lagi.',
+      'auth/invalid-credential':'Password salah. Coba lagi.',
+      'auth/too-many-requests':'Terlalu banyak percobaan. Tunggu sebentar.',
+      'auth/network-request-failed':'Tidak ada koneksi internet.',
+      'no-user':'Sesi tidak valid, silakan login ulang.',
+    };
+    document.getElementById('pvErrMsg').textContent = map[err.code] || ('Gagal: '+(err.code||err.message));
+    document.getElementById('pvErr').classList.add('show');
+  }
+}
+
+document.addEventListener('keydown', (e) => {
+  const ov = document.getElementById('passwdVerifyOverlay');
+  if (!ov?.classList.contains('open')) return;
+  if (e.key === 'Enter') pvVerify();
+  if (e.key === 'Escape') closePvModal();
+});
 
 // ═══════════════════════════════════════════════════
 // USER MANAGEMENT
