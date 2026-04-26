@@ -3852,7 +3852,7 @@ function startRTDB() {
     return raw;
   }
 
-  function initialAvatar(nama) {
+  initialAvatar(p.namaLengkap || p.nama)
     if (!nama) return '?';
     const parts = nama.trim().split(' ');
     if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
@@ -3874,7 +3874,7 @@ function startRTDB() {
         <div class="dk-item" id="dkItem_${i}" onclick="window._dkSelectItem(${i})">
           <div class="dk-avatar">${initialAvatar(p.nama)}</div>
           <div class="dk-info">
-            <div class="dk-nama">${p.nama || '—'}</div>
+            <div class="dk-nama">${p.namaLengkap || p.nama || '—'}</div>
             <div class="dk-meta">
               ${p.nik ? 'NIK: ' + p.nik + ' · ' : ''}
               ${tglStr ? tglStr + ' · ' : ''}
@@ -3939,9 +3939,9 @@ function startRTDB() {
 
       const hasil = allPenduduk.filter(p => {
         if (!p || !p.nama) return false;
-        const nama = (p.nama || '').toLowerCase();
-        const nik  = (p.nik  || '').toLowerCase();
-        return nama.includes(q) || nik.includes(q);
+        const nama = (p.namaLengkap || p.nama || '').toLowerCase();
+const nik  = (p.nik  || '').toLowerCase();
+return nama.includes(q) || nik.includes(q);
       }).slice(0, 30);
 
       renderDkResults(hasil);
@@ -3962,7 +3962,7 @@ function startRTDB() {
     if (_dkTarget === 'balita') {
       // Isi form balita
       const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
-      set('bNama',    p.nama);
+      set('bNama', p.namaLengkap || p.nama);
       set('bTglLahir', tgl);
       set('bAlamat',  p.alamat);
       set('bNIK',     p.nik);
@@ -3975,7 +3975,7 @@ function startRTDB() {
     } else if (_dkTarget === 'lansia') {
       // Isi form lansia
       const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
-      set('lNama',    p.nama);
+      set('lNama', p.namaLengkap || p.nama);
       set('lTglLahir', tgl);
       set('lAlamat',  p.alamat);
       set('lNIK',     p.nik);
