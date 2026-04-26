@@ -1007,13 +1007,18 @@ body.dark .role-chip.kader{background:rgba(167,139,250,.1);color:#c4b5fd;border-
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
         <div><div class="card-title" style="margin-bottom:0"><i class="ri-parent-line"></i>Data Lansia Terdaftar</div><div class="card-sub" style="margin:4px 0 0;font-size:12px">Klik nama untuk detail</div></div>
         <input type="text" placeholder="🔍 Cari nama..." id="searchLansia" style="padding:7px 11px;font-size:13px;width:200px;max-width:100%" oninput="renderLansia()">
+        <select id="filterLansiaJK" onchange="renderLansia()" style="font-size:12px;padding:7px 10px;border-radius:8px">
+          <option value="">Semua JK</option>
+          <option value="L">Laki-laki</option>
+          <option value="P">Perempuan</option>
+        </select>
       </div>
       <div class="tbl-ctrl">
         <label style="text-transform:none;font-size:13px;color:var(--mu);letter-spacing:0">Tampilkan</label>
         <select id="limitLansia" onchange="renderLansia()" style="width:auto;padding:5px 10px;font-size:13px"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option><option value="all">Semua</option></select>
         <span class="tbl-info" id="infoLansia"></span>
       </div>
-      <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Nama</th><th>Usia</th><th>TD</th><th>Gula Darah</th><th>Kolesterol</th><th>Asam Urat</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="lansiaTbody"></tbody></table></div>
+      <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Nama</th><th>JK</th><th>Usia</th><th>TD</th><th>Gula Darah</th><th>Kolesterol</th><th>Asam Urat</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="lansiaTbody"></tbody></table></div>
     </div>
   </div>
 
@@ -1275,6 +1280,7 @@ body.dark .role-chip.kader{background:rgba(167,139,250,.1);color:#c4b5fd;border-
       <div class="form-grid">
         <div class="form-group"><label>Nama Lansia *</label><input type="text" id="lNama" placeholder="Nama lengkap"></div>
         <div class="form-group"><label>Tanggal Lahir *</label><input type="text" id="lTglLahir" placeholder="dd/mm/yyyy"></div>
+        <div class="form-group"><label>Jenis Kelamin</label><select id="lJK"><option value="">— Pilih —</option><option value="L">Laki-laki</option><option value="P">Perempuan</option></select></div>
         <div class="form-group full"><label>Alamat *</label><input type="text" id="lAlamat" placeholder="Alamat lengkap"></div>
         <div class="sec-div">Hasil Pemeriksaan (tidak harus semua terisi)</div>
         <div class="form-group"><label>Tekanan Darah<span class="lopt">opsional</span></label><input type="text" id="lTD" placeholder="120/80"></div>
@@ -2477,12 +2483,14 @@ function openLansiaModal(id=null){
   editLId=id;
   document.getElementById('mLansiaTitle').innerHTML=`<i class="ri-parent-line"></i> ${id?'Edit':'Tambah'} Lansia`;
   ['lNama','lTglLahir','lAlamat','lTD','lGula','lAsamUrat','lKolesterol','lRiwayat','lNIK','lKK'].forEach(f=>document.getElementById(f).value='');
+  document.getElementById('lJK').value='';
   if(id){const l=db.lansia.find(x=>x.id===id);if(!l)return;
     document.getElementById('lNama').value=l.nama||'';document.getElementById('lTglLahir').value=l.tglLahir?fmtTglDisplay(l.tglLahir):'';
     document.getElementById('lAlamat').value=l.alamat||'';document.getElementById('lTD').value=l.td||'';
     document.getElementById('lGula').value=l.gula!=null?l.gula:'';document.getElementById('lAsamUrat').value=l.asamUrat!=null?l.asamUrat:'';
     document.getElementById('lKolesterol').value=l.kolesterol!=null?l.kolesterol:'';document.getElementById('lRiwayat').value=l.riwayat||'';
     document.getElementById('lNIK').value=l.nik||'';document.getElementById('lKK').value=l.kk||'';
+    document.getElementById('lJK').value=l.jk||'';
   }
   openModal('modalLansia');
 }
@@ -2495,19 +2503,20 @@ function simpanLansia(){
   const kolesterol=document.getElementById('lKolesterol').value?parseInt(String(document.getElementById('lKolesterol').value).replace(',','.')):null;
   const riwayat=document.getElementById('lRiwayat').value.trim();
   const nik=document.getElementById('lNIK').value.trim(),kk=document.getElementById('lKK').value.trim();
+  const jk=document.getElementById('lJK').value;
   const bulan=new Date().toISOString().slice(0,7);
   const entry={bulan};if(td)entry.td=td;if(gula!=null)entry.gula=gula;if(asamUrat!=null)entry.asamUrat=asamUrat;if(kolesterol!=null)entry.kolesterol=kolesterol;
   if(editLId){
     const idx=db.lansia.findIndex(x=>x.id===editLId);if(idx!==-1){
       const rp=db.lansia[idx].riwayatPemeriksaan||[];const ei=rp.findIndex(r=>r.bulan===bulan);
       if(ei!==-1)rp[ei]=entry;else rp.push(entry);
-      const u={...db.lansia[idx],nama,tglLahir,alamat,riwayat,nik,kk,riwayatPemeriksaan:rp};
+      const u={...db.lansia[idx],nama,tglLahir,alamat,riwayat,nik,kk,jk,riwayatPemeriksaan:rp};
       if(td)u.td=td;else delete u.td;if(gula!=null)u.gula=gula;else delete u.gula;
       if(asamUrat!=null)u.asamUrat=asamUrat;else delete u.asamUrat;if(kolesterol!=null)u.kolesterol=kolesterol;else delete u.kolesterol;
       db.lansia[idx]=u;
     }
   } else {
-    const nl={id:uid(),nama,tglLahir,alamat,riwayat,nik,kk,riwayatPemeriksaan:[entry]};
+    const nl={id:uid(),nama,tglLahir,alamat,riwayat,nik,kk,jk,riwayatPemeriksaan:[entry]};
     if(td)nl.td=td;if(gula!=null)nl.gula=gula;if(asamUrat!=null)nl.asamUrat=asamUrat;if(kolesterol!=null)nl.kolesterol=kolesterol;
     db.lansia.push(nl);
   }
@@ -2518,7 +2527,12 @@ function hapusLansia(id){
   if(!confirm('Hapus data lansia ini?'))return;db.lansia=db.lansia.filter(l=>l.id!==id);saveDB();renderLansia();toast('Lansia dihapus');}
 function renderLansia(){
   const q=(document.getElementById('searchLansia')?.value||'').toLowerCase();
-  let list=db.lansia.filter(l=>l.nama.toLowerCase().includes(q));
+  const filterJK=document.getElementById('filterLansiaJK')?.value||'';
+  let list=db.lansia.filter(l=>{
+    const namaMatch=l.nama.toLowerCase().includes(q);
+    const jkMatch=!filterJK||l.jk===filterJK;
+    return namaMatch&&jkMatch;
+  });
   const total=list.length;
   const limitV=document.getElementById('limitLansia')?.value||'10';
   const limit=limitV==='all'?total:Math.min(parseInt(limitV),total);
@@ -2526,12 +2540,14 @@ function renderLansia(){
   document.getElementById('infoLansia').textContent=`Menampilkan ${shown.length} dari ${total} data`;
   const tbody=document.getElementById('lansiaTbody');
   if(!tbody)return;
-  if(total===0){tbody.innerHTML=`<tr><td colspan="9"><div class="empty-state"><i class="ri-parent-line"></i><p>${q?'Tidak ditemukan':'Belum ada data'}</p></div></td></tr>`;return;}
+  if(total===0){tbody.innerHTML=`<tr><td colspan="10"><div class="empty-state"><i class="ri-parent-line"></i><p>${q||filterJK?'Tidak ditemukan':'Belum ada data'}</p></div></td></tr>`;return;}
   tbody.innerHTML=shown.map((l,i)=>{
     const st=overallLansia(l);
+    const jkBadge=l.jk==='L'?`<span class="dk-badge lk" style="font-size:10px">L</span>`:l.jk==='P'?`<span class="dk-badge pr" style="font-size:10px">P</span>`:'—';
     return `<tr>
       <td style="color:var(--mu);font-size:12px">${i+1}</td>
       <td class="td-name" style="cursor:pointer" onclick="detailLansia('${l.id}')">${l.nama}</td>
+      <td>${jkBadge}</td>
       <td>${hitungUsiaThn(l.tglLahir)} thn</td>
       <td><span class="badge ${statusTD(l.td).cls}">${l.td||'—'}</span></td>
       <td><span class="badge ${statusGula(l.gula).cls}">${l.gula!=null?fmtDes(l.gula)+' mg/dL':'—'}</span></td>
@@ -4028,6 +4044,9 @@ function startRTDB() {
       set('lAlamat',  p.alamat);
       set('lNIK',     p.nik);
       set('lKK',      p.noKK || p.kk || '');
+      const lJkEl = document.getElementById('lJK');
+      if (lJkEl && p.jenisKelamin) lJkEl.value = p.jenisKelamin;
+      else if (lJkEl && p.jk) lJkEl.value = p.jk;
       toast('✅ Data lansia berhasil diisi dari DigiNduk!', 'success');
     }
     closeDkModal();
