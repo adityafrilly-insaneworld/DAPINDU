@@ -3963,27 +3963,66 @@ function startRTDB() {
     }
   };
 
-  window.dkPakai = function() {
+  // Cari NIK dari /penduduk berdasarkan kecocokan nama
+  async function cariNikDariNama(semuaPenduduk, namaCari) {
+    if (!namaCari) return '';
+    const q = namaCari.trim().toLowerCase();
+    const cocok = semuaPenduduk.find(p => {
+      const n = (p.namaLengkap || p.nama || '').trim().toLowerCase();
+      return n === q;
+    });
+    return cocok ? (cocok.nik || '') : '';
+  }
+
+  window.dkPakai = async function() {
     if (!_dkSelected) return;
     const p = _dkSelected;
     const tgl = fmtTgl(p.tanggalLahir || p.tglLahir || '');
+    const namaAyah = p.namaAyah || p.ayah || '';
+    const namaIbu  = p.namaIbu  || p.ibu  || '';
+
+    // Tombol loading sementara cari NIK
+    const btnPakai = document.getElementById('dkBtnPakai');
+    btnPakai.disabled = true;
+    btnPakai.innerHTML = '<span class="dk-loading-spinner" style="width:14px;height:14px;border-width:2px;display:inline-block;margin-right:6px"></span> Mengambil data…';
+
+    let nikAyah = '', nikIbu = '';
+    try {
+      const { ref, get } = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-database.js');
+      const db = await getDkDb();
+      const snap = await get(ref(db, 'penduduk'));
+      if (snap.exists()) {
+        const raw = snap.val();
+        const semuaPenduduk = typeof raw === 'object' && !Array.isArray(raw)
+          ? Object.values(raw)
+          : (Array.isArray(raw) ? raw : []);
+        nikAyah = await cariNikDariNama(semuaPenduduk, namaAyah);
+        nikIbu  = await cariNikDariNama(semuaPenduduk, namaIbu);
+      }
+    } catch(e) {
+      console.warn('[DAPINDU] Gagal ambil NIK ortu:', e);
+    } finally {
+      btnPakai.disabled = false;
+      btnPakai.innerHTML = '<i class="ri-user-add-line"></i> Pakai Data Ini';
+    }
+
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
 
     if (_dkTarget === 'balita') {
-      // Isi form balita
-      const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
       set('bNama',    p.namaLengkap || p.nama);
       set('bTglLahir', tgl);
       set('bAlamat',  p.alamat);
       set('bNIK',     p.nik);
       set('bKK',      p.noKK || p.kk || '');
-      // JK
+      set('bNamaIbu', namaIbu);
+      set('bNamaAyah', namaAyah);
+      set('bNIKIbu',  nikIbu);
+      set('bNIKAyah', nikAyah);
       const jkEl = document.getElementById('bJK');
       if (jkEl && p.jenisKelamin) jkEl.value = p.jenisKelamin;
       else if (jkEl && p.jk) jkEl.value = p.jk;
       toast('✅ Data balita berhasil diisi dari DigiNduk!', 'success');
     } else if (_dkTarget === 'lansia') {
-      // Isi form lansia
-      const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
       set('lNama',    p.namaLengkap || p.nama);
       set('lTglLahir', tgl);
       set('lAlamat',  p.alamat);
